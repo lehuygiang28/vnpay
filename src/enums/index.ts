@@ -10,3 +10,7 @@ export enum VnpLocale {
     VN = 'vn',
     EN = 'en',
 }
+
+export enum VnpOrderType {
+    OTHER = 'other',
+}

@@ -16,7 +16,9 @@
     "keywords": [
         "vnpay",
         "vnpay.vn",
-        "payment"
+        "payment",
+        "vn-payment",
+        "vn-payments"
     ],
     "author": "lehuygiang28 <lehuygiang28@gmail.com>",
     "license": "MIT",
