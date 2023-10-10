@@ -1,0 +1,33 @@
+{
+    "name": "vnpay",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/lehuygiang28/vnpay.git"
+    },
+    "version": "0.0.1",
+    "description": "",
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "prepare": "npm run test && npm run build",
+        "test": "jest"
+    },
+    "keywords": [
+        "vnpay",
+        "vnpay.vn",
+        "payment"
+    ],
+    "author": "lehuygiang28 <lehuygiang28@gmail.com>",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/jest": "^29.5.5",
+        "@types/node": "^20.8.4",
+        "ts-jest": "^29.1.1",
+        "typescript": "^5.2.2"
+    },
+    "dependencies": {
+        "class-validator": "^0.14.0",
+        "moment-timezone": "^0.5.43"
+    }
+}
