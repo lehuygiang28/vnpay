@@ -10,7 +10,8 @@ import {
 import { ConfigVnpayDTO, BuildPaymentUrlDTO } from './dtos';
 import { VnpLocale, VnpOrderType } from './enums';
 import { dateFormat } from './utils/common';
-import { VnpayIpnUrlPayloadDTO, VnpayReturnObject } from './dtos/ipn-url-return.dto';
+import { ReturnQueryFromVNPayDTO } from './dtos/return-query-from-vnpay.dto';
+import { VerifyReturnUrlDTO } from './dtos/verify-return-url.dto';
 
 /**
  * VNPay class to support VNPay payment
@@ -19,7 +20,14 @@ import { VnpayIpnUrlPayloadDTO, VnpayReturnObject } from './dtos/ipn-url-return.
  * @example
  * import { VNPay } from 'vnpay';
  *
- * const vnpay = await VNPay.setup({
+ * const vnpay = new VNPay({
+ *     paymentGateway: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
+ *     tmnCode: 'TMNCODE',
+ *     secureSecret: 'SERCRET',
+ * });
+ *
+ * // or setup with async/await
+ * const vnpayAsync = await VNPay.setup({
  *     paymentGateway: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
  *     tmnCode: 'TMNCODE',
  *     secureSecret: 'SERCRET',
@@ -37,6 +45,7 @@ import { VnpayIpnUrlPayloadDTO, VnpayReturnObject } from './dtos/ipn-url-return.
 export class VNPay {
     private globalConfig: ConfigVnpayDTO;
     private CRYPTO_ALGORITHM = 'sha512';
+    private CRYPTO_ENCODING: BufferEncoding = 'utf-8';
 
     private vnp_Version = VNP_VERSION;
     private vnp_Command = VNP_DEFAULT_COMMAND;
@@ -44,7 +53,7 @@ export class VNPay {
     private vnp_Locale = VnpLocale.VN;
     private vnp_OrderType: string | VnpOrderType = VnpOrderType.OTHER;
 
-    private constructor(readonly init: ConfigVnpayDTO) {
+    public constructor(init: ConfigVnpayDTO) {
         this.globalConfig = new ConfigVnpayDTO(init);
     }
 
@@ -156,7 +165,7 @@ export class VNPay {
 
             const hmac = crypto.createHmac(this.CRYPTO_ALGORITHM, this.globalConfig.secureSecret);
             const signed = hmac
-                .update(Buffer.from(redirectUrl.search.slice(1).toString()))
+                .update(Buffer.from(redirectUrl.search.slice(1).toString(), this.CRYPTO_ENCODING))
                 .digest('hex');
 
             redirectUrl.searchParams.append('vnp_SecureHash', signed);
@@ -168,35 +177,32 @@ export class VNPay {
     /**
      * Method to verify the return url from VNPay
      * @vi_vn Phương thức xác thực tính đúng đắn của các tham số trả về từ VNPay
-     * @param {VnpayIpnUrlPayloadDTO} payload - The payload from VNPay
-     * @returns {Promise<VnpayReturnObject>} The return object
+     * @param {ReturnQueryFromVNPayDTO} vnpayReturnQuery - The object of data return from VNPay
+     * @returns {Promise<VerifyReturnUrlDTO>} The return object
      */
-    public verifyReturnUrl(payload: VnpayIpnUrlPayloadDTO): Promise<VnpayReturnObject> {
+    public verifyReturnUrl(vnpayReturnQuery: ReturnQueryFromVNPayDTO): Promise<VerifyReturnUrlDTO> {
         return new Promise((resolve, reject) => {
             const err = this.validateGlobalConfig();
             if (err !== true) {
                 return reject(err);
             }
 
-            if (!this.globalConfig.secureSecret) {
-                return reject(new Error('Missing secure secret'));
-            }
+            const secureHash = vnpayReturnQuery.vnp_SecureHash;
+            const secretKey = this.globalConfig.secureSecret;
 
-            const returnResults = {
-                isSuccess: false,
+            delete (vnpayReturnQuery as any).vnp_SecureHash;
+            delete vnpayReturnQuery.vnp_SecureHashType;
+
+            const outputResults = {
+                isSuccess: vnpayReturnQuery.vnp_ResponseCode === '00',
                 message: VNPay.getResponseByStatusCode(
-                    payload.vnp_ResponseCode.toString(),
+                    vnpayReturnQuery.vnp_ResponseCode.toString(),
                     this.configDefault.vnp_Locale,
                 ),
             };
-            const secureHash = payload.vnp_SecureHash;
 
-            delete (payload as any).vnp_SecureHash;
-            delete payload.vnp_SecureHashType;
-            payload.vnp_Amount = parseInt(payload.vnp_Amount.toString(), 10) / 100;
-
-            const urlSearch = new URLSearchParams();
-            Object.entries(payload)
+            const urlReturn = new URL(this.globalConfig.paymentGateway ?? PAYMENT_GATEWAY_SANDBOX);
+            Object.entries(vnpayReturnQuery)
                 .sort(([key1], [key2]) => key1.toString().localeCompare(key2.toString()))
                 .forEach(([key, value]) => {
                     // Skip empty value
@@ -204,27 +210,29 @@ export class VNPay {
                         return;
                     }
 
-                    urlSearch.append(key, value.toString());
+                    urlReturn.searchParams.append(key, value.toString());
                 });
 
-            const hmac = crypto.createHmac(this.CRYPTO_ALGORITHM, this.globalConfig.secureSecret);
-            const signed = hmac.update(Buffer.from(urlSearch.toString())).digest('hex');
+            const hmac = crypto.createHmac(this.CRYPTO_ALGORITHM, secretKey);
+            const signed = hmac
+                .update(Buffer.from(urlReturn.search.slice(1).toString(), this.CRYPTO_ENCODING))
+                .digest('hex');
 
             if (secureHash === signed) {
-                Object.assign(returnResults, {
-                    isSuccess: payload.vnp_ResponseCode === '00',
+                Object.assign(outputResults, {
+                    isSuccess: vnpayReturnQuery.vnp_ResponseCode === '00',
                 });
             } else {
-                Object.assign(returnResults, {
+                Object.assign(outputResults, {
                     isSuccess: false,
                     message: 'Wrong checksum',
                 });
             }
 
-            const returnObject: VnpayReturnObject = {
-                ...payload,
-                ...returnResults,
-            };
+            const returnObject = new VerifyReturnUrlDTO({
+                ...vnpayReturnQuery,
+                ...outputResults,
+            });
 
             resolve(returnObject);
         });
@@ -347,26 +355,4 @@ export class VNPay {
 
         return respondText[locale];
     }
-
-    static SAMPLE_TESTING_DATA = {
-        config: {
-            paymentGateway: 'http://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
-            merchant: 'COCOSIN',
-            secureSecret: 'RAOEXHYVSDDIIENYWSLDIIZTANXUXZFJ',
-        },
-        payload: {
-            createdDate: '20180112172309',
-            amount: 500000,
-            clientIp: '127.0.0.1',
-            locale: 'vn',
-            currency: 'VND',
-            orderId: 'node-2018-01-12T10:23:09.796Z',
-            orderInfo: 'Thanh toan giay adidas',
-            orderType: 'fashion',
-            returnUrl: 'http://localhost:8080/payment/callback',
-            transactionId: 'node-2018-01-12T10:23:09.796Z',
-            customerId: 'giaang',
-            bankCode: null,
-        },
-    };
 }

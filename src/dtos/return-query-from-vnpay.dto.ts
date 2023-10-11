@@ -9,7 +9,11 @@ import {
     Min,
 } from 'class-validator';
 
-export class VnpayIpnUrlPayloadDTO {
+export class ReturnQueryFromVNPayDTO {
+    constructor(data: ReturnQueryFromVNPayDTO) {
+        Object.assign(this, data);
+    }
+
     /**
      * Mã website của merchant trên hệ thống của VNPAY. Ví dụ: 2QXUI4J4
      */
@@ -115,16 +119,4 @@ export class VnpayIpnUrlPayloadDTO {
     @IsString()
     @Length(32, 256)
     vnp_SecureHash: string;
-}
-
-export interface VnpayReturnObject extends VnpayIpnUrlPayloadDTO {
-    /**
-     * @vi_vn Trạng thái giao dịch
-     */
-    isSuccess: boolean;
-
-    /**
-     * @vi_vn Thông báo lỗi
-     */
-    message: string;
 }
