@@ -9,7 +9,9 @@
 </div>
 <br/>
 
-Thư viện hỗ trợ thanh toán qua VNPay.
+<strong>Thư viện hỗ trợ thanh toán qua [VNPay](https://vnpay.vn).</strong>
+
+VNPay documents: [https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/](https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/)
 
 ## Cài đặt:
 
@@ -33,6 +35,12 @@ pnpm add vnpay
 
 ## Sử dụng:
 
+#### Các phương thức
+
+1. `buildPaymentUrl(payload: BuildPaymentUrlDTO): Promise<string>`: Tạo url thanh toán
+
+2. `verifyReturnUrl(vnpayReturnQuery: ReturnQueryFromVNPayDTO): Promise<VerifyReturnUrlDTO>`: Xác thực kết quả trả về từ VNPay
+
 -   Import:
 
 ```typescript
@@ -51,6 +59,7 @@ const vnpayInstance = new VNPay({
     paymentGateway: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html', //your payment gateway, default is sandbox
     tmnCode: 'TMNCODE', // your tmn code
     secureSecret: 'SERCRET', // your secure secret
+    returnUrl: 'http://localhost:8888/order/vnpay_return', // return url
 });
 ```
 
@@ -61,7 +70,6 @@ const vnpayInstance = new VNPay({
 const urlString = await vnpay.buildPaymentUrl({
     vnp_Amount: 100000, // amount in VND
     vnp_IpAddr: '192.168.0.1', // customer ip address
-    vnp_ReturnUrl: 'http://localhost:8888/order/vnpay_return', // return url
     vnp_TxnRef: '12345678', // your transaction reference
     vnp_OrderInfo: `Thanh toan cho ma GD: ${tnx}`,
 });

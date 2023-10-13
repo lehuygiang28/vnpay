@@ -1,4 +1,4 @@
-# vnpay
+# VNPay API Nodejs
 
 <div style="text-align: center;">
     <h5>
@@ -9,7 +9,9 @@
 </div>
 <br/>
 
-A library support to payment with VNPay.
+<strong>A library support to payment with [VNPay](https://vnpay.vn).</strong>
+
+VNPay documents: [https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/](https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/)
 
 ## Installation:
 
@@ -33,6 +35,12 @@ pnpm add vnpay
 
 ## Usage:
 
+#### Methods
+
+1. `buildPaymentUrl(payload: BuildPaymentUrlDTO): Promise<string>`: Build payment url with payload
+
+2. `verifyReturnUrl(vnpayReturnQuery: ReturnQueryFromVNPayDTO): Promise<VerifyReturnUrlDTO>`: Verify return url from VNPay
+
 -   Import:
 
 ```typescript
@@ -51,6 +59,7 @@ const vnpayInstance = new VNPay({
     paymentGateway: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html', //your payment gateway, default is sandbox
     tmnCode: 'TMNCODE', // your tmn code
     secureSecret: 'SERCRET', // your secure secret
+    returnUrl: 'http://localhost:8888/order/vnpay_return', // return url
 });
 ```
 
@@ -61,7 +70,6 @@ const vnpayInstance = new VNPay({
 const urlString = await vnpay.buildPaymentUrl({
     vnp_Amount: 100000, // amount in VND
     vnp_IpAddr: '192.168.0.1', // customer ip address
-    vnp_ReturnUrl: 'http://localhost:8888/order/vnpay_return', // return url
     vnp_TxnRef: '12345678', // your transaction reference
     vnp_OrderInfo: `Thanh toan cho ma GD: ${tnx}`,
 });
