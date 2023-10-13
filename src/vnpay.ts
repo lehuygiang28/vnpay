@@ -53,8 +53,8 @@ export class VNPay {
     private vnp_Locale = VnpLocale.VN;
     private vnp_OrderType: string | VnpOrderType = VnpOrderType.OTHER;
 
-    public constructor(init: ConfigVnpayDTO) {
-        this.globalConfig = new ConfigVnpayDTO(init);
+    public constructor({ paymentGateway = PAYMENT_GATEWAY_SANDBOX, ...init }: ConfigVnpayDTO) {
+        this.globalConfig = new ConfigVnpayDTO({ paymentGateway, ...init });
     }
 
     /**
@@ -131,8 +131,12 @@ export class VNPay {
     public buildPaymentUrl(payload: BuildPaymentUrlDTO): Promise<string> {
         return new Promise((resolve, reject) => {
             const err = this.validateGlobalConfig();
-            if (err !== true) {
+            if (err instanceof Error) {
                 return reject(err);
+            }
+
+            if (!payload.vnp_ReturnUrl) {
+                payload.vnp_ReturnUrl = this.globalConfig.returnUrl;
             }
 
             const data = { ...this.configDefault, ...payload };
@@ -149,9 +153,7 @@ export class VNPay {
                 }
             });
 
-            const redirectUrl = new URL(
-                this.globalConfig.paymentGateway ?? PAYMENT_GATEWAY_SANDBOX,
-            );
+            const redirectUrl = new URL(String(this.globalConfig.paymentGateway));
             Object.entries(data)
                 .sort(([key1], [key2]) => key1.toString().localeCompare(key2.toString()))
                 .forEach(([key, value]) => {
@@ -180,12 +182,16 @@ export class VNPay {
      * @param {ReturnQueryFromVNPayDTO} vnpayReturnQuery - The object of data return from VNPay
      * @returns {Promise<VerifyReturnUrlDTO>} The return object
      */
-    public verifyReturnUrl(vnpayReturnQuery: ReturnQueryFromVNPayDTO): Promise<VerifyReturnUrlDTO> {
+    public verifyReturnUrl(
+        vnpayReturnQuery1: ReturnQueryFromVNPayDTO,
+    ): Promise<VerifyReturnUrlDTO> {
         return new Promise((resolve, reject) => {
             const err = this.validateGlobalConfig();
             if (err !== true) {
                 return reject(err);
             }
+
+            const vnpayReturnQuery = new ReturnQueryFromVNPayDTO(vnpayReturnQuery1);
 
             const secureHash = vnpayReturnQuery.vnp_SecureHash;
             const secretKey = this.globalConfig.secureSecret;

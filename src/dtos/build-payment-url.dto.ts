@@ -89,11 +89,11 @@ export class BuildPaymentUrlDTO {
     @Length(1, 100)
     vnp_OrderType?: string;
 
+    @IsOptional()
     @IsString()
-    @IsNotEmpty()
     @IsUrl()
     @Length(10, 255)
-    vnp_ReturnUrl: string;
+    vnp_ReturnUrl?: string;
 
     @IsAlphanumeric()
     @IsNotEmpty()
