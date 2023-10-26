@@ -179,25 +179,28 @@ export class VNPay {
     /**
      * Method to verify the return url from VNPay
      * @vi_vn Phương thức xác thực tính đúng đắn của các tham số trả về từ VNPay
-     * @param {ReturnQueryFromVNPayDTO} vnpayReturnQuery - The object of data return from VNPay
+     * @param {ReturnQueryFromVNPayDTO} query - The object of data return from VNPay
      * @returns {Promise<VerifyReturnUrlDTO>} The return object
      */
-    public verifyReturnUrl(
-        vnpayReturnQuery1: ReturnQueryFromVNPayDTO,
-    ): Promise<VerifyReturnUrlDTO> {
+    public verifyReturnUrl(query: ReturnQueryFromVNPayDTO): Promise<VerifyReturnUrlDTO> {
         return new Promise((resolve, reject) => {
             const err = this.validateGlobalConfig();
             if (err !== true) {
                 return reject(err);
             }
 
-            const vnpayReturnQuery = new ReturnQueryFromVNPayDTO(vnpayReturnQuery1);
+            const vnpayReturnQuery = new ReturnQueryFromVNPayDTO({ ...query });
+            validate(vnpayReturnQuery).then((errs) => {
+                if (errs.length > 0) {
+                    reject(errs);
+                }
+            });
 
             const secureHash = vnpayReturnQuery.vnp_SecureHash;
-            const secretKey = this.globalConfig.secureSecret;
 
-            delete (vnpayReturnQuery as any).vnp_SecureHash;
-            delete vnpayReturnQuery.vnp_SecureHashType;
+            // Will be remove when append to URLSearchParams
+            vnpayReturnQuery.vnp_SecureHash = '';
+            vnpayReturnQuery.vnp_SecureHashType = '';
 
             const outputResults = {
                 isSuccess: vnpayReturnQuery.vnp_ResponseCode === '00',
@@ -212,14 +215,15 @@ export class VNPay {
                 .sort(([key1], [key2]) => key1.toString().localeCompare(key2.toString()))
                 .forEach(([key, value]) => {
                     // Skip empty value
-                    if (!value || value === '' || value === undefined || value === null) {
+                    if (value === '' || value === undefined || value === null) {
                         return;
                     }
 
                     urlReturn.searchParams.append(key, value.toString());
                 });
 
-            const hmac = crypto.createHmac(this.CRYPTO_ALGORITHM, secretKey);
+            const hmac = crypto.createHmac(this.CRYPTO_ALGORITHM, this.globalConfig.secureSecret);
+
             const signed = hmac
                 .update(Buffer.from(urlReturn.search.slice(1).toString(), this.CRYPTO_ENCODING))
                 .digest('hex');

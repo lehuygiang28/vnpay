@@ -11,7 +11,19 @@ import {
 
 export class ReturnQueryFromVNPayDTO {
     constructor(data: ReturnQueryFromVNPayDTO) {
-        Object.assign(this, data);
+        this.vnp_TmnCode = data.vnp_TmnCode;
+        this.vnp_Amount = Number(data.vnp_Amount);
+        this.vnp_BankCode = data.vnp_BankCode;
+        this.vnp_BankTranNo = data?.vnp_BankTranNo;
+        this.vnp_CardType = data?.vnp_CardType;
+        this.vnp_PayDate = data?.vnp_PayDate;
+        this.vnp_OrderInfo = data.vnp_OrderInfo;
+        this.vnp_TransactionNo = Number(data.vnp_TransactionNo);
+        this.vnp_ResponseCode = data.vnp_ResponseCode;
+        this.vnp_TransactionStatus = data.vnp_TransactionStatus;
+        this.vnp_TxnRef = data.vnp_TxnRef;
+        this.vnp_SecureHashType = data?.vnp_SecureHashType;
+        this.vnp_SecureHash = data.vnp_SecureHash;
     }
 
     /**
@@ -20,7 +32,7 @@ export class ReturnQueryFromVNPayDTO {
     @IsNotEmpty()
     @IsAlphanumeric()
     @Length(8, 8)
-    vnp_TmnCode?: string;
+    vnp_TmnCode: string;
 
     /**
      * Số tiền thanh toán. VNPAY phản hồi số tiền nhân thêm 100 lần.
@@ -43,7 +55,7 @@ export class ReturnQueryFromVNPayDTO {
      */
     @IsOptional()
     @Length(1, 255)
-    vnp_BankTranNo: string;
+    vnp_BankTranNo?: string;
 
     /**
      * Loại tài khoản/thẻ khách hàng sử dụng:ATM, QRCODE
@@ -51,14 +63,14 @@ export class ReturnQueryFromVNPayDTO {
     @IsOptional()
     @IsString()
     @Length(2, 20)
-    vnp_CardType: string;
+    vnp_CardType?: string;
 
     /**
      * @description The date time when the transaction is created
      * @default - Format is `yyyyMMddHHmmss`
      */
     @IsOptional()
-    vnp_PayDate: number;
+    vnp_PayDate?: number;
 
     /**
      * 	Thông tin mô tả nội dung thanh toán (Tiếng Việt, không dấu). Ví dụ: **Nap tien cho thue bao 0123456789. So tien 100,000 VND**
