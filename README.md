@@ -9,7 +9,7 @@
 </div>
 <br/>
 
-<strong>A library support to payment with [VNPay](https://vnpay.vn).</strong>
+<strong>An open-source library support to payment with [VNPay](https://vnpay.vn).</strong>
 
 VNPay documents: [https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/](https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/)
 
@@ -76,33 +76,29 @@ const urlString = await vnpay.buildPaymentUrl({
 ```
 
 -   Verify response from VNPay:
+    Notice: Don't update order status here, just update order status when verify `ipn` call from VNPay
 
 ```typescript
 /**
  * Verify response from VNPay
- * Step 1: Get the response query from VNPay with GET method, in return url
- * Return url is passing to VNPay in buildPaymentUrl method
- * @example example below in expressjs
  */
 router.get('/order/vnpay_return', async (req, res) => {
     // `req.query` is the query string from VNPay
     const verifyResult = await vnpay.verifyReturnUrl(req.query);
     if (verifyResult.isSuccess) {
         // do something if verify success
+        // Don't update order status here, just update order status when verify ipn call from VNPay
     } else {
         // do something if verify fail
     }
 });
 ```
 
--   Verify ipn from VNPay:
+-   Verify ipn call from VNPay:
 
 ```typescript
 /**
- * Verify response from VNPay
- * Step 1: Get the response query from VNPay with GET method, in return url
- * Return url is passing to VNPay in buildPaymentUrl method
- * @example example below in expressjs
+ * Verify the ipn call from VNPay
  */
 router.get('/order/vnpay_ipn', async (req, res) => {
     // `req.query` is the query string from VNPay
@@ -117,6 +113,6 @@ router.get('/order/vnpay_ipn', async (req, res) => {
 
 ## Contribution
 
-<a href="https://github.com/lehuygiang28/regex-vietnamese/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=lehuygiang28/regex-vietnamese" />
+<a href="https://github.com/lehuygiang28/vnpay/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=lehuygiang28/vnpay" />
 </a>

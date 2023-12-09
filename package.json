@@ -12,10 +12,10 @@
         "lib"
     ],
     "scripts": {
-        "build": "tsc",
+        "build": "rimraf ./lib && tsc",
         "prepare": "npm run build",
         "test": "jest",
-        "example": "node lib/examples/main.js"
+        "example": "node lib/example.js"
     },
     "keywords": [
         "vnpay",
@@ -29,6 +29,7 @@
     "devDependencies": {
         "@types/jest": "^29.5.5",
         "@types/node": "^20.8.4",
+        "rimraf": "^5.0.5",
         "ts-jest": "^29.1.1",
         "typescript": "^5.2.2"
     },

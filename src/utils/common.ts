@@ -1,3 +1,14 @@
+import { RESPONSE_MAP } from '../constants/response-map.constant';
+import { VnpLocale } from '../enums';
+
+/**
+ * Định dạng lại ngày theo định dạng của VNPay, mặc định là yyyyMMddHHmmss
+ * @en Format date to VNPay format, default is yyyyMMddHHmmss
+ *
+ * @param date date to format
+ * @param format format of date
+ * @returns formatted date
+ */
 export function dateFormat(date: Date, format = 'yyyyMMddHHmmss'): number {
     const pad = (n: number) => (n < 10 ? `0${n}` : n).toString();
     const year = date.getFullYear();
@@ -26,4 +37,24 @@ export function generateRandomString(length: number) {
         result += `${characters[(Math.random() * charactersLength) | 0]}`;
     }
     return result;
+}
+
+/**
+ * Lấy thông tin response theo mã response
+ * @en Get response message by response code
+ *
+ * @param responseCode response code from VNPay
+ * @param locale locale of response text
+ * @param responseMap map of response code and response text if you want to custom
+ * @returns message of response code
+ */
+export function getResponseByStatusCode(
+    responseCode: string,
+    locale = VnpLocale.VN,
+    responseMap = RESPONSE_MAP,
+): string {
+    const respondText: Record<VnpLocale, string> =
+        responseMap.get(responseCode) ?? (responseMap.get('default') as Record<VnpLocale, string>);
+
+    return respondText[locale];
 }
