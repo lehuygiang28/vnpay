@@ -37,11 +37,13 @@ pnpm add vnpay
 
 #### Các phương thức
 
-1. `buildPaymentUrl(payload: BuildPaymentUrlDTO): Promise<string>`: Tạo url thanh toán
+1. `buildPaymentUrl(payload: BuildPaymentUrlSchema): Promise<string>`: Tạo url thanh toán
 
-2. `verifyReturnUrl(vnpayReturnQuery: ReturnQueryFromVNPayDTO): Promise<VerifyReturnUrlDTO>`: Xác thực kết quả trả về từ VNPay
+2. `verifyReturnUrl(vnpayReturnQuery: ReturnQueryFromVNPaySchema): Promise<VerifyReturnUrlSchema>`: Xác thực kết quả trả về từ VNPay
 
-3. `verifyIpnUrl(vnpayReturnQuery: ReturnQueryFromVNPayDTO): Promise<VerifyReturnUrlDTO>`: Xác thực lời gọi ipn từ VNPay
+3. `verifyIpnUrl(vnpayIpnQuery: ReturnQueryFromVNPaySchema): Promise<VerifyReturnUrlSchema>`: Xác thực lời gọi ipn từ VNPay
+
+4. `queryDr(payload: QueryDrSchema): Promise<AxiosResponse<any, any>>`: Truy vấn kết quả giao dịch
 
 -   Import:
 
@@ -110,6 +112,22 @@ router.get('/order/vnpay_ipn', async (req, res) => {
         //nếu xác thực thất bại, thực hiện xử lý lỗi, ...
     }
 });
+```
+
+-   Truy vấn kết quả thanh toán (QueryDr):
+
+```typescript
+const res = await vnpay.queryDr({
+    vnp_CreateDate: 20210809121212,
+    vnp_IpAddr: '127.0.0.1',
+    vnp_OrderInfo: 'hihihi',
+    vnp_RequestId: '121212',
+    vnp_TransactionDate: 20210809121212,
+    vnp_TransactionNo: 121212,
+    vnp_TxnRef: '112121',
+});
+
+console.log(res.data);
 ```
 
 ## Contribution

@@ -37,9 +37,13 @@ pnpm add vnpay
 
 #### Methods
 
-1. `buildPaymentUrl(payload: BuildPaymentUrlDTO): Promise<string>`: Build payment url with payload
+1. `buildPaymentUrl(payload: BuildPaymentUrlSchema): Promise<string>`: Build payment url with payload
 
-2. `verifyReturnUrl(vnpayReturnQuery: ReturnQueryFromVNPayDTO): Promise<VerifyReturnUrlDTO>`: Verify return url from VNPay
+2. `verifyReturnUrl(vnpayReturnQuery: ReturnQueryFromVNPaySchema): Promise<VerifyReturnUrlSchema>`: Verify return url from VNPay
+
+3. `verifyIpnUrl(vnpayIpnQuery: ReturnQueryFromVNPaySchema): Promise<VerifyReturnUrlSchema>`: Verify ipn url from VNPay
+
+4. `queryDr(payload: QueryDrSchema): Promise<AxiosResponse<any, any>>`: Query result transaction
 
 -   Import:
 
@@ -109,6 +113,22 @@ router.get('/order/vnpay_ipn', async (req, res) => {
         // do something if verify fail
     }
 });
+```
+
+-   Query result transaction (QueryDr):
+
+```typescript
+const res = await vnpay.queryDr({
+    vnp_CreateDate: 20210809121212,
+    vnp_IpAddr: '127.0.0.1',
+    vnp_OrderInfo: 'hihihi',
+    vnp_RequestId: '121212',
+    vnp_TransactionDate: 20210809121212,
+    vnp_TransactionNo: 121212,
+    vnp_TxnRef: '112121',
+});
+
+console.log(res.data);
 ```
 
 ## Contribution
