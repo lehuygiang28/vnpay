@@ -4,7 +4,7 @@
         "type": "git",
         "url": "git+https://github.com/lehuygiang28/vnpay.git"
     },
-    "version": "0.2.1",
+    "version": "0.3.0",
     "description": "A library support to payment with VNPay",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
@@ -14,7 +14,9 @@
     "scripts": {
         "build": "tsc",
         "prepare": "npm run build",
-        "test": "jest"
+        "test": "jest",
+        "publish": "npm run build && npm publish --access public",
+        "example": "node lib/examples/main.js"
     },
     "keywords": [
         "vnpay",
@@ -32,7 +34,7 @@
         "typescript": "^5.2.2"
     },
     "dependencies": {
-        "class-validator": "^0.14.0",
-        "moment-timezone": "^0.5.43"
+        "moment-timezone": "^0.5.43",
+        "zod": "^3.22.4"
     }
 }

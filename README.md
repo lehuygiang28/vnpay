@@ -55,7 +55,7 @@ const { VNPay } = require('vnpay');
 
 ```typescript
 // Create instance
-const vnpayInstance = new VNPay({
+const vnpay = new VNPay({
     paymentGateway: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html', //your payment gateway, default is sandbox
     tmnCode: 'TMNCODE', // your tmn code
     secureSecret: 'SERCRET', // your secure secret
@@ -87,6 +87,31 @@ const urlString = await vnpay.buildPaymentUrl({
 router.get('/order/vnpay_return', async (req, res) => {
     // `req.query` is the query string from VNPay
     const verifyResult = await vnpay.verifyReturnUrl(req.query);
+    if (verifyResult.isSuccess) {
+        // do something if verify success
+    } else {
+        // do something if verify fail
+    }
+});
+```
+
+-   Verify ipn from VNPay:
+
+```typescript
+/**
+ * Verify response from VNPay
+ * Step 1: Get the response query from VNPay with GET method, in return url
+ * Return url is passing to VNPay in buildPaymentUrl method
+ * @example example below in expressjs
+ */
+router.get('/order/vnpay_ipn', async (req, res) => {
+    // `req.query` is the query string from VNPay
+    const verifyResult = await vnpay.verifyIpnUrl(req.query);
+    if (verifyResult.isSuccess) {
+        // do something if verify success
+    } else {
+        // do something if verify fail
+    }
 });
 ```
 

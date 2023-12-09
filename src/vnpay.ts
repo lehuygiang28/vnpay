@@ -1,17 +1,14 @@
 import crypto from 'crypto';
 import timezone from 'moment-timezone';
-import { validate } from 'class-validator';
-import {
-    CURR_CODE_VND,
-    PAYMENT_GATEWAY_SANDBOX,
-    VNP_DEFAULT_COMMAND,
-    VNP_VERSION,
-} from './constants';
-import { ConfigVnpayDTO, BuildPaymentUrlDTO } from './dtos';
-import { VnpLocale, VnpOrderType } from './enums';
+import { PAYMENT_GATEWAY_SANDBOX, VNP_DEFAULT_COMMAND, VNP_VERSION } from './constants';
+import { VnpCurrCode, VnpLocale, VnpOrderType } from './enums';
 import { dateFormat } from './utils/common';
-import { ReturnQueryFromVNPayDTO } from './dtos/return-query-from-vnpay.dto';
-import { VerifyReturnUrlDTO } from './dtos/verify-return-url.dto';
+import {
+    ConfigVnpaySchema,
+    BuildPaymentUrlSchema,
+    ReturnQueryFromVNPaySchema,
+    VerifyReturnUrlSchema,
+} from './schema';
 
 /**
  * VNPay class to support VNPay payment
@@ -26,14 +23,7 @@ import { VerifyReturnUrlDTO } from './dtos/verify-return-url.dto';
  *     secureSecret: 'SERCRET',
  * });
  *
- * // or setup with async/await
- * const vnpayAsync = await VNPay.setup({
- *     paymentGateway: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
- *     tmnCode: 'TMNCODE',
- *     secureSecret: 'SERCRET',
- * });
- *
- * const tnx = '12345678';
+ * const tnx = '12345678'; // Generate your own transaction code
  * const urlString = await vnpay.buildPaymentUrl({
  *     vnp_Amount: 100000,
  *      vnp_IpAddr: '192.168.0.1',
@@ -43,34 +33,27 @@ import { VerifyReturnUrlDTO } from './dtos/verify-return-url.dto';
  * }),
  */
 export class VNPay {
-    private globalConfig: ConfigVnpayDTO;
+    private globalConfig: ConfigVnpaySchema;
     private CRYPTO_ALGORITHM = 'sha512';
     private CRYPTO_ENCODING: BufferEncoding = 'utf-8';
 
-    private vnp_Version = VNP_VERSION;
     private vnp_Command = VNP_DEFAULT_COMMAND;
-    private vnp_CurrCode = CURR_CODE_VND;
-    private vnp_Locale = VnpLocale.VN;
     private vnp_OrderType: string | VnpOrderType = VnpOrderType.OTHER;
 
-    public constructor({ paymentGateway = PAYMENT_GATEWAY_SANDBOX, ...init }: ConfigVnpayDTO) {
-        this.globalConfig = new ConfigVnpayDTO({ paymentGateway, ...init });
-    }
-
-    /**
-     * Setup the VNPay config
-     * @vi_vn Phương thức thiết lập cấu hình cho VNPay
-     *
-     * @param {ConfigVnpayDTO} init  - The config to setup
-     * @returns {VNPay} The VNPay instance
-     */
-    public static async setup(init: ConfigVnpayDTO): Promise<VNPay> {
-        const initValid = new ConfigVnpayDTO(init);
-        const err = await validate(initValid);
-        if (err.length > 0) {
-            throw err;
-        }
-        return new this(initValid);
+    public constructor({
+        paymentGateway = PAYMENT_GATEWAY_SANDBOX,
+        vnp_Version = VNP_VERSION,
+        vnp_CurrCode = VnpCurrCode.VND,
+        vnp_Locale = VnpLocale.VN,
+        ...init
+    }: ConfigVnpaySchema) {
+        this.globalConfig = ConfigVnpaySchema.parse({
+            paymentGateway,
+            vnp_Version,
+            vnp_CurrCode,
+            vnp_Locale,
+            ...init,
+        });
     }
 
     /**
@@ -79,46 +62,12 @@ export class VNPay {
      */
     public get configDefault() {
         return {
-            vnp_Version: this.vnp_Version,
+            vnp_Version: this.globalConfig.vnp_Version,
+            vnp_CurrCode: this.globalConfig.vnp_CurrCode,
+            vnp_Locale: this.globalConfig.vnp_Locale,
             vnp_Command: this.vnp_Command,
-            vnp_CurrCode: this.vnp_CurrCode,
-            vnp_Locale: this.vnp_Locale,
             vnp_OrderType: this.vnp_OrderType,
         };
-    }
-
-    /**
-     * Set the default config for VNPay
-     * @vi_vn Phương thức thiết lập cấu hình mặc định cho VNPay
-     */
-    public set configDefault(
-        config: Partial<{
-            vnp_Version: string;
-            vnp_Command: string;
-            vnp_CurrCode: string;
-            vnp_Locale: VnpLocale;
-            vnp_OrderType: string;
-        }>,
-    ) {
-        this.vnp_Version = config.vnp_Version ?? this.vnp_Version;
-        this.vnp_Command = config.vnp_Command ?? this.vnp_Command;
-        this.vnp_CurrCode = config.vnp_CurrCode ?? this.vnp_CurrCode;
-        this.vnp_Locale = config.vnp_Locale ?? this.vnp_Locale;
-        this.vnp_OrderType = config.vnp_OrderType ?? this.vnp_OrderType;
-    }
-
-    private validateGlobalConfig() {
-        if (!this.globalConfig.secureSecret) {
-            return new Error('Missing secure secret');
-        }
-        if (!this.globalConfig.tmnCode) {
-            return new Error('Missing merchant code');
-        }
-        if (!this.globalConfig.paymentGateway) {
-            return new Error('Missing payment gateway');
-        }
-
-        return true;
     }
 
     /**
@@ -128,124 +77,124 @@ export class VNPay {
      * @param {BuildPaymentUrlDTO} payload - Payload that contains the information to build the payment url
      * @returns {string} The payment url string
      */
-    public buildPaymentUrl(payload: BuildPaymentUrlDTO): Promise<string> {
+    public buildPaymentUrl(payload: BuildPaymentUrlSchema): Promise<string> {
         return new Promise((resolve, reject) => {
-            const err = this.validateGlobalConfig();
-            if (err instanceof Error) {
-                return reject(err);
-            }
+            try {
+                const validatedPayload = BuildPaymentUrlSchema.parse(payload);
 
-            if (!payload.vnp_ReturnUrl) {
-                payload.vnp_ReturnUrl = this.globalConfig.returnUrl;
-            }
-
-            const data = { ...this.configDefault, ...payload };
-
-            const timeGMT7 = timezone(new Date()).tz('Asia/Ho_Chi_Minh').format();
-            data.vnp_CreateDate = dateFormat(new Date(timeGMT7), 'yyyyMMddHHmmss');
-            data.vnp_Amount = data.vnp_Amount * 100;
-            data.vnp_TmnCode = this.globalConfig.tmnCode;
-
-            const dataValidate = new BuildPaymentUrlDTO(data);
-            validate(dataValidate).then((err) => {
-                if (err.length > 0) {
-                    reject(err);
+                if (!validatedPayload.vnp_ReturnUrl) {
+                    validatedPayload.vnp_ReturnUrl = this.globalConfig.returnUrl;
                 }
-            });
 
-            const redirectUrl = new URL(String(this.globalConfig.paymentGateway));
-            Object.entries(data)
-                .sort(([key1], [key2]) => key1.toString().localeCompare(key2.toString()))
-                .forEach(([key, value]) => {
-                    // Skip empty value
-                    if (!value || value === '' || value === undefined || value === null) {
-                        return;
-                    }
+                const data = { ...this.configDefault, ...validatedPayload };
+                const timeGMT7 = timezone(new Date()).tz('Asia/Ho_Chi_Minh').format();
+                data.vnp_CreateDate = dateFormat(new Date(timeGMT7), 'yyyyMMddHHmmss');
+                data.vnp_Amount = data.vnp_Amount * 100;
+                data.vnp_TmnCode = this.globalConfig.tmnCode;
 
-                    redirectUrl.searchParams.append(key, value.toString());
-                });
+                const redirectUrl = new URL(String(this.globalConfig.paymentGateway));
+                Object.entries(data)
+                    .sort(([key1], [key2]) => key1.toString().localeCompare(key2.toString()))
+                    .forEach(([key, value]) => {
+                        // Skip empty value
+                        if (!value || value === '' || value === undefined || value === null) {
+                            return;
+                        }
 
-            const hmac = crypto.createHmac(this.CRYPTO_ALGORITHM, this.globalConfig.secureSecret);
-            const signed = hmac
-                .update(Buffer.from(redirectUrl.search.slice(1).toString(), this.CRYPTO_ENCODING))
-                .digest('hex');
+                        redirectUrl.searchParams.append(key, value.toString());
+                    });
 
-            redirectUrl.searchParams.append('vnp_SecureHash', signed);
+                const hmac = crypto.createHmac(
+                    this.CRYPTO_ALGORITHM,
+                    this.globalConfig.secureSecret,
+                );
+                const signed = hmac
+                    .update(
+                        Buffer.from(redirectUrl.search.slice(1).toString(), this.CRYPTO_ENCODING),
+                    )
+                    .digest('hex');
 
-            return resolve(redirectUrl.toString());
+                redirectUrl.searchParams.append('vnp_SecureHash', signed);
+
+                return resolve(redirectUrl.toString());
+            } catch (error) {
+                return reject(error);
+            }
         });
     }
 
     /**
      * Method to verify the return url from VNPay
      * @vi_vn Phương thức xác thực tính đúng đắn của các tham số trả về từ VNPay
-     * @param {ReturnQueryFromVNPayDTO} query - The object of data return from VNPay
-     * @returns {Promise<VerifyReturnUrlDTO>} The return object
+     * @param {ReturnQueryFromVNPaySchema} query - The object of data return from VNPay
+     * @returns {Promise<VerifyReturnUrlSchema>} The return object
      */
-    public verifyReturnUrl(query: ReturnQueryFromVNPayDTO): Promise<VerifyReturnUrlDTO> {
+    public verifyReturnUrl(query: ReturnQueryFromVNPaySchema): Promise<VerifyReturnUrlSchema> {
         return new Promise((resolve, reject) => {
-            const err = this.validateGlobalConfig();
-            if (err !== true) {
-                return reject(err);
-            }
+            try {
+                const vnpayReturnQuery = ReturnQueryFromVNPaySchema.parse(query);
+                const secureHash = vnpayReturnQuery.vnp_SecureHash;
 
-            const vnpayReturnQuery = new ReturnQueryFromVNPayDTO({ ...query });
-            validate(vnpayReturnQuery).then((errs) => {
-                if (errs.length > 0) {
-                    reject(errs);
-                }
-            });
+                // Will be remove when append to URLSearchParams
+                delete vnpayReturnQuery.vnp_SecureHash;
+                delete vnpayReturnQuery.vnp_SecureHashType;
 
-            const secureHash = vnpayReturnQuery.vnp_SecureHash;
-
-            // Will be remove when append to URLSearchParams
-            vnpayReturnQuery.vnp_SecureHash = '';
-            vnpayReturnQuery.vnp_SecureHashType = '';
-
-            const outputResults = {
-                isSuccess: vnpayReturnQuery.vnp_ResponseCode === '00',
-                message: VNPay.getResponseByStatusCode(
-                    vnpayReturnQuery.vnp_ResponseCode.toString(),
-                    this.configDefault.vnp_Locale,
-                ),
-            };
-
-            const urlReturn = new URL(this.globalConfig.paymentGateway ?? PAYMENT_GATEWAY_SANDBOX);
-            Object.entries(vnpayReturnQuery)
-                .sort(([key1], [key2]) => key1.toString().localeCompare(key2.toString()))
-                .forEach(([key, value]) => {
-                    // Skip empty value
-                    if (value === '' || value === undefined || value === null) {
-                        return;
-                    }
-
-                    urlReturn.searchParams.append(key, value.toString());
-                });
-
-            const hmac = crypto.createHmac(this.CRYPTO_ALGORITHM, this.globalConfig.secureSecret);
-
-            const signed = hmac
-                .update(Buffer.from(urlReturn.search.slice(1).toString(), this.CRYPTO_ENCODING))
-                .digest('hex');
-
-            if (secureHash === signed) {
-                Object.assign(outputResults, {
+                const outputResults = {
                     isSuccess: vnpayReturnQuery.vnp_ResponseCode === '00',
+                    message: VNPay.getResponseByStatusCode(
+                        vnpayReturnQuery.vnp_ResponseCode?.toString() ?? '',
+                        this.configDefault.vnp_Locale,
+                    ),
+                };
+
+                const urlReturn = new URL(
+                    this.globalConfig.paymentGateway ?? PAYMENT_GATEWAY_SANDBOX,
+                );
+                Object.entries(vnpayReturnQuery)
+                    .sort(([key1], [key2]) => key1.toString().localeCompare(key2.toString()))
+                    .forEach(([key, value]) => {
+                        // Skip empty value
+                        if (value === '' || value === undefined || value === null) {
+                            return;
+                        }
+
+                        urlReturn.searchParams.append(key, value.toString());
+                    });
+
+                const hmac = crypto.createHmac(
+                    this.CRYPTO_ALGORITHM,
+                    this.globalConfig.secureSecret,
+                );
+
+                const signed = hmac
+                    .update(Buffer.from(urlReturn.search.slice(1).toString(), this.CRYPTO_ENCODING))
+                    .digest('hex');
+
+                if (secureHash === signed) {
+                    Object.assign(outputResults, {
+                        isSuccess: vnpayReturnQuery.vnp_ResponseCode === '00',
+                    });
+                } else {
+                    Object.assign(outputResults, {
+                        isSuccess: false,
+                        message: 'Wrong checksum',
+                    });
+                }
+
+                const returnObject = VerifyReturnUrlSchema.parse({
+                    ...vnpayReturnQuery,
+                    ...outputResults,
                 });
-            } else {
-                Object.assign(outputResults, {
-                    isSuccess: false,
-                    message: 'Wrong checksum',
-                });
+
+                resolve(returnObject);
+            } catch (error) {
+                reject(error);
             }
-
-            const returnObject = new VerifyReturnUrlDTO({
-                ...vnpayReturnQuery,
-                ...outputResults,
-            });
-
-            resolve(returnObject);
         });
+    }
+
+    public verifyIpnUrl(query: ReturnQueryFromVNPaySchema): Promise<VerifyReturnUrlSchema> {
+        return this.verifyReturnUrl(query);
     }
 
     /**
