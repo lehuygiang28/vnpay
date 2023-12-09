@@ -15,7 +15,6 @@
         "build": "tsc",
         "prepare": "npm run build",
         "test": "jest",
-        "publish": "npm run build && npm publish --access public",
         "example": "node lib/examples/main.js"
     },
     "keywords": [
