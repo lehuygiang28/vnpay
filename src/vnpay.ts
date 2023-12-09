@@ -1,6 +1,11 @@
 import crypto from 'crypto';
 import timezone from 'moment-timezone';
-import { PAYMENT_GATEWAY_SANDBOX, VNP_DEFAULT_COMMAND, VNP_VERSION } from './constants';
+import {
+    VNPAY_GATEWAY_SANDBOX_HOST,
+    GATEWAY_ENDPOINT,
+    VNP_DEFAULT_COMMAND,
+    VNP_VERSION,
+} from './constants';
 import { VnpCurrCode, VnpLocale, VnpOrderType } from './enums';
 import { dateFormat, getResponseByStatusCode } from './utils/common';
 import {
@@ -43,14 +48,14 @@ export class VNPay {
     private vnp_OrderType: string | VnpOrderType = VnpOrderType.OTHER;
 
     public constructor({
-        paymentGateway = PAYMENT_GATEWAY_SANDBOX,
+        api_Host = VNPAY_GATEWAY_SANDBOX_HOST,
         vnp_Version = VNP_VERSION,
         vnp_CurrCode = VnpCurrCode.VND,
         vnp_Locale = VnpLocale.VN,
         ...init
     }: ConfigVnpaySchema) {
         this.globalConfig = ConfigVnpaySchema.parse({
-            paymentGateway,
+            api_Host,
             vnp_Version,
             vnp_CurrCode,
             vnp_Locale,
@@ -94,7 +99,7 @@ export class VNPay {
                 data.vnp_Amount = data.vnp_Amount * 100;
                 data.vnp_TmnCode = this.globalConfig.tmnCode;
 
-                const redirectUrl = new URL(String(this.globalConfig.paymentGateway));
+                const redirectUrl = new URL(`${this.globalConfig.api_Host}/${GATEWAY_ENDPOINT}`);
                 Object.entries(data)
                     .sort(([key1], [key2]) => key1.toString().localeCompare(key2.toString()))
                     .forEach(([key, value]) => {
@@ -117,6 +122,7 @@ export class VNPay {
                     .digest('hex');
 
                 redirectUrl.searchParams.append('vnp_SecureHash', signed);
+                console.log(redirectUrl.search);
 
                 return resolve(redirectUrl.toString());
             } catch (error) {
@@ -150,9 +156,7 @@ export class VNPay {
                     ),
                 };
 
-                const urlReturn = new URL(
-                    this.globalConfig.paymentGateway ?? PAYMENT_GATEWAY_SANDBOX,
-                );
+                const searchParams = new URLSearchParams();
                 Object.entries(vnpayReturnQuery)
                     .sort(([key1], [key2]) => key1.toString().localeCompare(key2.toString()))
                     .forEach(([key, value]) => {
@@ -161,7 +165,7 @@ export class VNPay {
                             return;
                         }
 
-                        urlReturn.searchParams.append(key, value.toString());
+                        searchParams.append(key, value.toString());
                     });
 
                 const hmac = crypto.createHmac(
@@ -170,7 +174,7 @@ export class VNPay {
                 );
 
                 const signed = hmac
-                    .update(Buffer.from(urlReturn.search.slice(1).toString(), this.CRYPTO_ENCODING))
+                    .update(Buffer.from(searchParams.toString(), this.CRYPTO_ENCODING))
                     .digest('hex');
 
                 if (secureHash === signed) {

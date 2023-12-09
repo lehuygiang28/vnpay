@@ -37,11 +37,6 @@ const commonSchema = z.object({
 
 export const ConfigVnpaySchema = z.object({
     /**
-     * Đường dẫn tới cổng thanh toán của VNPay
-     * @en Payment gateway url of VNPay
-     */
-    paymentGateway: z.string().url().min(1).optional(),
-    /**
      * Mã tmn của đối tác
      * @en Merchant tmn code
      */
@@ -77,6 +72,14 @@ export const ConfigVnpaySchema = z.object({
      * @see https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/
      */
     vnp_OrderType: z.union([z.nativeEnum(VnpOrderType), z.string()]).optional(),
+
+    /**
+     * Đường dẫn tới API của VNPay
+     * @en API host url of VNPay
+     * @default 'https://sandbox.vnpayment.vn'
+     * @example 'https://sandbox.vnpayment.vn'
+     */
+    api_Host: z.string().url().min(1).optional(),
 });
 
 export const BuildPaymentUrlSchema = commonSchema.extend({

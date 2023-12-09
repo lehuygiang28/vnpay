@@ -4,7 +4,7 @@ async function main() {
     const vnpay = new VNPay({
         tmnCode: '2QXUI4B4',
         secureSecret: 'secret',
-        returnUrl: 'https://sandbox.vnpayment.vn/tryitnow/Home/ReturnResult',
+        api_Host: 'https://sandbox.vnpayment.vn',
     });
 
     const urlString = await vnpay.buildPaymentUrl({
