@@ -5,15 +5,19 @@ import {
     GATEWAY_ENDPOINT,
     VNP_DEFAULT_COMMAND,
     VNP_VERSION,
+    QUERY_DR_REFUND_ENDPOINT,
 } from './constants';
 import { VnpCurrCode, VnpLocale, VnpOrderType } from './enums';
-import { dateFormat, getResponseByStatusCode } from './utils/common';
+import { dateFormat, getResponseByStatusCode, resolveUrlString } from './utils/common';
 import {
     ConfigVnpaySchema,
     BuildPaymentUrlSchema,
     ReturnQueryFromVNPaySchema,
     VerifyReturnUrlSchema,
+    QueryDrSchema,
+    BodyRequestQueryDr,
 } from './schema';
+import axios, { AxiosResponse } from 'axios';
 
 /**
  * Lớp hỗ trợ thanh toán qua VNPay
@@ -24,7 +28,7 @@ import {
  * import { VNPay } from 'vnpay';
  *
  * const vnpay = new VNPay({
- *     paymentGateway: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
+ *     api_Host: 'https://sandbox.vnpayment.vn',
  *     tmnCode: 'TMNCODE',
  *     secureSecret: 'SERCRET',
  * });
@@ -99,7 +103,12 @@ export class VNPay {
                 data.vnp_Amount = data.vnp_Amount * 100;
                 data.vnp_TmnCode = this.globalConfig.tmnCode;
 
-                const redirectUrl = new URL(`${this.globalConfig.api_Host}/${GATEWAY_ENDPOINT}`);
+                const redirectUrl = new URL(
+                    resolveUrlString(
+                        this.globalConfig.api_Host ?? VNPAY_GATEWAY_SANDBOX_HOST,
+                        GATEWAY_ENDPOINT,
+                    ),
+                );
                 Object.entries(data)
                     .sort(([key1], [key2]) => key1.toString().localeCompare(key2.toString()))
                     .forEach(([key, value]) => {
@@ -122,7 +131,6 @@ export class VNPay {
                     .digest('hex');
 
                 redirectUrl.searchParams.append('vnp_SecureHash', signed);
-                console.log(redirectUrl.search);
 
                 return resolve(redirectUrl.toString());
             } catch (error) {
@@ -209,5 +217,44 @@ export class VNPay {
      */
     public verifyIpnUrl(query: ReturnQueryFromVNPaySchema): Promise<VerifyReturnUrlSchema> {
         return this.verifyReturnUrl(query);
+    }
+
+    /**
+     * Đây là API để hệ thống merchant truy vấn kết quả thanh toán của giao dịch tại hệ thống VNPAY.
+     * @en This is the API for the merchant system to query the payment result of the transaction at the VNPAY system.
+     * @see https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#truy-van-ket-qua-thanh-toan-PAY
+     *
+     * @param {QueryDrSchema} query - The data to query
+     * @returns {Promise<AxiosResponse<any, any>>} The axios instance
+     */
+    public async queryDr(query: QueryDrSchema): Promise<AxiosResponse<any, any>> {
+        const command = 'querydr';
+        const { vnp_Version = VNP_VERSION } = query;
+        const dataQuery = QueryDrSchema.parse({ vnp_Version, ...query });
+
+        const url = new URL(
+            resolveUrlString(
+                this.globalConfig.api_Host ?? VNPAY_GATEWAY_SANDBOX_HOST,
+                QUERY_DR_REFUND_ENDPOINT,
+            ),
+        );
+
+        const stringToCheckSum =
+            `${dataQuery.vnp_RequestId}|${dataQuery.vnp_Version}|${command}` +
+            `|${this.globalConfig.tmnCode}|${dataQuery.vnp_TxnRef}|${dataQuery.vnp_TransactionDate}` +
+            `|${dataQuery.vnp_CreateDate}|${dataQuery.vnp_IpAddr}|${dataQuery.vnp_OrderInfo}`;
+
+        const hmac = crypto.createHmac(this.CRYPTO_ALGORITHM, this.globalConfig.secureSecret);
+        const signed = hmac
+            .update(Buffer.from(stringToCheckSum, this.CRYPTO_ENCODING))
+            .digest('hex');
+
+        const body: BodyRequestQueryDr = {
+            ...dataQuery,
+            vnp_Command: command,
+            vnp_TmnCode: this.globalConfig.tmnCode,
+            vnp_SecureHash: signed,
+        };
+        return axios.post(url.toString(), body);
     }
 }

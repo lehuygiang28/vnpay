@@ -1,4 +1,5 @@
 import { VNPay } from './vnpay';
+import { dateFormat } from './utils';
 
 async function main() {
     const vnpay = new VNPay({
@@ -23,7 +24,7 @@ async function main() {
         vnp_BankTranNo: '123456',
         vnp_CardType: 'ATM',
         vnp_OrderInfo: '123456',
-        vnp_PayDate: 20220101120000,
+        vnp_PayDate: dateFormat(new Date()),
         vnp_ResponseCode: '00',
         vnp_TmnCode: '2QXUI4B4',
         vnp_TransactionNo: '123456',
@@ -34,6 +35,19 @@ async function main() {
     console.warn(
         'Will show the error wrong checksum because the vnp_SecureHash is wrong, need to call to vnpay to get the correct vnp_SecureHash',
     );
+
+    console.log('----querydr----------');
+    const res = await vnpay.queryDr({
+        vnp_CreateDate: 20210809121212,
+        vnp_IpAddr: '127.0.0.1',
+        vnp_OrderInfo: 'hihihi',
+        vnp_RequestId: '121212',
+        vnp_TransactionDate: 20210809121212,
+        vnp_TransactionNo: 121212,
+        vnp_TxnRef: '112121',
+    });
+
+    console.log(res.data);
 }
 
 main();

@@ -58,3 +58,7 @@ export function getResponseByStatusCode(
 
     return respondText[locale];
 }
+
+export function resolveUrlString(host: string, path: string): string {
+    return `${host.replace(/\/+$/, '')}/${path.replace(/^\//, '')}`;
+}
