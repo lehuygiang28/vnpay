@@ -49,7 +49,7 @@ export function generateRandomString(length: number) {
  * @returns message of response code
  */
 export function getResponseByStatusCode(
-    responseCode: string,
+    responseCode: string = '',
     locale = VnpLocale.VN,
     responseMap = RESPONSE_MAP,
 ): string {

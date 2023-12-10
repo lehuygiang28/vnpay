@@ -4,7 +4,7 @@
         "type": "git",
         "url": "git+https://github.com/lehuygiang28/vnpay.git"
     },
-    "version": "0.4.0",
+    "version": "0.5.0",
     "description": "A library support to payment with VNPay",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",

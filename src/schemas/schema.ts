@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { VnpCurrCode, VnpLocale, VnpOrderType } from './enums';
+import { VnpCurrCode, VnpLocale, VnpOrderType } from '../enums';
 
 export const ConfigVnpaySchema = z.object({
     /**
@@ -48,7 +48,7 @@ export const ConfigVnpaySchema = z.object({
     api_Host: z.string().url().min(1).optional(),
 });
 
-const commonSchema = z.object({
+export const commonSchema = z.object({
     /**
      * Số tiền thanh toán. VNPAY phản hồi số tiền nhân thêm 100 lần.
      * @en Amount of payment. VNPAY responds to the amount received plus 100 times.
@@ -220,76 +220,7 @@ export const VerifyReturnUrlSchema = ReturnQueryFromVNPaySchema.extend({
     message: z.string().default('').optional(),
 }).strict();
 
-export const QueryDrSchema = commonSchema
-    .pick({
-        vnp_TxnRef: true,
-    })
-
-    .required()
-    .extend({
-        /**
-         * Mã hệ thống merchant tự sinh ứng với mỗi yêu cầu truy vấn giao dịch.
-         * Mã này là duy nhất dùng để phân biệt các yêu cầu truy vấn giao dịch. Không được trùng lặp trong ngày.
-         * @en Merchant system code automatically generated for each transaction query request.
-         * This code is unique to distinguish transaction query requests. Not duplicated in a day.
-         *
-         */
-        vnp_RequestId: z.string().min(1).max(32),
-        /**
-         * Thời gian ghi nhận giao dịch tại hệ thống của merchant tính theo GMT+7, định dạng: yyyyMMddHHmmss, tham khảo giá trị:
-         * - Thanh toán PAYgiống vnp_CreateDate của vnp_Command=pay
-         * - Thanh toán bằng mã Token giống "vnp_create_date" của "vnp_Command=pay_and_create" và "vnp_command=token_pay"
-         * - Thanh toán trả góp giống "transaction": {"mcDate": ""} chiều khởi tạo giao dịch trả góp
-         * - Thanh toán định kỳ giống "transaction": {"mcDate": ""} chiều khởi tạo yêu cầu thanh toán định kỳ
-         *
-         * @en Transaction time recorded at merchant system according to GMT + 7, format: yyyyMMddHHmmss, refer to value:
-         * - PAY payment same as vnp_CreateDate of vnp_Command = pay
-         * - Payment by Token code same as "vnp_create_date" of "vnp_Command = pay_and_create" and "vnp_command = token_pay"
-         * - Installment payment same as "transaction": {"mcDate": ""} in the afternoon of initiating the installment payment transaction
-         * - Periodic payment same as "transaction": {"mcDate": ""} in the afternoon of initiating the periodic payment request
-         */
-        vnp_TransactionDate: z.union([
-            z.number().min(1).max(Number.MAX_SAFE_INTEGER),
-            z.string().length(14),
-        ]),
-        /**
-         * 	Địa chỉ IP của máy chủ thực hiện gọi API
-         * @en IP address of the server that calls the API
-         */
-        vnp_IpAddr: z.string().min(7).max(45),
-    })
-
-    .and(
-        ConfigVnpaySchema.pick({
-            vnp_Version: true,
-        }).optional(),
-    )
-    .and(
-        BuildPaymentUrlSchema.pick({
-            vnp_OrderInfo: true,
-            vnp_CreateDate: true,
-        }).required(),
-    )
-    .and(
-        ReturnQueryFromVNPaySchema.pick({
-            vnp_TransactionNo: true,
-        }).required(),
-    );
-
-export const BodyRequestQueryDr = QueryDrSchema.and(
-    ReturnQueryFromVNPaySchema.pick({
-        vnp_SecureHash: true,
-        vnp_TmnCode: true,
-    }).required(),
-).and(
-    BuildPaymentUrlSchema.pick({
-        vnp_Command: true,
-    }).required(),
-);
-
 export type ConfigVnpaySchema = z.infer<typeof ConfigVnpaySchema>;
 export type BuildPaymentUrlSchema = z.infer<typeof BuildPaymentUrlSchema>;
 export type ReturnQueryFromVNPaySchema = z.infer<typeof ReturnQueryFromVNPaySchema>;
 export type VerifyReturnUrlSchema = z.infer<typeof VerifyReturnUrlSchema>;
-export type QueryDrSchema = z.infer<typeof QueryDrSchema>;
-export type BodyRequestQueryDr = z.infer<typeof BodyRequestQueryDr>;

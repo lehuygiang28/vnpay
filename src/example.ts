@@ -37,17 +37,17 @@ async function main() {
     );
 
     console.log('----querydr----------');
-    const res = await vnpay.queryDr({
-        vnp_CreateDate: 20210809121212,
+    const queryDrResult = await vnpay.queryDr({
+        vnp_CreateDate: 20210809121213,
         vnp_IpAddr: '127.0.0.1',
         vnp_OrderInfo: 'hihihi',
-        vnp_RequestId: '121212',
+        vnp_RequestId: '1212123',
         vnp_TransactionDate: 20210809121212,
         vnp_TransactionNo: 121212,
         vnp_TxnRef: '112121',
     });
 
-    console.log(res.data);
+    console.log(queryDrResult);
 }
 
 main();

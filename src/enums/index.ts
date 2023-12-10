@@ -14,3 +14,9 @@ export enum VnpLocale {
 export enum VnpOrderType {
     OTHER = 'other',
 }
+
+export enum VnpTransactionType {
+    PAYMENT = '01',
+    FULL_REFUND = '02',
+    PARTIAL_REFUND = '03',
+}

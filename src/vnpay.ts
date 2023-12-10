@@ -6,6 +6,7 @@ import {
     VNP_DEFAULT_COMMAND,
     VNP_VERSION,
     QUERY_DR_REFUND_ENDPOINT,
+    QUERY_DR_RESPONSE_MAP,
 } from './constants';
 import { VnpCurrCode, VnpLocale, VnpOrderType } from './enums';
 import { dateFormat, getResponseByStatusCode, resolveUrlString } from './utils/common';
@@ -16,8 +17,9 @@ import {
     VerifyReturnUrlSchema,
     QueryDrSchema,
     BodyRequestQueryDr,
-} from './schema';
-import axios, { AxiosResponse } from 'axios';
+    QueryDrResponseFromVNPaySchema,
+} from './schemas';
+import axios from 'axios';
 
 /**
  * Lớp hỗ trợ thanh toán qua VNPay
@@ -225,9 +227,9 @@ export class VNPay {
      * @see https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#truy-van-ket-qua-thanh-toan-PAY
      *
      * @param {QueryDrSchema} query - The data to query
-     * @returns {Promise<AxiosResponse<any, any>>} The axios instance
+     * @returns {Promise<QueryDrResponseFromVNPaySchema>} The data return from VNPay
      */
-    public async queryDr(query: QueryDrSchema): Promise<AxiosResponse<any, any>> {
+    public async queryDr(query: QueryDrSchema): Promise<QueryDrResponseFromVNPaySchema> {
         const command = 'querydr';
         const { vnp_Version = VNP_VERSION } = query;
         const dataQuery = QueryDrSchema.parse({ vnp_Version, ...query });
@@ -255,6 +257,35 @@ export class VNPay {
             vnp_TmnCode: this.globalConfig.tmnCode,
             vnp_SecureHash: signed,
         };
-        return axios.post(url.toString(), body);
+        const res = await axios.post<QueryDrResponseFromVNPaySchema>(url.toString(), body);
+
+        if (Number(res.data.vnp_ResponseCode) >= 90 && Number(res.data.vnp_ResponseCode) <= 99) {
+            return {
+                ...res.data,
+                vnp_Message: getResponseByStatusCode(
+                    res.data.vnp_ResponseCode?.toString(),
+                    this.globalConfig.vnp_Locale,
+                    QUERY_DR_RESPONSE_MAP,
+                ),
+            };
+        }
+
+        const responseData = res.data;
+        const stringToCheckSumResponse =
+            `${responseData.vnp_ResponseId}|${responseData.vnp_Command}|${responseData.vnp_ResponseCode}` +
+            `|${responseData.vnp_Message}|${responseData.vnp_TmnCode}|${responseData.vnp_TxnRef}` +
+            `|${responseData.vnp_Amount}|${responseData.vnp_BankCode}|${responseData.vnp_PayDate}` +
+            `|${responseData.vnp_TransactionNo}|${responseData.vnp_TransactionType}|${responseData.vnp_TransactionStatus}` +
+            `|${responseData.vnp_OrderInfo}|${responseData.vnp_PromotionCode}|${responseData.vnp_PromotionAmount}`;
+
+        const signedResponse = hmac
+            .update(Buffer.from(stringToCheckSumResponse, this.CRYPTO_ENCODING))
+            .digest('hex');
+
+        if (signedResponse !== responseData.vnp_SecureHash) {
+            throw new Error('Wrong checksum');
+        }
+
+        return responseData;
     }
 }

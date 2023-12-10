@@ -43,7 +43,7 @@ pnpm add vnpay
 
 3. `verifyIpnUrl(vnpayIpnQuery: ReturnQueryFromVNPaySchema): Promise<VerifyReturnUrlSchema>`: Xác thực lời gọi ipn từ VNPay
 
-4. `queryDr(payload: QueryDrSchema): Promise<AxiosResponse<any, any>>`: Truy vấn kết quả giao dịch
+4. `queryDr(payload: QueryDrSchema): Promise<QueryDrResponseFromVNPaySchema>`: Truy vấn kết quả giao dịch
 
 -   Import:
 
@@ -117,7 +117,7 @@ router.get('/order/vnpay_ipn', async (req, res) => {
 -   Truy vấn kết quả thanh toán (QueryDr):
 
 ```typescript
-const res = await vnpay.queryDr({
+const queryDrResult = await vnpay.queryDr({
     vnp_CreateDate: 20210809121212,
     vnp_IpAddr: '127.0.0.1',
     vnp_OrderInfo: 'hihihi',
@@ -127,7 +127,7 @@ const res = await vnpay.queryDr({
     vnp_TxnRef: '112121',
 });
 
-console.log(res.data);
+console.log(queryDrResult);
 ```
 
 ## Contribution

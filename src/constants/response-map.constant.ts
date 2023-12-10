@@ -103,3 +103,151 @@ export const RESPONSE_MAP = new Map<string, Record<VnpLocale, string>>([
     ],
     ['default', { vn: 'Giao dịch thất bại', en: 'Failure' }],
 ]);
+
+export const QUERY_DR_RESPONSE_MAP = new Map<string, Record<VnpLocale, string>>([
+    ['00', { vn: 'Yêu cầu thành công', en: 'Success' }],
+    [
+        '02',
+        {
+            vn: 'Mã định danh kết nối không hợp lệ (kiểm tra lại TmnCode)',
+            en: 'Invalid connection identifier (check TmnCode)',
+        },
+    ],
+    [
+        '03',
+        {
+            vn: 'Dữ liệu gửi sang không đúng định dạng',
+            en: 'Sent data is not in the right format',
+        },
+    ],
+    [
+        '91',
+        {
+            vn: 'Không tìm thấy giao dịch yêu cầu',
+            en: 'Transaction not found for request',
+        },
+    ],
+    [
+        '94',
+        {
+            vn: 'Yêu cầu trùng lặp, duplicate request trong thời gian giới hạn của API',
+            en: 'Duplicate request within the time limit of the API',
+        },
+    ],
+    [
+        '97',
+        {
+            vn: 'Checksum không hợp lệ',
+            en: 'Invalid checksum',
+        },
+    ],
+    [
+        '99',
+        {
+            vn: 'Các lỗi khác (lỗi còn lại, không có trong danh sách mã lỗi đã liệt kê)',
+            en: 'Other errors (remaining errors, not in the list of error codes listed)',
+        },
+    ],
+    ['default', { vn: 'Giao dịch thất bại', en: 'Failure' }],
+]);
+
+export const REFUND_RESPONSE_MAP = new Map<string, Record<VnpLocale, string>>([
+    ['00', { vn: 'Yêu cầu thành công', en: 'Success' }],
+    [
+        '02',
+        {
+            vn: 'Mã định danh kết nối không hợp lệ (kiểm tra lại TmnCode)',
+            en: 'Invalid connection identifier (check TmnCode)',
+        },
+    ],
+    [
+        '03',
+        {
+            vn: 'Dữ liệu gửi sang không đúng định dạng',
+            en: 'Sent data is not in the right format',
+        },
+    ],
+    [
+        '91',
+        {
+            vn: 'Không tìm thấy giao dịch yêu cầu hoàn trả',
+            en: 'Transaction not found for request refund',
+        },
+    ],
+    [
+        '94',
+        {
+            vn: 'Giao dịch đã được gửi yêu cầu hoàn tiền trước đó. Yêu cầu này VNPAY đang xử lý',
+            en: 'The transaction has been sent a refund request before. VNPAY is processing this request',
+        },
+    ],
+    [
+        '95',
+        {
+            vn: 'Giao dịch này không thành công bên VNPAY. VNPAY từ chối xử lý yêu cầu',
+            en: 'This transaction is not successful from VNPAY. VNPAY refuses to process the request',
+        },
+    ],
+    [
+        '97',
+        {
+            vn: 'Checksum không hợp lệ',
+            en: 'Invalid checksum',
+        },
+    ],
+    [
+        '99',
+        {
+            vn: 'Các lỗi khác (lỗi còn lại, không có trong danh sách mã lỗi đã liệt kê)',
+            en: 'Other errors (remaining errors, not in the list of error codes listed)',
+        },
+    ],
+    ['default', { vn: 'Giao dịch thất bại', en: 'Failure' }],
+]);
+
+export const TRANSACTION_STATUS_RESPONSE_MAP = new Map<string, Record<VnpLocale, string>>([
+    ['00', { vn: 'Giao dịch thanh toán thành công', en: 'Payment transaction successful' }],
+    ['01', { vn: 'Giao dịch chưa hoàn tất', en: 'Transaction not completed' }],
+    [
+        '02',
+        {
+            vn: 'Giao dịch bị lỗi',
+            en: 'Transaction error',
+        },
+    ],
+    [
+        '04',
+        {
+            vn: 'Giao dịch đảo (Khách hàng đã bị trừ tiền tại Ngân hàng nhưng GD chưa thành công ở VNPAY)',
+            en: 'Transaction reverse (Customer has been deducted money at the Bank but the transaction is not successful at VNPAY)',
+        },
+    ],
+    [
+        '05',
+        {
+            vn: 'VNPAY đang xử lý giao dịch này (GD hoàn tiền)',
+            en: 'VNPAY is processing this transaction (refund)',
+        },
+    ],
+    [
+        '06',
+        {
+            vn: 'VNPAY đã gửi yêu cầu hoàn tiền sang Ngân hàng (GD hoàn tiền)',
+            en: 'VNPAY has sent a refund request to the Bank (refund)',
+        },
+    ],
+    [
+        '07',
+        {
+            vn: 'Giao dịch bị nghi ngờ gian lận',
+            en: 'Transaction suspected of fraud',
+        },
+    ],
+    [
+        '09',
+        {
+            vn: 'GD Hoàn trả bị từ chối',
+            en: 'Refund transaction is rejected',
+        },
+    ],
+]);
