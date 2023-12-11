@@ -1,0 +1,9 @@
+.vscode
+node_modules
+src
+.gitignore
+.prettierrc
+
+*.md
+!README*.md
+tsconfig.json
