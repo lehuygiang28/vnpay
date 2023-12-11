@@ -15,7 +15,8 @@
         "build": "rimraf ./lib && tsc",
         "prepare": "npm run build",
         "test": "jest",
-        "example": "ts-node ./src/example.ts"
+        "example": "node ./lib/example.js",
+        "dev:example": "ts-node ./src/example.ts"
     },
     "keywords": [
         "vnpay",
