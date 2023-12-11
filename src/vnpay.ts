@@ -19,7 +19,6 @@ import {
     BodyRequestQueryDr,
     QueryDrResponseFromVNPaySchema,
 } from './schemas';
-import axios from 'axios';
 
 /**
  * Lớp hỗ trợ thanh toán qua VNPay
@@ -246,8 +245,8 @@ export class VNPay {
             `|${this.globalConfig.tmnCode}|${dataQuery.vnp_TxnRef}|${dataQuery.vnp_TransactionDate}` +
             `|${dataQuery.vnp_CreateDate}|${dataQuery.vnp_IpAddr}|${dataQuery.vnp_OrderInfo}`;
 
-        const hmac = crypto.createHmac(this.CRYPTO_ALGORITHM, this.globalConfig.secureSecret);
-        const signed = hmac
+        const signed = crypto
+            .createHmac(this.CRYPTO_ALGORITHM, this.globalConfig.secureSecret)
             .update(Buffer.from(stringToCheckSum, this.CRYPTO_ENCODING))
             .digest('hex');
 
@@ -257,20 +256,35 @@ export class VNPay {
             vnp_TmnCode: this.globalConfig.tmnCode,
             vnp_SecureHash: signed,
         };
-        const res = await axios.post<QueryDrResponseFromVNPaySchema>(url.toString(), body);
 
-        if (Number(res.data.vnp_ResponseCode) >= 90 && Number(res.data.vnp_ResponseCode) <= 99) {
+        const response = await fetch(url.toString(), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const responseData = (await response.json()) as QueryDrResponseFromVNPaySchema;
+
+        if (
+            Number(responseData.vnp_ResponseCode) >= 90 &&
+            Number(responseData.vnp_ResponseCode) <= 99
+        ) {
             return {
-                ...res.data,
+                ...responseData,
                 vnp_Message: getResponseByStatusCode(
-                    res.data.vnp_ResponseCode?.toString(),
+                    responseData.vnp_ResponseCode?.toString(),
                     this.globalConfig.vnp_Locale,
                     QUERY_DR_RESPONSE_MAP,
                 ),
             };
         }
 
-        const responseData = res.data;
         const stringToCheckSumResponse =
             `${responseData.vnp_ResponseId}|${responseData.vnp_Command}|${responseData.vnp_ResponseCode}` +
             `|${responseData.vnp_Message}|${responseData.vnp_TmnCode}|${responseData.vnp_TxnRef}` +
@@ -278,14 +292,22 @@ export class VNPay {
             `|${responseData.vnp_TransactionNo}|${responseData.vnp_TransactionType}|${responseData.vnp_TransactionStatus}` +
             `|${responseData.vnp_OrderInfo}|${responseData.vnp_PromotionCode}|${responseData.vnp_PromotionAmount}`;
 
-        const signedResponse = hmac
+        const signedResponse = crypto
+            .createHmac(this.CRYPTO_ALGORITHM, this.globalConfig.secureSecret)
             .update(Buffer.from(stringToCheckSumResponse, this.CRYPTO_ENCODING))
             .digest('hex');
 
         if (signedResponse !== responseData.vnp_SecureHash) {
-            throw new Error('Wrong checksum');
+            throw new Error('Wrong checksum from VNPay response');
         }
 
-        return responseData;
+        return {
+            ...responseData,
+            vnp_Message: getResponseByStatusCode(
+                responseData.vnp_ResponseCode?.toString(),
+                this.globalConfig.vnp_Locale,
+                QUERY_DR_RESPONSE_MAP,
+            ),
+        };
     }
 }
