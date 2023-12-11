@@ -60,10 +60,9 @@ const { VNPay } = require('vnpay');
 ```typescript
 // Create instance
 const vnpay = new VNPay({
-    paymentGateway: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html', //your payment gateway, default is sandbox
+    api_Host: 'https://sandbox.vnpayment.vn', //your payment gateway, default is sandbox
     tmnCode: 'TMNCODE', // your tmn code
     secureSecret: 'SERCRET', // your secure secret
-    returnUrl: 'http://localhost:8888/order/vnpay_return', // return url
 });
 ```
 
@@ -76,6 +75,7 @@ const urlString = await vnpay.buildPaymentUrl({
     vnp_IpAddr: '192.168.0.1', // customer ip address
     vnp_TxnRef: '12345678', // your transaction reference
     vnp_OrderInfo: `Thanh toan cho ma GD: ${tnx}`,
+    returnUrl: 'http://localhost:8888/order/vnpay_return', // return url
 });
 ```
 
@@ -130,6 +130,8 @@ const queryDrResult = await vnpay.queryDr({
 
 console.log(queryDrResult);
 ```
+
+#### Example here: [Click here](https://github.com/lehuygiang28/vnpay/blob/main/src/example.ts)
 
 ## Contribution
 

@@ -60,10 +60,9 @@ const { VNPay } = require('vnpay');
 ```typescript
 // Khởi tạo VNPay
 const vnpay = new VNPay({
-    paymentGateway: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html', // cổng thanh toán, mặc định là sandbox
+    api_Host: 'https://sandbox.vnpayment.vn', // cổng thanh toán, mặc định là sandbox
     tmnCode: 'TMNCODE', // mã tmn của bạn
     secureSecret: 'SERCRET', // secret của bạn
-    returnUrl: 'http://localhost:8888/order/vnpay_return', // url trả về
 });
 ```
 
@@ -76,6 +75,7 @@ const urlString = await vnpay.buildPaymentUrl({
     vnp_IpAddr: '192.168.0.1', // địa chỉ ip của khách hàng
     vnp_TxnRef: '12345678', // mã giao dịch của bạn
     vnp_OrderInfo: `Thanh toan cho ma GD: ${tnx}`,
+    returnUrl: 'http://localhost:8888/order/vnpay_return', // return url
 });
 ```
 
@@ -129,6 +129,8 @@ const queryDrResult = await vnpay.queryDr({
 
 console.log(queryDrResult);
 ```
+
+#### Code tham khảo: [Bấm vào đây](https://github.com/lehuygiang28/vnpay/blob/main/src/example.ts)
 
 ## Contribution
 

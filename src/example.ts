@@ -1,24 +1,36 @@
+import crypto from 'crypto';
 import { VNPay } from './vnpay';
 import { dateFormat } from './utils';
+import {
+    QueryDrResponseFromVNPaySchema,
+    ReturnQueryFromVNPaySchema,
+    VerifyReturnUrlSchema,
+} from './schemas';
 
 async function main() {
+    const secret = 'secret';
     const vnpay = new VNPay({
         tmnCode: '2QXUI4B4',
-        secureSecret: 'secret',
+        secureSecret: secret,
         api_Host: 'https://sandbox.vnpayment.vn',
     });
 
+    // Create payment url
+    console.log('----url----------');
     const urlString = await vnpay.buildPaymentUrl({
         vnp_Amount: 10000,
         vnp_IpAddr: '1.1.1.1',
         vnp_TxnRef: '123456',
         vnp_OrderInfo: '123456',
         vnp_OrderType: 'other',
+        vnp_ReturnUrl: 'http://localhost:3000/return',
     });
     console.log(urlString);
 
-    // Will show the error wrong checksum because the vnp_SecureHash is wrong, need to call to vnpay to get the correct vnp_SecureHash
-    const verify = await vnpay.verifyReturnUrl({
+    // Verify return url, ipn call
+    console.log('----verify response----------');
+    const queryResponseFromVNPay: ReturnQueryFromVNPaySchema = {
+        // sample return url from vnpay
         vnp_Amount: 10000,
         vnp_BankCode: 'NCB',
         vnp_BankTranNo: '123456',
@@ -29,15 +41,17 @@ async function main() {
         vnp_TmnCode: '2QXUI4B4',
         vnp_TransactionNo: '123456',
         vnp_TxnRef: '123456',
-        vnp_SecureHash: 'vnp_SecureHash',
+    };
+
+    const verify: VerifyReturnUrlSchema = await vnpay.verifyReturnUrl({
+        ...queryResponseFromVNPay,
+        vnp_SecureHash: getSampleSecureHash(queryResponseFromVNPay, secret),
     });
     console.log(verify);
-    console.warn(
-        'Will show the error wrong checksum because the vnp_SecureHash is wrong, need to call to vnpay to get the correct vnp_SecureHash',
-    );
 
+    // Query dr
     console.log('----querydr----------');
-    const queryDrResult = await vnpay.queryDr({
+    const queryDrResult: QueryDrResponseFromVNPaySchema = await vnpay.queryDr({
         vnp_CreateDate: 20210809121213,
         vnp_IpAddr: '127.0.0.1',
         vnp_OrderInfo: 'hihihi',
@@ -46,8 +60,27 @@ async function main() {
         vnp_TransactionNo: 121212,
         vnp_TxnRef: '112121',
     });
-
     console.log(queryDrResult);
+}
+
+// This function is used to generate secure hash for testing purpose
+function getSampleSecureHash(queryResponseFromVNPay: ReturnQueryFromVNPaySchema, secret: string) {
+    const searchParams = new URLSearchParams();
+    Object.entries(queryResponseFromVNPay)
+        .sort(([key1], [key2]) => key1.toString().localeCompare(key2.toString()))
+        .forEach(([key, value]) => {
+            // Skip empty value
+            if (value === '' || value === undefined || value === null) {
+                return;
+            }
+
+            searchParams.append(key, value.toString());
+        });
+
+    return crypto
+        .createHmac('sha512', secret)
+        .update(Buffer.from(searchParams.toString(), 'utf-8'))
+        .digest('hex');
 }
 
 main();
