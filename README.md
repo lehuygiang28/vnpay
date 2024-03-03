@@ -1,51 +1,50 @@
-# VNPay API Nodejs
+# vnpay
 
 <div style="text-align: center;">
     <h5>
-        <a href="./README.vi_vn.md">VI</a>
+        <a href="./README.en-US.md">EN</a>
         |
-        <a href="./README.md">EN</a>
+        <a href="./README.md">VI</a>
     </h5>
 </div>
 <br/>
 
-<strong>An open-source library support to payment with [VNPay](https://vnpay.vn).</strong>
+<strong>Thư viện mã nguồn mở hỗ trợ thanh toán qua [VNPay](https://vnpay.vn).</strong>
 
-VNPay documents: [https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/](https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/)
+Tài liệu từ VNPay: [https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/](https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/)
 
-## Installation:
+## Cài đặt:
 
-Install `vnpay` with `npm`:
+Cài đặt `vnpay` với `npm`:
 
 ```bash
 npm install vnpay
 ```
 
-Install `vnpay` with `yarn`:
+Cài đặt `vnpay` với `yarn`:
 
 ```bash
 yarn add vnpay
 ```
 
-Install `vnpay` with `pnpm`:
+Cài đặt `vnpay` với `pnpm`:
 
 ```bash
 pnpm add vnpay
 ```
 
-## Usage:
+## Sử dụng:
 
-#### Methods
+#### Các phương thức
 
-1. `buildPaymentUrl(payload: BuildPaymentUrlSchema): Promise<string>`: Build payment url with payload
+| Method            | Parameters                                     | Return Type                               | Description                      |
+| ----------------- | ---------------------------------------------- | ----------------------------------------- | -------------------------------- |
+| `buildPaymentUrl` | `payload: BuildPaymentUrlSchema`               | `Promise<string>`                         | Tạo url thanh toán               |
+| `verifyReturnUrl` | `vnpayReturnQuery: ReturnQueryFromVNPaySchema` | `Promise<VerifyReturnUrlSchema>`          | Xác thực kết quả trả về từ VNPay |
+| `verifyIpnUrl`    | `vnpayIpnQuery: ReturnQueryFromVNPaySchema`    | `Promise<VerifyReturnUrlSchema>`          | Xác thực lời gọi ipn từ VNPay    |
+| `queryDr`         | `payload: QueryDrSchema`                       | `Promise<QueryDrResponseFromVNPaySchema>` | Truy vấn kết quả giao dịch       |
 
-2. `verifyReturnUrl(vnpayReturnQuery: ReturnQueryFromVNPaySchema): Promise<VerifyReturnUrlSchema>`: Verify return url from VNPay
-
-3. `verifyIpnUrl(vnpayIpnQuery: ReturnQueryFromVNPaySchema): Promise<VerifyReturnUrlSchema>`: Verify ipn url from VNPay
-
-4. `queryDr(payload: QueryDrSchema): Promise<QueryDrResponseFromVNPaySchema>`: Query result transaction
-
--   Import:
+-   Nhập thư viện:
 
 ```typescript
 // ES Modules
@@ -55,73 +54,77 @@ import { VNPay } from 'vnpay';
 const { VNPay } = require('vnpay');
 ```
 
--   Create instance:
+-   Khởi tạo đối tượng VNPay:
 
 ```typescript
-// Create instance
+// Khởi tạo VNPay
 const vnpay = new VNPay({
-    api_Host: 'https://sandbox.vnpayment.vn', //your payment gateway, default is sandbox
-    tmnCode: 'TMNCODE', // your tmn code
-    secureSecret: 'SERCRET', // your secure secret
+    api_Host: 'https://sandbox.vnpayment.vn', // cổng thanh toán, mặc định là sandbox
+    tmnCode: 'TMNCODE', // mã tmn của bạn (mã đăng ký với VNPay)
+    secureSecret: 'SERCRET', // secret của bạn (mã đăng ký với VNPay)
 });
+// Kiểm tra email của bạn để lấy mã tmn và secret
 ```
 
--   Build/create payment url:
+-   Tạo url thanh toán:
 
 ```typescript
-// Build payment url
+// Tạo url thanh toán
 const urlString = await vnpay.buildPaymentUrl({
-    vnp_Amount: 100000, // amount in VND
-    vnp_IpAddr: '192.168.0.1', // customer ip address
-    vnp_TxnRef: '12345678', // your transaction reference
+    vnp_Amount: 100000, // giá tiền (đơn vị VND)
+    vnp_IpAddr: '192.168.0.1', // địa chỉ ip của khách hàng
+    vnp_TxnRef: '12345678', // mã giao dịch của bạn
     vnp_OrderInfo: `Thanh toan cho ma GD: ${tnx}`,
     returnUrl: 'http://localhost:8888/order/vnpay_return', // return url
 });
 ```
 
--   Verify response from VNPay:
-    Notice: Don't update order status here, just update order status when verify `ipn` call from VNPay
+-   Xác thực lời gọi thông báo thanh toán ngay lập tức (ipn - instant payment notification) từ VNPay:
 
 ```typescript
 /**
- * Verify response from VNPay
- */
-router.get('/order/vnpay_return', async (req, res) => {
-    // `req.query` is the query string from VNPay
-    const verifyResult = await vnpay.verifyReturnUrl(req.query);
-    if (verifyResult.isSuccess) {
-        // do something if verify success
-        // Don't update order status here, just update order status when verify ipn call from VNPay
-    } else {
-        // do something if verify fail
-    }
-});
-```
-
--   Verify ipn call from VNPay:
-
-```typescript
-/**
- * Verify the ipn call from VNPay
+ * Xác thực lời gọi ipn từ VNPay
+ * Lưu ý: Thực hiện cập nhật trạng thái đơn hàng, v.v..
  */
 router.get('/order/vnpay_ipn', async (req, res) => {
-    // `req.query` is the query string from VNPay
     const verifyResult = await vnpay.verifyIpnUrl(req.query);
     if (verifyResult.isSuccess) {
-        // do something if verify success
+        // nếu xác thực thành công, thực hiện cập nhật trạng thái đơn hàng, ...
     } else {
-        // do something if verify fail
+        //nếu xác thực thất bại, thực hiện xử lý lỗi, ...
     }
 });
 ```
 
--   Query result transaction (QueryDr):
+-   Xác thực kết quả trả về từ VNPay:
+
+    _**Lưu ý:** Không thực hiện cập nhật trạng thái đơn hàng ở đây. Chỉ thực hiện cập nhật trạng thái đơn hàng ở lời gọi `ipn - instant payment notification`_
+
+```typescript
+/**
+ * Xác thực kết quả trả về từ VNPay
+ * Lưu ý: Không thực hiện cập nhật trạng thái đơn hàng ở đây
+ * Nên sử dụng để chuyển hướng người dùng về trang web của bạn,...
+ */
+router.get('/order/vnpay_return', async (req, res) => {
+    const verifyResult = await vnpay.verifyReturnUrl(req.query);
+    if (verifyResult.isSuccess) {
+        // Nếu xác thực thành công, thực hiện cập nhật giao diện, v.v..
+        // Lưu ý không thực hiện cập nhật trạng thái đơn hàng ở đây
+        // Chỉ thực hiện cập nhật trạng thái đơn hàng ở lời gọi `ipn`
+    } else {
+        //nếu xác thực thất bại, thực hiện xử lý lỗi, ...
+    }
+});
+```
+
+-   Truy vấn kết quả thanh toán (QueryDr):
 
 ```typescript
 const queryDrResult = await vnpay.queryDr({
     vnp_CreateDate: 20210809121212,
     vnp_IpAddr: '127.0.0.1',
-    vnp_OrderInfo: 'hihihi',
+    vnp_OrderInfo: 'Don hang 12345',
     vnp_RequestId: '121212',
     vnp_TransactionDate: 20210809121212,
     vnp_TransactionNo: 121212,
@@ -131,10 +134,10 @@ const queryDrResult = await vnpay.queryDr({
 console.log(queryDrResult);
 ```
 
-#### Example here: [Click here](https://github.com/lehuygiang28/vnpay/blob/main/src/example.ts)
+#### Code tham khảo: [Bấm vào đây](https://github.com/lehuygiang28/vnpay/blob/main/src/example.ts)
 
 ## Contribution
 
-<a href="https://github.com/lehuygiang28/vnpay/graphs/contributors">
+<a href="https://github.com/lehuygiang28/regex-vietnamese/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=lehuygiang28/vnpay" />
 </a>
