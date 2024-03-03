@@ -8,6 +8,8 @@ import {
 } from './schemas';
 
 async function main() {
+    console.time('main');
+
     const secret = 'secret';
     const vnpay = new VNPay({
         tmnCode: '2QXUI4B4',
@@ -16,6 +18,7 @@ async function main() {
     });
 
     // Create payment url
+    console.time('buildPaymentUrl');
     console.log('----url----------');
     const urlString = await vnpay.buildPaymentUrl({
         vnp_Amount: 10000,
@@ -26,8 +29,10 @@ async function main() {
         vnp_ReturnUrl: 'http://localhost:3000/return',
     });
     console.log(urlString);
+    console.timeEnd('buildPaymentUrl');
 
     // Verify return url, ipn call
+    console.time('verifyReturnUrl');
     console.log('----verify response----------');
     const queryResponseFromVNPay: ReturnQueryFromVNPaySchema = {
         // sample return url from vnpay
@@ -43,13 +48,19 @@ async function main() {
         vnp_TxnRef: '123456',
     };
 
-    const verify: VerifyReturnUrlSchema = await vnpay.verifyReturnUrl({
-        ...queryResponseFromVNPay,
-        vnp_SecureHash: getSampleSecureHash(queryResponseFromVNPay, secret),
-    });
-    console.log(verify);
+    try {
+        const verify: VerifyReturnUrlSchema = await vnpay.verifyReturnUrl({
+            ...queryResponseFromVNPay,
+            vnp_SecureHash: getSampleSecureHash(queryResponseFromVNPay, secret),
+        });
+        console.log(verify);
+    } catch (error) {
+        console.log(`verify error: ${error}`);
+    }
+    console.timeEnd('verifyReturnUrl');
 
     // Query dr
+    console.time('queryDr');
     console.log('----querydr----------');
     const queryDrResult: QueryDrResponseFromVNPaySchema = await vnpay.queryDr({
         vnp_CreateDate: 20210809121213,
@@ -61,6 +72,9 @@ async function main() {
         vnp_TxnRef: '112121',
     });
     console.log(queryDrResult);
+    console.timeEnd('queryDr');
+
+    console.timeEnd('main');
 }
 
 // This function is used to generate secure hash for testing purpose
