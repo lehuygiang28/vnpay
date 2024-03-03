@@ -2,9 +2,9 @@
 
 <div style="text-align: center;">
     <h5>
-        <a href="./README.en-US.md">EN</a>
-        |
         <a href="./README.md">VI</a>
+        |
+        <a href="./README_en-US.md">EN</a>
     </h5>
 </div>
 <br/>
