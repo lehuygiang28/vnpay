@@ -1,11 +1,11 @@
 import crypto from 'crypto';
-import { VNPay } from './vnpay';
-import { dateFormat } from './utils';
+import { VNPay } from '../src/vnpay';
+import { dateFormat } from '../src/utils';
 import {
     QueryDrResponseFromVNPaySchema,
     ReturnQueryFromVNPaySchema,
     VerifyReturnUrlSchema,
-} from './schemas';
+} from '../src/schemas';
 
 async function main() {
     console.time('main');

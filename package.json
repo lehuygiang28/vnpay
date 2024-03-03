@@ -5,7 +5,7 @@
         "url": "git+https://github.com/lehuygiang28/vnpay.git"
     },
     "version": "0.5.2",
-    "description": "A library support to payment with VNPay",
+    "description": "A open-source library support to payment with VNPay",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
     "files": [
@@ -15,8 +15,7 @@
         "build": "rimraf ./lib && tsc",
         "prepare": "npm run build",
         "test": "jest",
-        "example": "node ./lib/example.js",
-        "dev:example": "ts-node ./src/example.ts"
+        "example": "ts-node ./example/index.ts"
     },
     "keywords": [
         "vnpay",
@@ -27,6 +26,10 @@
     ],
     "author": "lehuygiang28 <lehuygiang28@gmail.com>",
     "license": "MIT",
+    "dependencies": {
+        "moment-timezone": "^0.5.43",
+        "zod": "^3.22.4"
+    },
     "devDependencies": {
         "@types/jest": "^29.5.5",
         "@types/node": "^20.8.4",
@@ -34,9 +37,5 @@
         "ts-jest": "^29.1.1",
         "ts-node": "^10.9.2",
         "typescript": "^5.2.2"
-    },
-    "dependencies": {
-        "moment-timezone": "^0.5.43",
-        "zod": "^3.22.4"
     }
 }
