@@ -37,13 +37,12 @@ pnpm add vnpay
 
 #### Methods
 
-1. `buildPaymentUrl(payload: BuildPaymentUrlSchema): Promise<string>`: Build payment url with payload
-
-2. `verifyReturnUrl(vnpayReturnQuery: ReturnQueryFromVNPaySchema): Promise<VerifyReturnUrlSchema>`: Verify return url from VNPay
-
-3. `verifyIpnUrl(vnpayIpnQuery: ReturnQueryFromVNPaySchema): Promise<VerifyReturnUrlSchema>`: Verify ipn url from VNPay
-
-4. `queryDr(payload: QueryDrSchema): Promise<QueryDrResponseFromVNPaySchema>`: Query result transaction
+| Method            | Parameters                                     | Return Type                               | Description                    |
+| ----------------- | ---------------------------------------------- | ----------------------------------------- | ------------------------------ |
+| `buildPaymentUrl` | `payload: BuildPaymentUrlSchema`               | `Promise<string>`                         | Build payment url with payload |
+| `verifyReturnUrl` | `vnpayReturnQuery: ReturnQueryFromVNPaySchema` | `Promise<VerifyReturnUrlSchema>`          | Verify return url from VNPay   |
+| `verifyIpnUrl`    | `vnpayIpnQuery: ReturnQueryFromVNPaySchema`    | `Promise<VerifyReturnUrlSchema>`          | Verify ipn url from VNPay      |
+| `queryDr`         | `payload: QueryDrSchema`                       | `Promise<QueryDrResponseFromVNPaySchema>` | Query result transaction       |
 
 -   Import:
 
@@ -131,7 +130,7 @@ const queryDrResult = await vnpay.queryDr({
 console.log(queryDrResult);
 ```
 
-#### Example here: [Click here](https://github.com/lehuygiang28/vnpay/blob/main/src/example.ts)
+#### Example here: [Click here](https://github.com/lehuygiang28/vnpay/blob/main/example/express.ts)
 
 ## Contribution
 

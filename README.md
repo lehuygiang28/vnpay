@@ -134,7 +134,7 @@ const queryDrResult = await vnpay.queryDr({
 console.log(queryDrResult);
 ```
 
-#### Code tham khảo: [Bấm vào đây](https://github.com/lehuygiang28/vnpay/blob/main/src/example.ts)
+#### Code tham khảo: [Bấm vào đây](https://github.com/lehuygiang28/vnpay/blob/main/example/express.ts)
 
 ## Contribution
 
