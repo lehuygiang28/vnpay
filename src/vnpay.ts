@@ -213,13 +213,26 @@ export class VNPay {
     }
     /**
      * Phương thức xác thực tính đúng đắn của lời gọi ipn từ VNPay
+     *
+     * Sau khi nhận được lời gọi, hệ thống merchant cần xác thực dữ liệu nhận được từ VNPay, kiểm tra đơn hàng có hợp lệ không, kiểm tra số tiền thanh toán có đúng không.
+     *
+     * Sau đó phản hồi lại VNPay kết quả xác thực thông qua các `IpnResponse`
+     *
      * @en Method to verify the ipn url from VNPay
+     *
+     * After receiving the call, the merchant system needs to verify the data received from VNPay, check if the order is valid, check if the payment amount is correct.
+     *
+     * Then respond to VNPay the verification result through the `IpnResponse`
      *
      * @param {ReturnQueryFromVNPay} query The object of data return from VNPay
      * @returns {Promise<VerifyIpnCall>} The return object
      */
-    public verifyIpnCall(query: ReturnQueryFromVNPay): Promise<VerifyIpnCall> {
-        return this.verifyReturnUrl(query);
+    public async verifyIpnCall(query: ReturnQueryFromVNPay): Promise<VerifyIpnCall> {
+        const result = await this.verifyReturnUrl(query);
+        return {
+            ...result,
+            vnp_Amount: result.vnp_Amount / 100,
+        };
     }
 
     /**

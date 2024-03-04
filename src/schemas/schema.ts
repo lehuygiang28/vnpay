@@ -50,8 +50,8 @@ export const ConfigVnpaySchema = z.object({
 
 export const commonSchema = z.object({
     /**
-     * Số tiền thanh toán. VNPAY phản hồi số tiền nhân thêm 100 lần.
-     * @en Amount of payment. VNPAY responds to the amount received plus 100 times.
+     * Số tiền thanh toán. Đã tự động tính toán theo đơn vị của VNPay. (100 lần số tiền của đơn hàng trong cơ sở dữ liệu của bạn)
+     * @en Amount of payment. Automatically calculated according to the unit of VNPay. (100 times the amount of the order in your database)
      */
     vnp_Amount: z.number().min(1).max(Number.MAX_SAFE_INTEGER),
     /**

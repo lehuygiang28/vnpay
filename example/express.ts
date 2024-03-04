@@ -2,6 +2,15 @@ import express, { Request, Response } from 'express';
 import portfinder from 'portfinder';
 import { VNPay } from '../src/vnpay';
 import { ReturnQueryFromVNPay, VerifyReturnUrl } from '../src/schemas';
+import {
+    IpnResponse,
+    IpnSuccess,
+    IpnUnknownError,
+    IpnFailChecksum,
+    IpnOrderNotFound,
+    IpnInvalidAmount,
+    InpOrderAlreadyConfirmed,
+} from '../src/constants';
 
 const app = express();
 let portToListen = 3000;
@@ -43,28 +52,51 @@ app.get('/payment-url', async (req: Request, res: Response) => {
  * So you need to implement this endpoint to handle the result of the payment
  * Eg: Update the order status, send the email to the customer, etc.
  */
-app.get('/vnpay-ipn', async (req: Request<any, any, any, ReturnQueryFromVNPay>, res: Response) => {
-    let verify: VerifyReturnUrl;
-    try {
-        verify = await vnpay.verifyIpnCall({ ...req.query });
-        if (!verify.isSuccess) {
-            return res.status(200).json({
-                message: verify?.message ?? 'Payment failed!',
-                status: verify.isSuccess,
-            });
+app.get(
+    '/vnpay-ipn',
+    async (req: Request<any, any, any, ReturnQueryFromVNPay>, res: Response<IpnResponse>) => {
+        try {
+            const verify: VerifyReturnUrl = await vnpay.verifyIpnCall({ ...req.query });
+            if (!verify.isSuccess) {
+                return res.json(IpnFailChecksum);
+            }
+
+            // Find the order in your database
+            // This is the sample order that you need to check the status, amount, etc.
+            const foundOrder = {
+                orderId: '123456',
+                amount: 10000,
+                status: 'pending',
+            };
+
+            // If the order is not found, or the order id is not matched
+            // You can use the orderId to find the order in your database
+            if (!foundOrder || verify.vnp_TxnRef !== foundOrder.orderId) {
+                return res.json(IpnOrderNotFound);
+            }
+
+            // If the amount is not matched
+            if (verify.vnp_Amount !== foundOrder.amount) {
+                return res.json(IpnInvalidAmount);
+            }
+
+            // If the order is already confirmed
+            if (foundOrder.status === 'completed') {
+                return res.json(InpOrderAlreadyConfirmed);
+            }
+
+            // Update the order status to completed
+            // Eg: Update the order status in your database
+            foundOrder.status = 'completed';
+
+            // Then return the success response to VNPay
+            return res.json(IpnSuccess);
+        } catch (error) {
+            console.log(`verify error: ${error}`);
+            return res.json(IpnUnknownError);
         }
-    } catch (error) {
-        console.log(`verify error: ${error}`);
-        return res.status(400).json({ message: 'verify error', status: false });
-    }
-
-    // Update the order status, send the email to the customer, etc.
-
-    return res.status(200).json({
-        message: verify?.message ?? 'Payment successful!',
-        status: verify.isSuccess,
-    });
-});
+    },
+);
 
 /**
  * WARNING: Do not use this endpoint to handle the result of the payment, this should be used to handle redirect user from VNPay to your website
