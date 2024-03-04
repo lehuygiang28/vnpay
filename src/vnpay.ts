@@ -121,11 +121,8 @@ export class VNPay {
                         redirectUrl.searchParams.append(key, value.toString());
                     });
 
-                const hmac = crypto.createHmac(
-                    this.CRYPTO_ALGORITHM,
-                    this.globalConfig.secureSecret,
-                );
-                const signed = hmac
+                const signed = crypto
+                    .createHmac(this.CRYPTO_ALGORITHM, this.globalConfig.secureSecret)
                     .update(
                         Buffer.from(redirectUrl.search.slice(1).toString(), this.CRYPTO_ENCODING),
                     )
