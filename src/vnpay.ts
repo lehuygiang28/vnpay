@@ -11,13 +11,19 @@ import {
 import { VnpCurrCode, VnpLocale, VnpOrderType } from './enums';
 import { dateFormat, getResponseByStatusCode, resolveUrlString } from './utils/common';
 import {
+    ConfigVnpay,
+    BuildPaymentUrl,
+    ReturnQueryFromVNPay,
+    VerifyReturnUrl,
+    QueryDr,
+    QueryDrResponseFromVNPay,
     ConfigVnpaySchema,
     BuildPaymentUrlSchema,
     ReturnQueryFromVNPaySchema,
     VerifyReturnUrlSchema,
     QueryDrSchema,
     BodyRequestQueryDr,
-    QueryDrResponseFromVNPaySchema,
+    VerifyIpnCall,
 } from './schemas';
 
 /**
@@ -45,7 +51,7 @@ import {
  *
  */
 export class VNPay {
-    private globalConfig: ConfigVnpaySchema;
+    private globalConfig: ConfigVnpay;
     private CRYPTO_ALGORITHM = 'sha512';
     private CRYPTO_ENCODING: BufferEncoding = 'utf-8';
 
@@ -58,7 +64,7 @@ export class VNPay {
         vnp_CurrCode = VnpCurrCode.VND,
         vnp_Locale = VnpLocale.VN,
         ...init
-    }: ConfigVnpaySchema) {
+    }: ConfigVnpay) {
         this.globalConfig = ConfigVnpaySchema.parse({
             api_Host,
             vnp_Version,
@@ -86,23 +92,23 @@ export class VNPay {
      * Phương thức xây dựng, tạo thành url thanh toán của VNPay
      * @en Build the payment url
      *
-     * @param {BuildPaymentUrlDTO} payload - Payload that contains the information to build the payment url
+     * @param {BuildPaymentUrl} data - Payload that contains the information to build the payment url
      * @returns {string} The payment url string
      */
-    public buildPaymentUrl(payload: BuildPaymentUrlSchema): Promise<string> {
+    public buildPaymentUrl(data: BuildPaymentUrl): Promise<string> {
         return new Promise((resolve, reject) => {
             try {
-                const validatedPayload = BuildPaymentUrlSchema.parse(payload);
+                const validatedPayload = BuildPaymentUrlSchema.parse(data);
 
                 if (!validatedPayload.vnp_ReturnUrl) {
                     validatedPayload.vnp_ReturnUrl = this.globalConfig.returnUrl;
                 }
 
-                const data = { ...this.defaultConfig, ...validatedPayload };
+                const dataToBuild = { ...this.defaultConfig, ...validatedPayload };
                 const timeGMT7 = timezone(new Date()).tz('Asia/Ho_Chi_Minh').format();
-                data.vnp_CreateDate = dateFormat(new Date(timeGMT7), 'yyyyMMddHHmmss');
-                data.vnp_Amount = data.vnp_Amount * 100;
-                data.vnp_TmnCode = this.globalConfig.tmnCode;
+                dataToBuild.vnp_CreateDate = dateFormat(new Date(timeGMT7), 'yyyyMMddHHmmss');
+                dataToBuild.vnp_Amount = dataToBuild.vnp_Amount * 100;
+                dataToBuild.vnp_TmnCode = this.globalConfig.tmnCode;
 
                 const redirectUrl = new URL(
                     resolveUrlString(
@@ -110,7 +116,7 @@ export class VNPay {
                         GATEWAY_ENDPOINT,
                     ),
                 );
-                Object.entries(data)
+                Object.entries(dataToBuild)
                     .sort(([key1], [key2]) => key1.toString().localeCompare(key2.toString()))
                     .forEach(([key, value]) => {
                         // Skip empty value
@@ -141,10 +147,10 @@ export class VNPay {
      * Phương thức xác thực tính đúng đắn của các tham số trả về từ VNPay
      * @en Method to verify the return url from VNPay
      *
-     * @param {ReturnQueryFromVNPaySchema} query - The object of data return from VNPay
-     * @returns {Promise<VerifyReturnUrlSchema>} The return object
+     * @param {ReturnQueryFromVNPay} query - The object of data return from VNPay
+     * @returns {Promise<VerifyReturnUrl>} The return object
      */
-    public verifyReturnUrl(query: ReturnQueryFromVNPaySchema): Promise<VerifyReturnUrlSchema> {
+    public verifyReturnUrl(query: ReturnQueryFromVNPay): Promise<VerifyReturnUrl> {
         return new Promise((resolve, reject) => {
             try {
                 const vnpayReturnQuery = ReturnQueryFromVNPaySchema.parse(query);
@@ -205,15 +211,27 @@ export class VNPay {
             }
         });
     }
+    /**
+     * Phương thức xác thực tính đúng đắn của lời gọi ipn từ VNPay
+     * @en Method to verify the ipn url from VNPay
+     *
+     * @param {ReturnQueryFromVNPay} query The object of data return from VNPay
+     * @returns {Promise<VerifyIpnCall>} The return object
+     */
+    public verifyIpnCall(query: ReturnQueryFromVNPay): Promise<VerifyIpnCall> {
+        return this.verifyReturnUrl(query);
+    }
 
     /**
+     * @deprecated Use `verifyIpnCall` instead
+     *
      * Phương thức xác thực tính đúng đắn của lời gọi ipn từ VNPay
      * @en Method to verify the ipn url from VNPay
      *
      * @param query The object of data return from VNPay
      * @returns The return object
      */
-    public verifyIpnUrl(query: ReturnQueryFromVNPaySchema): Promise<VerifyReturnUrlSchema> {
+    public verifyIpnUrl(query: ReturnQueryFromVNPay): Promise<VerifyReturnUrl> {
         return this.verifyReturnUrl(query);
     }
 
@@ -222,10 +240,10 @@ export class VNPay {
      * @en This is the API for the merchant system to query the payment result of the transaction at the VNPAY system.
      * @see https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#truy-van-ket-qua-thanh-toan-PAY
      *
-     * @param {QueryDrSchema} query - The data to query
-     * @returns {Promise<QueryDrResponseFromVNPaySchema>} The data return from VNPay
+     * @param {QueryDr} query - The data to query
+     * @returns {Promise<QueryDrResponseFromVNPay>} The data return from VNPay
      */
-    public async queryDr(query: QueryDrSchema): Promise<QueryDrResponseFromVNPaySchema> {
+    public async queryDr(query: QueryDr): Promise<QueryDrResponseFromVNPay> {
         const command = 'querydr';
         const { vnp_Version = VNP_VERSION } = query;
         const dataQuery = QueryDrSchema.parse({ vnp_Version, ...query });
@@ -266,7 +284,7 @@ export class VNPay {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const responseData = (await response.json()) as QueryDrResponseFromVNPaySchema;
+        const responseData = (await response.json()) as QueryDrResponseFromVNPay;
 
         if (
             Number(responseData.vnp_ResponseCode) >= 90 &&
