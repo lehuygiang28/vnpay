@@ -57,7 +57,7 @@ pnpm add vnpay
             <td><code>verifyIpnUrl</code></td>
             <td><code>query: ReturnQueryFromVNPay</code></td>
             <td><code>Promise&lt;VerifyIpnCall&gt;</code></td>
-            <td>Verify <a href="https://en.wikipedia.org/wiki/Instant_payment_notification">ipn</a> call from VNPay</td>
+            <td>Verify <a href="https://en.wikipedia.org/wiki/Instant_payment_notification" target="_blank">ipn</a> call from VNPay</td>
         </tr>
         <tr>
             <td><code>verifyReturnUrl</code></td>
@@ -74,7 +74,7 @@ pnpm add vnpay
     </tbody>
 </table>
 
-#### Example here: [Click here](https://github.com/lehuygiang28/vnpay/blob/main/example/express.ts)
+#### Example here: <a href="https://github.com/lehuygiang28/vnpay/blob/main/example/express.ts" target="_blank">Click here</a>
 
 ## Contribution
 

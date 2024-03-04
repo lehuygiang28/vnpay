@@ -57,7 +57,7 @@ pnpm add vnpay
             <td><code>verifyIpnCall</code></td>
             <td><code>query: ReturnQueryFromVNPay</code></td>
             <td><code>Promise&lt;VerifyIpnCall&gt;</code></td>
-            <td>Xác thực lời gọi <a href="https://en.wikipedia.org/wiki/Instant_payment_notification">ipn</a> từ VNPay</td>
+            <td>Xác thực lời gọi <a href="https://en.wikipedia.org/wiki/Instant_payment_notification" target="_blank">ipn</a> từ VNPay</td>
         </tr>
         <tr>
             <td><code>verifyReturnUrl</code></td>
@@ -74,7 +74,7 @@ pnpm add vnpay
     </tbody>
 </table>
 
-#### Code tham khảo: [Bấm vào đây](https://github.com/lehuygiang28/vnpay/blob/main/example/express.ts)
+#### Code tham khảo: <a href="https://github.com/lehuygiang28/vnpay/blob/main/example/express.ts" target="_blank">Bấm vào đây</a>
 
 ## Contribution
 
