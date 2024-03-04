@@ -220,7 +220,8 @@ export const VerifyReturnUrlSchema = ReturnQueryFromVNPaySchema.extend({
     message: z.string().default('').optional(),
 }).strict();
 
-export type ConfigVnpaySchema = z.infer<typeof ConfigVnpaySchema>;
-export type BuildPaymentUrlSchema = z.infer<typeof BuildPaymentUrlSchema>;
-export type ReturnQueryFromVNPaySchema = z.infer<typeof ReturnQueryFromVNPaySchema>;
-export type VerifyReturnUrlSchema = z.infer<typeof VerifyReturnUrlSchema>;
+export type ConfigVnpay = z.infer<typeof ConfigVnpaySchema>;
+export type BuildPaymentUrl = z.infer<typeof BuildPaymentUrlSchema>;
+export type ReturnQueryFromVNPay = z.infer<typeof ReturnQueryFromVNPaySchema>;
+export type VerifyReturnUrl = z.infer<typeof VerifyReturnUrlSchema>;
+export type VerifyIpnCall = VerifyReturnUrl;

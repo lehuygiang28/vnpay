@@ -1,11 +1,7 @@
 import crypto from 'crypto';
 import { VNPay } from '../src/vnpay';
 import { dateFormat } from '../src/utils';
-import {
-    QueryDrResponseFromVNPaySchema,
-    ReturnQueryFromVNPaySchema,
-    VerifyReturnUrlSchema,
-} from '../src/schemas';
+import { QueryDrResponseFromVNPay, ReturnQueryFromVNPay, VerifyReturnUrl } from '../src/schemas';
 
 async function main() {
     console.time('main');
@@ -34,7 +30,7 @@ async function main() {
     // Verify return url, ipn call
     console.time('verifyReturnUrl');
     console.log('----verify response----------');
-    const queryResponseFromVNPay: ReturnQueryFromVNPaySchema = {
+    const queryResponseFromVNPay: ReturnQueryFromVNPay = {
         // sample return url from vnpay
         vnp_Amount: 10000,
         vnp_BankCode: 'NCB',
@@ -49,7 +45,7 @@ async function main() {
     };
 
     try {
-        const verify: VerifyReturnUrlSchema = await vnpay.verifyReturnUrl({
+        const verify: VerifyReturnUrl = await vnpay.verifyReturnUrl({
             ...queryResponseFromVNPay,
             vnp_SecureHash: getSampleSecureHash(queryResponseFromVNPay, secret),
         });
@@ -62,7 +58,7 @@ async function main() {
     // Query dr
     console.time('queryDr');
     console.log('----querydr----------');
-    const queryDrResult: QueryDrResponseFromVNPaySchema = await vnpay.queryDr({
+    const queryDrResult: QueryDrResponseFromVNPay = await vnpay.queryDr({
         vnp_CreateDate: 20210809121213,
         vnp_IpAddr: '127.0.0.1',
         vnp_OrderInfo: 'hihihi',
@@ -78,7 +74,7 @@ async function main() {
 }
 
 // This function is used to generate secure hash for testing purpose
-function getSampleSecureHash(queryResponseFromVNPay: ReturnQueryFromVNPaySchema, secret: string) {
+function getSampleSecureHash(queryResponseFromVNPay: ReturnQueryFromVNPay, secret: string) {
     const searchParams = new URLSearchParams();
     Object.entries(queryResponseFromVNPay)
         .sort(([key1], [key2]) => key1.toString().localeCompare(key2.toString()))

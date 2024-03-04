@@ -37,12 +37,12 @@ pnpm add vnpay
 
 #### Methods
 
-| Method            | Parameters                                     | Return Type                               | Description                    |
-| ----------------- | ---------------------------------------------- | ----------------------------------------- | ------------------------------ |
-| `buildPaymentUrl` | `payload: BuildPaymentUrlSchema`               | `Promise<string>`                         | Build payment url with payload |
-| `verifyReturnUrl` | `vnpayReturnQuery: ReturnQueryFromVNPaySchema` | `Promise<VerifyReturnUrlSchema>`          | Verify return url from VNPay   |
-| `verifyIpnUrl`    | `vnpayIpnQuery: ReturnQueryFromVNPaySchema`    | `Promise<VerifyReturnUrlSchema>`          | Verify ipn url from VNPay      |
-| `queryDr`         | `payload: QueryDrSchema`                       | `Promise<QueryDrResponseFromVNPaySchema>` | Query result transaction       |
+| Method            | Parameters                    | Return Type                         | Description                  |
+| ----------------- | ----------------------------- | ----------------------------------- | ---------------------------- |
+| `buildPaymentUrl` | `data: BuildPaymentUrl`       | `Promise<string>`                   | Build payment url with data  |
+| `verifyIpnUrl`    | `query: ReturnQueryFromVNPay` | `Promise<VerifyIpnCall>`            | Verify ipn url from VNPay    |
+| `verifyReturnUrl` | `query: ReturnQueryFromVNPay` | `Promise<VerifyReturnUrl>`          | Verify return url from VNPay |
+| `queryDr`         | `data: QueryDr`               | `Promise<QueryDrResponseFromVNPay>` | Query result transaction     |
 
 -   Import:
 

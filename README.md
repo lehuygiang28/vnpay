@@ -37,12 +37,12 @@ pnpm add vnpay
 
 #### Các phương thức
 
-| Method            | Parameters                                     | Return Type                               | Description                      |
-| ----------------- | ---------------------------------------------- | ----------------------------------------- | -------------------------------- |
-| `buildPaymentUrl` | `payload: BuildPaymentUrlSchema`               | `Promise<string>`                         | Tạo url thanh toán               |
-| `verifyReturnUrl` | `vnpayReturnQuery: ReturnQueryFromVNPaySchema` | `Promise<VerifyReturnUrlSchema>`          | Xác thực kết quả trả về từ VNPay |
-| `verifyIpnUrl`    | `vnpayIpnQuery: ReturnQueryFromVNPaySchema`    | `Promise<VerifyReturnUrlSchema>`          | Xác thực lời gọi ipn từ VNPay    |
-| `queryDr`         | `payload: QueryDrSchema`                       | `Promise<QueryDrResponseFromVNPaySchema>` | Truy vấn kết quả giao dịch       |
+| Method            | Parameters                    | Return Type                         | Description                      |
+| ----------------- | ----------------------------- | ----------------------------------- | -------------------------------- |
+| `buildPaymentUrl` | `data: BuildPaymentUrl`       | `Promise<string>`                   | Tạo đường dẫn thanh toán         |
+| `verifyIpnCall`   | `query: ReturnQueryFromVNPay` | `Promise<VerifyIpnCall>`            | Xác thực lời gọi ipn từ VNPay    |
+| `verifyReturnUrl` | `query: ReturnQueryFromVNPay` | `Promise<VerifyReturnUrl>`          | Xác thực kết quả trả về từ VNPay |
+| `queryDr`         | `data: QueryDr`               | `Promise<QueryDrResponseFromVNPay>` | Truy vấn kết quả giao dịch       |
 
 -   Nhập thư viện:
 

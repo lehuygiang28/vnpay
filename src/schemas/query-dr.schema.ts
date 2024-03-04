@@ -1,5 +1,4 @@
 import { z } from 'zod';
-
 import {
     commonSchema,
     BuildPaymentUrlSchema,
@@ -64,7 +63,7 @@ export const QueryDrSchema = commonSchema
         }).required(),
     );
 
-export const BodyRequestQueryDr = QueryDrSchema.and(
+export const BodyRequestQueryDrSchema = QueryDrSchema.and(
     ReturnQueryFromVNPaySchema.pick({
         vnp_SecureHash: true,
         vnp_TmnCode: true,
@@ -142,6 +141,6 @@ export const QueryDrResponseFromVNPaySchema = commonSchema
         }).optional(),
     );
 
-export type QueryDrSchema = z.infer<typeof QueryDrSchema>;
-export type BodyRequestQueryDr = z.infer<typeof BodyRequestQueryDr>;
-export type QueryDrResponseFromVNPaySchema = z.infer<typeof QueryDrResponseFromVNPaySchema>;
+export type QueryDr = z.infer<typeof QueryDrSchema>;
+export type BodyRequestQueryDr = z.infer<typeof BodyRequestQueryDrSchema>;
+export type QueryDrResponseFromVNPay = z.infer<typeof QueryDrResponseFromVNPaySchema>;

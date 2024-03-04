@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import portfinder from 'portfinder';
 import { VNPay } from '../src/vnpay';
-import { ReturnQueryFromVNPaySchema, VerifyReturnUrlSchema } from '../src/schemas';
+import { ReturnQueryFromVNPay, VerifyReturnUrl } from '../src/schemas';
 
 const app = express();
 let portToListen = 3000;
@@ -43,31 +43,28 @@ app.get('/payment-url', async (req: Request, res: Response) => {
  * So you need to implement this endpoint to handle the result of the payment
  * Eg: Update the order status, send the email to the customer, etc.
  */
-app.get(
-    '/vnpay-ipn',
-    async (req: Request<any, any, any, ReturnQueryFromVNPaySchema>, res: Response) => {
-        let verify: VerifyReturnUrlSchema;
-        try {
-            verify = await vnpay.verifyReturnUrl({ ...req.query });
-            if (!verify.isSuccess) {
-                return res.status(200).json({
-                    message: verify?.message ?? 'Payment failed!',
-                    status: verify.isSuccess,
-                });
-            }
-        } catch (error) {
-            console.log(`verify error: ${error}`);
-            return res.status(400).json({ message: 'verify error', status: false });
+app.get('/vnpay-ipn', async (req: Request<any, any, any, ReturnQueryFromVNPay>, res: Response) => {
+    let verify: VerifyReturnUrl;
+    try {
+        verify = await vnpay.verifyIpnCall({ ...req.query });
+        if (!verify.isSuccess) {
+            return res.status(200).json({
+                message: verify?.message ?? 'Payment failed!',
+                status: verify.isSuccess,
+            });
         }
+    } catch (error) {
+        console.log(`verify error: ${error}`);
+        return res.status(400).json({ message: 'verify error', status: false });
+    }
 
-        // Update the order status, send the email to the customer, etc.
+    // Update the order status, send the email to the customer, etc.
 
-        return res.status(200).json({
-            message: verify?.message ?? 'Payment successful!',
-            status: verify.isSuccess,
-        });
-    },
-);
+    return res.status(200).json({
+        message: verify?.message ?? 'Payment successful!',
+        status: verify.isSuccess,
+    });
+});
 
 /**
  * WARNING: Do not use this endpoint to handle the result of the payment, this should be used to handle redirect user from VNPay to your website
@@ -75,8 +72,8 @@ app.get(
  */
 app.get(
     '/vnpay-return',
-    async (req: Request<any, any, any, ReturnQueryFromVNPaySchema>, res: Response) => {
-        let verify: VerifyReturnUrlSchema;
+    async (req: Request<any, any, any, ReturnQueryFromVNPay>, res: Response) => {
+        let verify: VerifyReturnUrl;
         try {
             verify = await vnpay.verifyReturnUrl({ ...req.query });
             if (!verify.isSuccess) {
@@ -104,6 +101,7 @@ portfinder.getPort({ port: portToListen }, (err, port) => {
     } else {
         app.listen(port, () => {
             console.log(`Example app listening on port ${port}!`);
+            console.log(`Goto http://localhost:${port}/payment-url to get the sample payment url`);
             portToListen = port;
         });
     }
