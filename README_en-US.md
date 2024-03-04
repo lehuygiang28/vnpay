@@ -37,98 +37,42 @@ pnpm add vnpay
 
 #### Methods
 
-| Method            | Parameters                    | Return Type                         | Description                  |
-| ----------------- | ----------------------------- | ----------------------------------- | ---------------------------- |
-| `buildPaymentUrl` | `data: BuildPaymentUrl`       | `Promise<string>`                   | Build payment url with data  |
-| `verifyIpnUrl`    | `query: ReturnQueryFromVNPay` | `Promise<VerifyIpnCall>`            | Verify ipn url from VNPay    |
-| `verifyReturnUrl` | `query: ReturnQueryFromVNPay` | `Promise<VerifyReturnUrl>`          | Verify return url from VNPay |
-| `queryDr`         | `data: QueryDr`               | `Promise<QueryDrResponseFromVNPay>` | Query result transaction     |
-
--   Import:
-
-```typescript
-// ES Modules
-import { VNPay } from 'vnpay';
-
-// CommonJS
-const { VNPay } = require('vnpay');
-```
-
--   Create instance:
-
-```typescript
-// Create instance
-const vnpay = new VNPay({
-    api_Host: 'https://sandbox.vnpayment.vn', //your payment gateway, default is sandbox
-    tmnCode: 'TMNCODE', // your tmn code
-    secureSecret: 'SERCRET', // your secure secret
-});
-```
-
--   Build/create payment url:
-
-```typescript
-// Build payment url
-const urlString = await vnpay.buildPaymentUrl({
-    vnp_Amount: 100000, // amount in VND
-    vnp_IpAddr: '192.168.0.1', // customer ip address
-    vnp_TxnRef: '12345678', // your transaction reference
-    vnp_OrderInfo: `Thanh toan cho ma GD: ${tnx}`,
-    returnUrl: 'http://localhost:8888/order/vnpay_return', // return url
-});
-```
-
--   Verify response from VNPay:
-    Notice: Don't update order status here, just update order status when verify `ipn` call from VNPay
-
-```typescript
-/**
- * Verify response from VNPay
- */
-router.get('/order/vnpay_return', async (req, res) => {
-    // `req.query` is the query string from VNPay
-    const verifyResult = await vnpay.verifyReturnUrl(req.query);
-    if (verifyResult.isSuccess) {
-        // do something if verify success
-        // Don't update order status here, just update order status when verify ipn call from VNPay
-    } else {
-        // do something if verify fail
-    }
-});
-```
-
--   Verify ipn call from VNPay:
-
-```typescript
-/**
- * Verify the ipn call from VNPay
- */
-router.get('/order/vnpay_ipn', async (req, res) => {
-    // `req.query` is the query string from VNPay
-    const verifyResult = await vnpay.verifyIpnUrl(req.query);
-    if (verifyResult.isSuccess) {
-        // do something if verify success
-    } else {
-        // do something if verify fail
-    }
-});
-```
-
--   Query result transaction (QueryDr):
-
-```typescript
-const queryDrResult = await vnpay.queryDr({
-    vnp_CreateDate: 20210809121212,
-    vnp_IpAddr: '127.0.0.1',
-    vnp_OrderInfo: 'hihihi',
-    vnp_RequestId: '121212',
-    vnp_TransactionDate: 20210809121212,
-    vnp_TransactionNo: 121212,
-    vnp_TxnRef: '112121',
-});
-
-console.log(queryDrResult);
-```
+<table>
+    <thead>
+        <tr>
+            <th>Method</th>
+            <th>Parameters</th>
+            <th>Return Type</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>buildPaymentUrl</code></td>
+            <td><code>data: BuildPaymentUrl</code></td>
+            <td><code>Promise&lt;string&gt;</code></td>
+            <td>Build payment url with data</td>
+        </tr>
+        <tr>
+            <td><code>verifyIpnUrl</code></td>
+            <td><code>query: ReturnQueryFromVNPay</code></td>
+            <td><code>Promise&lt;VerifyIpnCall&gt;</code></td>
+            <td>Verify <a href="https://en.wikipedia.org/wiki/Instant_payment_notification">ipn</a> call from VNPay</td>
+        </tr>
+        <tr>
+            <td><code>verifyReturnUrl</code></td>
+            <td><code>query: ReturnQueryFromVNPay</code></td>
+            <td><code>Promise&lt;VerifyReturnUrl&gt;</code></td>
+            <td>Verify return url from VNPay</td>
+        </tr>
+        <tr>
+            <td><code>queryDr</code></td>
+            <td><code>data: QueryDr</code></td>
+            <td><code>Promise&lt;QueryDrResponseFromVNPay&gt;</code></td>
+            <td>Query result transaction</td>
+        </tr>
+    </tbody>
+</table>
 
 #### Example here: [Click here](https://github.com/lehuygiang28/vnpay/blob/main/example/express.ts)
 
