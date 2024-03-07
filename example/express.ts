@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import portfinder from 'portfinder';
 import { VNPay } from '../src/vnpay';
-import { ReturnQueryFromVNPay, VerifyReturnUrl } from '../src/schemas';
+import { ReturnQueryFromVNPay, VerifyReturnUrl } from '../src/types';
 import {
     IpnResponse,
     IpnSuccess,
@@ -19,6 +19,7 @@ const vnpay = new VNPay({
     tmnCode: '2QXUI4B4',
     secureSecret: 'secret',
     api_Host: 'https://sandbox.vnpayment.vn',
+    testMode: true,
 });
 
 app.get('/', (req: Request, res: Response) => {
@@ -38,12 +39,12 @@ app.get('/payment-url', async (req: Request, res: Response) => {
         vnp_TxnRef: '123456',
         vnp_OrderInfo: '123456',
         vnp_OrderType: 'other',
-        vnp_ReturnUrl: `http://localhost:${portToListen}/return`,
+        vnp_ReturnUrl: `http://localhost:${portToListen}/vnpay-return`,
     });
-    // Or redirect to payment url if you use a server like MVC or SSR
+    // redirect to payment url if you use a server like MVC or SSR
     // res.redirect(urlString);
 
-    // Return payment url to front-end client if you use a back-end server
+    // Or return payment url to front-end client if you use a back-end server
     return res.json({ paymentUrl: urlString });
 });
 
@@ -57,7 +58,7 @@ app.get(
     async (req: Request<any, any, any, ReturnQueryFromVNPay>, res: Response<IpnResponse>) => {
         try {
             const verify: VerifyReturnUrl = await vnpay.verifyIpnCall({ ...req.query });
-            if (!verify.isSuccess) {
+            if (!verify.isVerified) {
                 return res.json(IpnFailChecksum);
             }
 
@@ -108,7 +109,7 @@ app.get(
         let verify: VerifyReturnUrl;
         try {
             verify = await vnpay.verifyReturnUrl({ ...req.query });
-            if (!verify.isSuccess) {
+            if (!verify.isVerified) {
                 return res.status(200).json({
                     message: verify?.message ?? 'Payment failed!',
                     status: verify.isSuccess,

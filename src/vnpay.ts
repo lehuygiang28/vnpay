@@ -11,20 +11,21 @@ import {
 import { VnpCurrCode, VnpLocale, VnpOrderType } from './enums';
 import { dateFormat, getResponseByStatusCode, resolveUrlString } from './utils/common';
 import {
-    ConfigVnpay,
+    VNPayConfig,
     BuildPaymentUrl,
     ReturnQueryFromVNPay,
     VerifyReturnUrl,
-    QueryDr,
-    QueryDrResponseFromVNPay,
-    ConfigVnpaySchema,
-    BuildPaymentUrlSchema,
-    ReturnQueryFromVNPaySchema,
-    VerifyReturnUrlSchema,
-    QueryDrSchema,
-    BodyRequestQueryDr,
     VerifyIpnCall,
-} from './schemas';
+} from './types';
+import { QueryDr, BodyRequestQueryDr, QueryDrResponseFromVNPay } from './types/query-dr.type';
+
+type GlobalConfig = Omit<VNPayConfig, 'testMode'> & {
+    api_Host: string;
+    vnp_Locale: VnpLocale;
+    vnp_CurrCode: string;
+    vnp_Command: string;
+    vnp_OrderType: string;
+};
 
 /**
  * Lớp hỗ trợ thanh toán qua VNPay
@@ -51,27 +52,31 @@ import {
  *
  */
 export class VNPay {
-    private globalConfig: ConfigVnpay;
+    private globalDefaultConfig: GlobalConfig;
     private CRYPTO_ALGORITHM = 'sha512';
     private CRYPTO_ENCODING: BufferEncoding = 'utf-8';
-
-    private vnp_Command = VNP_DEFAULT_COMMAND;
-    private vnp_OrderType: string | VnpOrderType = VnpOrderType.OTHER;
 
     public constructor({
         api_Host = VNPAY_GATEWAY_SANDBOX_HOST,
         vnp_Version = VNP_VERSION,
         vnp_CurrCode = VnpCurrCode.VND,
         vnp_Locale = VnpLocale.VN,
-        ...init
-    }: ConfigVnpay) {
-        this.globalConfig = ConfigVnpaySchema.parse({
+        testMode = false,
+        ...config
+    }: VNPayConfig) {
+        if (testMode) {
+            api_Host = VNPAY_GATEWAY_SANDBOX_HOST;
+        }
+
+        this.globalDefaultConfig = {
             api_Host,
             vnp_Version,
             vnp_CurrCode,
             vnp_Locale,
-            ...init,
-        });
+            vnp_OrderType: VnpOrderType.OTHER,
+            vnp_Command: VNP_DEFAULT_COMMAND,
+            ...config,
+        };
     }
 
     /**
@@ -80,11 +85,12 @@ export class VNPay {
      */
     public get defaultConfig() {
         return {
-            vnp_Version: this.globalConfig.vnp_Version,
-            vnp_CurrCode: this.globalConfig.vnp_CurrCode,
-            vnp_Locale: this.globalConfig.vnp_Locale,
-            vnp_Command: this.vnp_Command,
-            vnp_OrderType: this.vnp_OrderType,
+            vnp_TmnCode: this.globalDefaultConfig.tmnCode,
+            vnp_Version: this.globalDefaultConfig.vnp_Version,
+            vnp_CurrCode: this.globalDefaultConfig.vnp_CurrCode,
+            vnp_Locale: this.globalDefaultConfig.vnp_Locale,
+            vnp_Command: this.globalDefaultConfig.vnp_Command,
+            vnp_OrderType: this.globalDefaultConfig.vnp_OrderType,
         };
     }
 
@@ -98,21 +104,20 @@ export class VNPay {
     public buildPaymentUrl(data: BuildPaymentUrl): Promise<string> {
         return new Promise((resolve, reject) => {
             try {
-                const validatedPayload = BuildPaymentUrlSchema.parse(data);
+                const validatedPayload = data;
 
-                if (!validatedPayload.vnp_ReturnUrl) {
-                    validatedPayload.vnp_ReturnUrl = this.globalConfig.returnUrl;
-                }
+                const dataToBuild = {
+                    ...this.defaultConfig,
+                    ...validatedPayload,
+                };
 
-                const dataToBuild = { ...this.defaultConfig, ...validatedPayload };
                 const timeGMT7 = timezone(new Date()).tz('Asia/Ho_Chi_Minh').format();
                 dataToBuild.vnp_CreateDate = dateFormat(new Date(timeGMT7), 'yyyyMMddHHmmss');
                 dataToBuild.vnp_Amount = dataToBuild.vnp_Amount * 100;
-                dataToBuild.vnp_TmnCode = this.globalConfig.tmnCode;
 
                 const redirectUrl = new URL(
                     resolveUrlString(
-                        this.globalConfig.api_Host ?? VNPAY_GATEWAY_SANDBOX_HOST,
+                        this.globalDefaultConfig.api_Host ?? VNPAY_GATEWAY_SANDBOX_HOST,
                         GATEWAY_ENDPOINT,
                     ),
                 );
@@ -128,7 +133,7 @@ export class VNPay {
                     });
 
                 const signed = crypto
-                    .createHmac(this.CRYPTO_ALGORITHM, this.globalConfig.secureSecret)
+                    .createHmac(this.CRYPTO_ALGORITHM, this.globalDefaultConfig.secureSecret)
                     .update(
                         Buffer.from(redirectUrl.search.slice(1).toString(), this.CRYPTO_ENCODING),
                     )
@@ -153,7 +158,7 @@ export class VNPay {
     public verifyReturnUrl(query: ReturnQueryFromVNPay): Promise<VerifyReturnUrl> {
         return new Promise((resolve, reject) => {
             try {
-                const vnpayReturnQuery = ReturnQueryFromVNPaySchema.parse(query);
+                const vnpayReturnQuery = query;
                 const secureHash = vnpayReturnQuery.vnp_SecureHash;
 
                 // Will be remove when append to URLSearchParams
@@ -161,10 +166,11 @@ export class VNPay {
                 delete vnpayReturnQuery.vnp_SecureHashType;
 
                 const outputResults = {
+                    isVerified: true,
                     isSuccess: vnpayReturnQuery.vnp_ResponseCode === '00',
                     message: getResponseByStatusCode(
                         vnpayReturnQuery.vnp_ResponseCode?.toString() ?? '',
-                        this.defaultConfig.vnp_Locale,
+                        this.globalDefaultConfig.vnp_Locale,
                     ),
                 };
 
@@ -182,28 +188,24 @@ export class VNPay {
 
                 const hmac = crypto.createHmac(
                     this.CRYPTO_ALGORITHM,
-                    this.globalConfig.secureSecret,
+                    this.globalDefaultConfig.secureSecret,
                 );
 
                 const signed = hmac
                     .update(Buffer.from(searchParams.toString(), this.CRYPTO_ENCODING))
                     .digest('hex');
 
-                if (secureHash === signed) {
+                if (secureHash !== signed) {
                     Object.assign(outputResults, {
-                        isSuccess: vnpayReturnQuery.vnp_ResponseCode === '00',
-                    });
-                } else {
-                    Object.assign(outputResults, {
-                        isSuccess: false,
+                        isVerified: false,
                         message: 'Wrong checksum',
                     });
                 }
 
-                const returnObject = VerifyReturnUrlSchema.parse({
+                const returnObject = {
                     ...vnpayReturnQuery,
                     ...outputResults,
-                });
+                };
 
                 resolve(returnObject);
             } catch (error) {
@@ -258,30 +260,32 @@ export class VNPay {
      */
     public async queryDr(query: QueryDr): Promise<QueryDrResponseFromVNPay> {
         const command = 'querydr';
-        const { vnp_Version = VNP_VERSION } = query;
-        const dataQuery = QueryDrSchema.parse({ vnp_Version, ...query });
+        const dataQuery = {
+            vnp_Version: this.globalDefaultConfig.vnp_Version ?? VNP_VERSION,
+            ...query,
+        };
 
         const url = new URL(
             resolveUrlString(
-                this.globalConfig.api_Host ?? VNPAY_GATEWAY_SANDBOX_HOST,
+                this.globalDefaultConfig.api_Host ?? VNPAY_GATEWAY_SANDBOX_HOST,
                 QUERY_DR_REFUND_ENDPOINT,
             ),
         );
 
         const stringToCheckSum =
             `${dataQuery.vnp_RequestId}|${dataQuery.vnp_Version}|${command}` +
-            `|${this.globalConfig.tmnCode}|${dataQuery.vnp_TxnRef}|${dataQuery.vnp_TransactionDate}` +
+            `|${this.globalDefaultConfig.tmnCode}|${dataQuery.vnp_TxnRef}|${dataQuery.vnp_TransactionDate}` +
             `|${dataQuery.vnp_CreateDate}|${dataQuery.vnp_IpAddr}|${dataQuery.vnp_OrderInfo}`;
 
         const signed = crypto
-            .createHmac(this.CRYPTO_ALGORITHM, this.globalConfig.secureSecret)
+            .createHmac(this.CRYPTO_ALGORITHM, this.globalDefaultConfig.secureSecret)
             .update(Buffer.from(stringToCheckSum, this.CRYPTO_ENCODING))
             .digest('hex');
 
         const body: BodyRequestQueryDr = {
             ...dataQuery,
             vnp_Command: command,
-            vnp_TmnCode: this.globalConfig.tmnCode,
+            vnp_TmnCode: this.globalDefaultConfig.tmnCode,
             vnp_SecureHash: signed,
         };
 
@@ -307,7 +311,7 @@ export class VNPay {
                 ...responseData,
                 vnp_Message: getResponseByStatusCode(
                     responseData.vnp_ResponseCode?.toString(),
-                    this.globalConfig.vnp_Locale,
+                    this.globalDefaultConfig.vnp_Locale,
                     QUERY_DR_RESPONSE_MAP,
                 ),
             };
@@ -315,13 +319,13 @@ export class VNPay {
 
         const stringToCheckSumResponse =
             `${responseData.vnp_ResponseId}|${responseData.vnp_Command}|${responseData.vnp_ResponseCode}` +
-            `|${responseData.vnp_Message}|${responseData.vnp_TmnCode}|${responseData.vnp_TxnRef}` +
+            `|${responseData.vnp_Message}|${this.defaultConfig.vnp_TmnCode}|${responseData.vnp_TxnRef}` +
             `|${responseData.vnp_Amount}|${responseData.vnp_BankCode}|${responseData.vnp_PayDate}` +
             `|${responseData.vnp_TransactionNo}|${responseData.vnp_TransactionType}|${responseData.vnp_TransactionStatus}` +
             `|${responseData.vnp_OrderInfo}|${responseData.vnp_PromotionCode}|${responseData.vnp_PromotionAmount}`;
 
         const signedResponse = crypto
-            .createHmac(this.CRYPTO_ALGORITHM, this.globalConfig.secureSecret)
+            .createHmac(this.CRYPTO_ALGORITHM, this.globalDefaultConfig.secureSecret)
             .update(Buffer.from(stringToCheckSumResponse, this.CRYPTO_ENCODING))
             .digest('hex');
 
@@ -333,7 +337,7 @@ export class VNPay {
             ...responseData,
             vnp_Message: getResponseByStatusCode(
                 responseData.vnp_ResponseCode?.toString(),
-                this.globalConfig.vnp_Locale,
+                this.globalDefaultConfig.vnp_Locale,
                 QUERY_DR_RESPONSE_MAP,
             ),
         };

@@ -50,7 +50,7 @@ export function generateRandomString(length: number) {
  */
 export function getResponseByStatusCode(
     responseCode: string = '',
-    locale = VnpLocale.VN,
+    locale: VnpLocale = VnpLocale.VN,
     responseMap = RESPONSE_MAP,
 ): string {
     const respondText: Record<VnpLocale, string> =

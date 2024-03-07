@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import { VNPay } from '../src/vnpay';
 import { dateFormat } from '../src/utils';
-import { QueryDrResponseFromVNPay, ReturnQueryFromVNPay, VerifyReturnUrl } from '../src/schemas';
+import { ReturnQueryFromVNPay, VerifyReturnUrl } from '../src/types';
 
 async function main() {
     console.time('main');
@@ -58,7 +58,7 @@ async function main() {
     // Query dr
     console.time('queryDr');
     console.log('----querydr----------');
-    const queryDrResult: QueryDrResponseFromVNPay = await vnpay.queryDr({
+    const queryDrResult = await vnpay.queryDr({
         vnp_CreateDate: 20210809121213,
         vnp_IpAddr: '127.0.0.1',
         vnp_OrderInfo: 'hihihi',

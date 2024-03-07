@@ -1,0 +1,100 @@
+import { VnpTransactionType } from '../enums';
+import { BuildPaymentUrl } from './build-payment-url.type';
+import { ReturnQueryFromVNPay } from './return-from-vnpay.type';
+
+export type QueryDr = Pick<BuildPaymentUrl, 'vnp_TxnRef' | 'vnp_OrderInfo' | 'vnp_CreateDate'> &
+    Pick<ReturnQueryFromVNPay, 'vnp_TxnRef'> & {
+        /**
+         * Mã hệ thống merchant tự sinh ứng với mỗi yêu cầu truy vấn giao dịch.
+         * Mã này là duy nhất dùng để phân biệt các yêu cầu truy vấn giao dịch. Không được trùng lặp trong ngày.
+         * @en Merchant system code automatically generated for each transaction query request.
+         * This code is unique to distinguish transaction query requests. Not duplicated in a day.
+         *
+         */
+        vnp_RequestId: string;
+
+        /**
+         * Thời gian ghi nhận giao dịch tại hệ thống của merchant tính theo GMT+7, định dạng: yyyyMMddHHmmss, tham khảo giá trị:
+         * - Thanh toán PAY giống vnp_CreateDate của vnp_Command=pay
+         * - Thanh toán bằng mã Token giống "vnp_create_date" của "vnp_Command=pay_and_create" và "vnp_command=token_pay"
+         * - Thanh toán trả góp giống "transaction": {"mcDate": ""} chiều khởi tạo giao dịch trả góp
+         * - Thanh toán định kỳ giống "transaction": {"mcDate": ""} chiều khởi tạo yêu cầu thanh toán định kỳ
+         *
+         * @en Transaction time recorded at merchant system according to GMT + 7, format: yyyyMMddHHmmss, refer to value:
+         * - PAY payment same as vnp_CreateDate of vnp_Command = pay
+         * - Payment by Token code same as "vnp_create_date" of "vnp_Command = pay_and_create" and "vnp_command = token_pay"
+         * - Installment payment same as "transaction": {"mcDate": ""} in the afternoon of initiating the installment payment transaction
+         * - Periodic payment same as "transaction": {"mcDate": ""} in the afternoon of initiating the periodic payment request
+         */
+        vnp_TransactionDate: number;
+
+        /**
+         * 	Địa chỉ IP của máy chủ thực hiện gọi API
+         * @en IP address of the server that calls the API
+         */
+        vnp_IpAddr: string;
+
+        /**
+         * Mã giao dịch ghi nhận tại hệ thống VNPAY.
+         * @en Transaction code recorded in VNPAY system.
+         * @example 20170829153052
+         */
+        vnp_TransactionNo: number;
+    };
+
+export type BodyRequestQueryDr = QueryDr & {
+    vnp_SecureHash: string;
+    vnp_TmnCode: string;
+    vnp_Command: string;
+};
+
+export type QueryDrResponseFromVNPay = Pick<BuildPaymentUrl, 'vnp_TxnRef' | 'vnp_Amount'> & {
+    vnp_ResponseCode: string;
+    vnp_Command: string;
+    vnp_PayDate: string | number;
+    vnp_OrderInfo: string;
+    vnp_TransactionStatus: string | number;
+    vnp_SecureHash: string;
+
+    /**
+     * Mã Ngân hàng thanh toán
+     * @en Bank code
+     * @example NCB
+     */
+    vnp_BankCode: string;
+
+    /**
+     * Mã hệ thống VNPAY tự sinh ứng với mỗi yêu cầu truy vấn giao dịch.
+     * Mã này là duy nhất dùng để phân biệt các yêu cầu truy vấn giao dịch. Không trùng lặp trong ngày.
+     * @en VNPAY system code automatically generated for each transaction query request.
+     * This code is unique to distinguish transaction query requests. Not duplicated in a day.
+     */
+    vnp_ResponseId: string;
+
+    /**
+     * Mô tả thông tin tương ứng với vnp_ResponseCode
+     * @en Description of information corresponding to vnp_ResponseCode
+     */
+    vnp_Message: string;
+
+    /**
+     * Loại giao dịch tại hệ thống VNPAY:
+     * - 01: GD thanh toán
+     * - 02: Giao dịch hoàn trả toàn phần
+     * - 03: Giao dịch hoàn trả một phần
+     */
+    vnp_TransactionType: VnpTransactionType;
+
+    /**
+     * 	Mã khuyến mại. Trong trường hợp khách hàng áp dụng mã QR khuyến mãi khi thanh toán.
+     * @en Promotion code. In case customers apply QR promotion code when paying.
+     */
+    vnp_PromotionCode?: string;
+
+    /**
+     * Số tiền khuyến mại. Trong trường hợp khách hàng áp dụng mã QR khuyến mãi khi thanh toán.
+     * @en Promotion amount. In case customers apply QR promotion code when paying.
+     */
+    vnp_PromotionAmount?: number;
+    vnp_TransactionNo: number | string;
+};
