@@ -7,6 +7,7 @@ import {
     VNP_VERSION,
     QUERY_DR_REFUND_ENDPOINT,
     QUERY_DR_RESPONSE_MAP,
+    REFUND_RESPONSE_MAP,
 } from './constants';
 import { VnpCurrCode, VnpLocale, VnpOrderType } from './enums';
 import { dateFormat, getResponseByStatusCode, resolveUrlString } from './utils/common';
@@ -18,6 +19,7 @@ import {
     VerifyIpnCall,
 } from './types';
 import { QueryDr, BodyRequestQueryDr, QueryDrResponseFromVNPay } from './types/query-dr.type';
+import { Refund, RefundResponse } from './types/refund.type';
 
 type GlobalConfig = Omit<VNPayConfig, 'testMode'> & {
     api_Host: string;
@@ -336,6 +338,92 @@ export class VNPay {
                 responseData.vnp_ResponseCode?.toString(),
                 this.globalDefaultConfig.vnp_Locale,
                 QUERY_DR_RESPONSE_MAP,
+            ),
+        };
+    }
+
+    public async refund(data: Refund) {
+        const vnp_Command = 'refund';
+
+        const dataQuery = {
+            ...data,
+            vnp_Command,
+            vnp_Version: this.globalDefaultConfig.vnp_Version,
+            vnp_TmnCode: this.globalDefaultConfig.tmnCode,
+        };
+
+        const url = new URL(
+            resolveUrlString(
+                this.globalDefaultConfig.api_Host ?? VNPAY_GATEWAY_SANDBOX_HOST,
+                QUERY_DR_REFUND_ENDPOINT,
+            ),
+        );
+        const stringToSigned =
+            `${dataQuery.vnp_RequestId}|${dataQuery.vnp_Version}|${vnp_Command}|${dataQuery.vnp_TmnCode}|` +
+            `${dataQuery.vnp_TransactionType}|${dataQuery.vnp_TxnRef}|${dataQuery.vnp_Amount}|` +
+            `${dataQuery.vnp_TransactionNo}|${dataQuery.vnp_TransactionDate}|${dataQuery.vnp_CreateBy}|` +
+            `${dataQuery.vnp_CreateDate}|${dataQuery.vnp_IpAddr}|${dataQuery.vnp_OrderInfo}`;
+
+        const signed = crypto
+            .createHmac(this.CRYPTO_ALGORITHM, this.globalDefaultConfig.secureSecret)
+            .update(Buffer.from(stringToSigned, this.CRYPTO_ENCODING))
+            .digest('hex');
+
+        const body = {
+            ...dataQuery,
+            vnp_SecureHash: signed,
+        };
+
+        const response = await fetch(url.toString(), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const responseData = (await response.json()) as RefundResponse;
+
+        if (
+            Number(responseData.vnp_ResponseCode) >= 90 &&
+            Number(responseData.vnp_ResponseCode) <= 99
+        ) {
+            return {
+                ...responseData,
+                vnp_Message: getResponseByStatusCode(
+                    responseData.vnp_ResponseCode?.toString(),
+                    this.globalDefaultConfig.vnp_Locale,
+                    QUERY_DR_RESPONSE_MAP,
+                ),
+            };
+        }
+
+        const stringToChecksumResponse =
+            `${responseData.vnp_ResponseId}|${vnp_Command}|${responseData.vnp_ResponseCode}|` +
+            `${responseData.vnp_Message}|${responseData.vnp_TmnCode}|${responseData.vnp_TxnRef}|` +
+            `${responseData.vnp_Amount}|${responseData.vnp_BankCode}|${responseData.vnp_PayDate}|` +
+            `${responseData.vnp_TransactionNo}|${responseData.vnp_TransactionType}|` +
+            `${responseData.vnp_TransactionStatus}|${responseData.vnp_OrderInfo}`;
+
+        const signedResponse = crypto
+            .createHmac(this.CRYPTO_ALGORITHM, this.globalDefaultConfig.secureSecret)
+            .update(Buffer.from(stringToChecksumResponse, this.CRYPTO_ENCODING))
+            .digest('hex');
+
+        if (signedResponse !== responseData.vnp_SecureHash) {
+            throw new Error('Wrong checksum from VNPay response');
+        }
+
+        return {
+            ...responseData,
+            vnp_Message: getResponseByStatusCode(
+                responseData.vnp_ResponseCode?.toString(),
+                this.globalDefaultConfig.vnp_Locale,
+                REFUND_RESPONSE_MAP,
             ),
         };
     }

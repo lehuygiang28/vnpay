@@ -19,9 +19,13 @@ export const VnpOrderType = {
 } as const;
 export type VnpOrderType = (typeof VnpOrderType)[keyof typeof VnpOrderType];
 
-export const VnpTransactionType = {
-    PAYMENT: '01',
-    FULL_REFUND: '02',
-    PARTIAL_REFUND: '03',
-} as const;
-export type VnpTransactionType = (typeof VnpTransactionType)[keyof typeof VnpTransactionType];
+export enum VnpTransactionType {
+    PAYMENT = '01',
+    FULL_REFUND = '02',
+    PARTIAL_REFUND = '03',
+}
+
+export enum RefundTransactionType {
+    FULL_REFUND = '02',
+    PARTIAL_REFUND = '03',
+}
