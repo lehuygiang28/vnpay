@@ -34,6 +34,9 @@ async function main() {
         api_Host: 'https://sandbox.vnpayment.vn',
     });
 
+    const bankList = await vnpay.getBankList();
+    console.log(bankList);
+
     const createDate = new Date();
     const orderId = `123456-${createDate.getTime()}`;
 
@@ -53,7 +56,7 @@ async function main() {
     const queryResponseFromVNPay: ReturnQueryFromVNPay = {
         // sample return url from vnpay
         vnp_Amount: 10000,
-        vnp_BankCode: 'NCB',
+        vnp_BankCode: bankList[0].bank_code,
         vnp_BankTranNo: '123456',
         vnp_CardType: 'ATM',
         vnp_OrderInfo: '123456',

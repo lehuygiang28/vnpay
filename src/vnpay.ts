@@ -8,6 +8,7 @@ import {
     QUERY_DR_REFUND_ENDPOINT,
     QUERY_DR_RESPONSE_MAP,
     REFUND_RESPONSE_MAP,
+    GET_BANK_LIST_ENDPOINT,
 } from './constants';
 import { VnpCurrCode, VnpLocale, VnpOrderType } from './enums';
 import { dateFormat, getResponseByStatusCode, resolveUrlString } from './utils/common';
@@ -20,6 +21,7 @@ import {
 } from './types';
 import { QueryDr, BodyRequestQueryDr, QueryDrResponseFromVNPay } from './types/query-dr.type';
 import { Refund, RefundResponse } from './types/refund.type';
+import { Bank } from './types/bank.type';
 
 type GlobalConfig = Omit<VNPayConfig, 'testMode'> & {
     api_Host: string;
@@ -94,6 +96,31 @@ export class VNPay {
             vnp_Command: this.globalDefaultConfig.vnp_Command,
             vnp_OrderType: this.globalDefaultConfig.vnp_OrderType,
         };
+    }
+
+    public async getBankList() {
+        const response = await fetch(
+            resolveUrlString(
+                this.globalDefaultConfig.api_Host ?? VNPAY_GATEWAY_SANDBOX_HOST,
+                GET_BANK_LIST_ENDPOINT,
+            ),
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `tmn_code=${this.globalDefaultConfig.tmnCode}`,
+            },
+        );
+        const bankList = (await response.json()) as Bank[];
+        bankList.forEach(
+            (b) =>
+                (b.logo_link = resolveUrlString(
+                    this.globalDefaultConfig.api_Host ?? VNPAY_GATEWAY_SANDBOX_HOST,
+                    b.logo_link.slice(1),
+                )),
+        );
+        return bankList;
     }
 
     /**
