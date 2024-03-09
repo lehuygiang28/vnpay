@@ -49,16 +49,47 @@ export type BodyRequestQueryDr = QueryDr & {
 };
 
 export type QueryDrResponseFromVNPay = Pick<BuildPaymentUrl, 'vnp_TxnRef' | 'vnp_Amount'> & {
-    vnp_ResponseCode: string;
+    /**
+     * Mã phản hồi kết quả xử lý của API.
+     * Quy định mã trả lời 00 ứng với yêu cầu được thực hiện thành công.
+     * Tham khảo thêm tại bảng mã lỗi.
+     *
+     * @en
+     * Response code of API
+     * If the API is executed successfully, the value of the response code is 00.
+     * To learn more about the response code, refer to the table below.
+     */
+    vnp_ResponseCode: number;
+
+    /**
+     * Loại giao dịch tại hệ thống VNPAY
+     */
     vnp_Command: string;
+
+    /**
+     * Thời gian thực hiện
+     */
     vnp_PayDate: string | number;
+
+    /**
+     * Mô tả thông tin yêu cầu
+     *
+     * @en Description of request
+     */
     vnp_OrderInfo: string;
+
+    /**
+     * Tình trạng thanh toán của giao dịch tại Cổng thanh toán VNPAY.
+     *
+     * @en Status of transaction payment at VNPAY payment gateway.
+     */
     vnp_TransactionStatus: string | number;
+
     vnp_SecureHash: string;
 
     /**
-     * Mã Ngân hàng thanh toán
-     * @en Bank code
+     * Mã Ngân hàng hoặc mã Ví điện tử thanh toán
+     * @en Bank code or account number
      * @example NCB
      */
     vnp_BankCode: string;
@@ -96,5 +127,5 @@ export type QueryDrResponseFromVNPay = Pick<BuildPaymentUrl, 'vnp_TxnRef' | 'vnp
      * @en Promotion amount. In case customers apply QR promotion code when paying.
      */
     vnp_PromotionAmount?: number;
-    vnp_TransactionNo: number | string;
+    vnp_TransactionNo?: number | string;
 };

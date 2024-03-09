@@ -1,3 +1,5 @@
+import { VnpLocale, VnpOrderType } from '../enums';
+
 export type BuildPaymentUrl = {
     /**
      * Số tiền thanh toán. Đã tự động tính toán theo đơn vị của VNPay. (100 lần số tiền của đơn hàng trong cơ sở dữ liệu của bạn)
@@ -54,7 +56,7 @@ export type BuildPaymentUrl = {
      * @en Language display on payment gateway. Currently support Vietnamese (vn), English (en)
      * @example vn
      */
-    vnp_Locale?: string;
+    vnp_Locale?: VnpLocale;
 
     /**
      * Loại đơn hàng
@@ -62,7 +64,7 @@ export type BuildPaymentUrl = {
      * @default 'other'
      * @enum {VnpOrderType} - [VnpOrderType]
      */
-    vnp_OrderType?: string;
+    vnp_OrderType?: VnpOrderType;
 
     /**
      * Mã Ngân hàng thanh toán
