@@ -186,12 +186,8 @@ export class VNPay {
                         searchParams.append(key, value.toString());
                     });
 
-                const hmac = crypto.createHmac(
-                    this.CRYPTO_ALGORITHM,
-                    this.globalDefaultConfig.secureSecret,
-                );
-
-                const signed = hmac
+                const signed = crypto
+                    .createHmac(this.CRYPTO_ALGORITHM, this.globalDefaultConfig.secureSecret)
                     .update(Buffer.from(searchParams.toString(), this.CRYPTO_ENCODING))
                     .digest('hex');
 
@@ -213,6 +209,7 @@ export class VNPay {
             }
         });
     }
+
     /**
      * Phương thức xác thực tính đúng đắn của lời gọi ipn từ VNPay
      *
