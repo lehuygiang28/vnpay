@@ -41,38 +41,49 @@ pnpm add vnpay
     <thead>
         <tr>
             <th>Phương thức</th>
-            <th>Tham số</th>
-            <th>Kiểu trả vê</th>
             <th>Mô Tả</th>
+            <th>Trạng thái</th>
         </tr>
     </thead>
     <tbody>
         <tr>
+            <td><code>getBankList</code></td>
+            <td>Lấy danh sách ngân hàng VNPay hỗ trợ</td>
+            <td style="text-align:center">✅</td>
+        </tr>
+        <tr>
             <td><code>buildPaymentUrl</code></td>
-            <td><code>data: BuildPaymentUrl</code></td>
-            <td><code>Promise&lt;string&gt;</code></td>
             <td>Tạo đường dẫn thanh toán</td>
+            <td style="text-align:center">✅</td>
         </tr>
         <tr>
             <td><code>verifyIpnCall</code></td>
-            <td><code>query: ReturnQueryFromVNPay</code></td>
-            <td><code>Promise&lt;VerifyIpnCall&gt;</code></td>
             <td>Xác thực lời gọi <a href="https://en.wikipedia.org/wiki/Instant_payment_notification" target="_blank">ipn</a> từ VNPay</td>
+            <td style="text-align:center">✅</td>
         </tr>
         <tr>
             <td><code>verifyReturnUrl</code></td>
-            <td><code>query: ReturnQueryFromVNPay</code></td>
-            <td><code>Promise&lt;VerifyReturnUrl&gt;</code></td>
             <td>Xác thực kết quả trả về từ VNPay</td>
+            <td style="text-align:center">✅</td>
         </tr>
         <tr>
             <td><code>queryDr</code></td>
-            <td><code>data: QueryDr</code></td>
-            <td><code>Promise&lt;QueryDrResponseFromVNPay&gt;</code></td>
             <td>Truy vấn kết quả giao dịch</td>
+            <td style="text-align:center">✅</td>
+        </tr>
+        <tr>
+            <td><code>refund</code></td>
+            <td>Tạo yêu cầu hoàn tiền</td>
+            <td style="text-align:center">✅</td>
         </tr>
     </tbody>
 </table>
+
+_Ghi chú:_
+
+-   Biểu tượng ✅ cho biết công việc đã được hoàn thành.
+-   Biểu tượng 📝 cho biết công việc cần được thực hiện.
+-   Biểu tượng ❗ cho biết công việc cần sự giúp đỡ.
 
 #### Code tham khảo: <a href="https://github.com/lehuygiang28/vnpay/blob/main/example/express.ts" target="_blank">Bấm vào đây</a>
 
