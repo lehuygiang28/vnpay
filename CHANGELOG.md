@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2024-03-10
+
+### Updated
+
+-   Update to user can pass `hashAlgorithm` to `VnPay` constructor
+
+## [0.8.0] - 2024-03-09
+
+### Added
+
+-   Add `getBankList`
+-   Add `refund` method
+
 ## [0.7.0] - 2024-03-07
 
 ### Changed
