@@ -1,4 +1,4 @@
-import { VnpCurrCode, VnpLocale } from '../enums';
+import { HashAlgorithm, VnpCurrCode, VnpLocale } from '../enums';
 
 export type VNPayConfig = {
     /**
@@ -41,6 +41,15 @@ export type VNPayConfig = {
 
     /**
      * Chế độ test
+     * @default false
      */
     testMode?: boolean;
+
+    /**
+     * Thuật toán mã hóa
+     *
+     * @en Hash algorithm
+     * @default 'SHA512'
+     */
+    hashAlgorithm?: HashAlgorithm;
 };

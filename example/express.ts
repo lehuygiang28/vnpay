@@ -19,7 +19,8 @@ const vnpay = new VNPay({
     tmnCode: '2QXUI4B4',
     secureSecret: 'secret',
     api_Host: 'https://sandbox.vnpayment.vn',
-    testMode: true,
+    testMode: true, // optional
+    hashAlgorithm: 'SHA512', // optional
 });
 
 app.get('/', (req: Request, res: Response) => {

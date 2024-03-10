@@ -3,6 +3,13 @@ export const UrlService = {
 } as const;
 export type UrlService = (typeof UrlService)[keyof typeof UrlService];
 
+export const HashAlgorithm = {
+    SHA256: 'SHA256',
+    SHA512: 'SHA512',
+    MD5: 'MD5',
+} as const;
+export type HashAlgorithm = (typeof HashAlgorithm)[keyof typeof HashAlgorithm];
+
 export const VnpCurrCode = {
     VND: 'VND',
 } as const;

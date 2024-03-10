@@ -1,5 +1,6 @@
 import { RESPONSE_MAP } from '../constants/response-map.constant';
-import { VnpLocale } from '../enums';
+import { HashAlgorithm, VnpLocale } from '../enums';
+import crypto, { BinaryLike } from 'crypto';
 
 /**
  * Định dạng lại ngày theo định dạng của VNPay, mặc định là yyyyMMddHHmmss
@@ -69,4 +70,8 @@ export function resolveUrlString(host: string, path: string): string {
         path = path.slice(1);
     }
     return `${host}/${path}`;
+}
+
+export function hash(secret: string, data: BinaryLike, algorithm: HashAlgorithm): string {
+    return crypto.createHmac(algorithm, secret).update(data).digest('hex');
 }

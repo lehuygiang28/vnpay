@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import timezone from 'moment-timezone';
 import {
     VNPAY_GATEWAY_SANDBOX_HOST,
@@ -10,8 +9,8 @@ import {
     REFUND_RESPONSE_MAP,
     GET_BANK_LIST_ENDPOINT,
 } from './constants';
-import { VnpCurrCode, VnpLocale, VnpOrderType } from './enums';
-import { dateFormat, getResponseByStatusCode, resolveUrlString } from './utils/common';
+import { HashAlgorithm, VnpCurrCode, VnpLocale, VnpOrderType } from './enums';
+import { dateFormat, getResponseByStatusCode, hash, resolveUrlString } from './utils/common';
 import {
     VNPayConfig,
     BuildPaymentUrl,
@@ -57,8 +56,8 @@ type GlobalConfig = Omit<VNPayConfig, 'testMode'> & {
  */
 export class VNPay {
     private globalDefaultConfig: GlobalConfig;
-    private CRYPTO_ALGORITHM = 'sha512';
-    private CRYPTO_ENCODING: BufferEncoding = 'utf-8';
+    private HASH_ALGORITHM: HashAlgorithm = 'SHA512';
+    private BUFFER_ENCODE: BufferEncoding = 'utf-8';
 
     public constructor({
         api_Host = VNPAY_GATEWAY_SANDBOX_HOST,
@@ -70,6 +69,10 @@ export class VNPay {
     }: VNPayConfig) {
         if (testMode) {
             api_Host = VNPAY_GATEWAY_SANDBOX_HOST;
+        }
+
+        if (config?.hashAlgorithm) {
+            this.HASH_ALGORITHM = config.hashAlgorithm;
         }
 
         this.globalDefaultConfig = {
@@ -161,12 +164,11 @@ export class VNPay {
                         redirectUrl.searchParams.append(key, value.toString());
                     });
 
-                const signed = crypto
-                    .createHmac(this.CRYPTO_ALGORITHM, this.globalDefaultConfig.secureSecret)
-                    .update(
-                        Buffer.from(redirectUrl.search.slice(1).toString(), this.CRYPTO_ENCODING),
-                    )
-                    .digest('hex');
+                const signed = hash(
+                    this.globalDefaultConfig.secureSecret,
+                    Buffer.from(redirectUrl.search.slice(1).toString(), this.BUFFER_ENCODE),
+                    this.HASH_ALGORITHM,
+                );
 
                 redirectUrl.searchParams.append('vnp_SecureHash', signed);
 
@@ -215,10 +217,11 @@ export class VNPay {
                         searchParams.append(key, value.toString());
                     });
 
-                const signed = crypto
-                    .createHmac(this.CRYPTO_ALGORITHM, this.globalDefaultConfig.secureSecret)
-                    .update(Buffer.from(searchParams.toString(), this.CRYPTO_ENCODING))
-                    .digest('hex');
+                const signed = hash(
+                    this.globalDefaultConfig.secureSecret,
+                    Buffer.from(searchParams.toString(), this.BUFFER_ENCODE),
+                    this.HASH_ALGORITHM,
+                );
 
                 if (secureHash !== signed) {
                     Object.assign(outputResults, {
@@ -303,10 +306,11 @@ export class VNPay {
             `|${this.globalDefaultConfig.tmnCode}|${dataQuery.vnp_TxnRef}|${dataQuery.vnp_TransactionDate}` +
             `|${dataQuery.vnp_CreateDate}|${dataQuery.vnp_IpAddr}|${dataQuery.vnp_OrderInfo}`;
 
-        const signed = crypto
-            .createHmac(this.CRYPTO_ALGORITHM, this.globalDefaultConfig.secureSecret)
-            .update(Buffer.from(stringToCheckSum, this.CRYPTO_ENCODING))
-            .digest('hex');
+        const signed = hash(
+            this.globalDefaultConfig.secureSecret,
+            Buffer.from(stringToCheckSum, this.BUFFER_ENCODE),
+            this.HASH_ALGORITHM,
+        );
 
         const body: BodyRequestQueryDr = {
             ...dataQuery,
@@ -350,10 +354,11 @@ export class VNPay {
             `|${responseData.vnp_TransactionNo}|${responseData.vnp_TransactionType}|${responseData.vnp_TransactionStatus}` +
             `|${responseData.vnp_OrderInfo}|${responseData.vnp_PromotionCode}|${responseData.vnp_PromotionAmount}`;
 
-        const signedResponse = crypto
-            .createHmac(this.CRYPTO_ALGORITHM, this.globalDefaultConfig.secureSecret)
-            .update(Buffer.from(stringToCheckSumResponse, this.CRYPTO_ENCODING))
-            .digest('hex');
+        const signedResponse = hash(
+            this.globalDefaultConfig.secureSecret,
+            Buffer.from(stringToCheckSumResponse, this.BUFFER_ENCODE),
+            this.HASH_ALGORITHM,
+        );
 
         if (signedResponse !== responseData.vnp_SecureHash) {
             throw new Error('Wrong checksum from VNPay response');
@@ -391,10 +396,11 @@ export class VNPay {
             `${dataQuery.vnp_TransactionNo}|${dataQuery.vnp_TransactionDate}|${dataQuery.vnp_CreateBy}|` +
             `${dataQuery.vnp_CreateDate}|${dataQuery.vnp_IpAddr}|${dataQuery.vnp_OrderInfo}`;
 
-        const signed = crypto
-            .createHmac(this.CRYPTO_ALGORITHM, this.globalDefaultConfig.secureSecret)
-            .update(Buffer.from(stringToSigned, this.CRYPTO_ENCODING))
-            .digest('hex');
+        const signed = hash(
+            this.globalDefaultConfig.secureSecret,
+            Buffer.from(stringToSigned, this.BUFFER_ENCODE),
+            this.HASH_ALGORITHM,
+        );
 
         const body = {
             ...dataQuery,
@@ -436,10 +442,11 @@ export class VNPay {
             `${responseData.vnp_TransactionNo}|${responseData.vnp_TransactionType}|` +
             `${responseData.vnp_TransactionStatus}|${responseData.vnp_OrderInfo}`;
 
-        const signedResponse = crypto
-            .createHmac(this.CRYPTO_ALGORITHM, this.globalDefaultConfig.secureSecret)
-            .update(Buffer.from(stringToChecksumResponse, this.CRYPTO_ENCODING))
-            .digest('hex');
+        const signedResponse = hash(
+            this.globalDefaultConfig.secureSecret,
+            Buffer.from(stringToChecksumResponse, this.BUFFER_ENCODE),
+            this.HASH_ALGORITHM,
+        );
 
         if (signedResponse !== responseData.vnp_SecureHash) {
             throw new Error('Wrong checksum from VNPay response');
