@@ -64,7 +64,7 @@ export type BuildPaymentUrl = {
      * @default 'other'
      * @enum {VnpOrderType} - [VnpOrderType]
      */
-    vnp_OrderType?: VnpOrderType;
+    vnp_OrderType?: VnpOrderType | string;
 
     /**
      * Mã Ngân hàng thanh toán
