@@ -103,6 +103,6 @@ _Ghi chú:_
 
 ## Contribution
 
-<a href="https://github.com/lehuygiang28/regex-vietnamese/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=lehuygiang28/vnpay" />
+<a href="https://github.com/lehuygiang28/vnpay/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=lehuygiang28/vnpay&max=20" />
 </a>

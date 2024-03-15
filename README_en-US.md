@@ -104,5 +104,5 @@ _Note:_
 ## Contribution
 
 <a href="https://github.com/lehuygiang28/vnpay/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=lehuygiang28/vnpay" />
+  <img src="https://contrib.rocks/image?repo=lehuygiang28/vnpay&max=20" />
 </a>
