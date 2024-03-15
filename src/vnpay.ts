@@ -347,12 +347,13 @@ export class VNPay {
             };
         }
 
-        const stringToCheckSumResponse =
+        let stringToCheckSumResponse =
             `${responseData.vnp_ResponseId}|${responseData.vnp_Command}|${responseData.vnp_ResponseCode}` +
             `|${responseData.vnp_Message}|${this.defaultConfig.vnp_TmnCode}|${responseData.vnp_TxnRef}` +
             `|${responseData.vnp_Amount}|${responseData.vnp_BankCode}|${responseData.vnp_PayDate}` +
             `|${responseData.vnp_TransactionNo}|${responseData.vnp_TransactionType}|${responseData.vnp_TransactionStatus}` +
             `|${responseData.vnp_OrderInfo}|${responseData.vnp_PromotionCode}|${responseData.vnp_PromotionAmount}`;
+        stringToCheckSumResponse = stringToCheckSumResponse.replace(/undefined/g, '');
 
         const signedResponse = hash(
             this.globalDefaultConfig.secureSecret,
