@@ -1,7 +1,7 @@
 import timezone from 'moment-timezone';
 import {
     VNPAY_GATEWAY_SANDBOX_HOST,
-    GATEWAY_ENDPOINT,
+    PAYMENT_ENDPOINT,
     VNP_DEFAULT_COMMAND,
     VNP_VERSION,
     QUERY_DR_REFUND_ENDPOINT,
@@ -65,6 +65,7 @@ export class VNPay {
         vnp_CurrCode = VnpCurrCode.VND,
         vnp_Locale = VnpLocale.VN,
         testMode = false,
+        paymentEndpoint = PAYMENT_ENDPOINT,
         ...config
     }: VNPayConfig) {
         if (testMode) {
@@ -150,7 +151,7 @@ export class VNPay {
                 const redirectUrl = new URL(
                     resolveUrlString(
                         this.globalDefaultConfig.api_Host ?? VNPAY_GATEWAY_SANDBOX_HOST,
-                        GATEWAY_ENDPOINT,
+                        this.globalDefaultConfig.paymentEndpoint ?? PAYMENT_ENDPOINT,
                     ),
                 );
                 Object.entries(dataToBuild)
