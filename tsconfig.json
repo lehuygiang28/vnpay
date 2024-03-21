@@ -1,13 +1,14 @@
 {
     "compilerOptions": {
-        "target": "es2015" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'. */,
-        "module": "commonjs" /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */,
-        "declaration": true /* Generates corresponding '.d.ts' file. */,
-        "outDir": "./lib" /* Redirect output structure to the directory. */,
-        "strict": true /* Enable all strict type-checking options. */,
+        "target": "es2015",
+        "module": "commonjs",
+        "declaration": true,
+        "outDir": "./lib",
+        "strict": true,
         "esModuleInterop": true,
-        "experimentalDecorators": true,
-        "strictPropertyInitialization": false
+        "skipLibCheck": true,
+        "strictPropertyInitialization": false,
+        "forceConsistentCasingInFileNames": true
     },
     "include": ["src"],
     "exclude": ["node_modules"]
