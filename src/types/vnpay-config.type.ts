@@ -40,12 +40,12 @@ export type VNPayConfig = {
     api_Host?: string;
 
     /**
-     * Endpoint API của VNPay
-     * @en  Endpoint of VNPay
+     * Payment endpoint API của VNPay
+     * @en  Payment endpoint of VNPay
      * @default 'paymentv2/vpcpay.html'
      * @example 'paymentv2/vpcpay.html'
      */
-    endPoint?: string;
+    paymentEndpoint?: string;
 
     /**
      * Chế độ test
