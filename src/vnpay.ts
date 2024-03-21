@@ -10,7 +10,13 @@ import {
     GET_BANK_LIST_ENDPOINT,
 } from './constants';
 import { HashAlgorithm, VnpCurrCode, VnpLocale, VnpOrderType } from './enums';
-import { dateFormat, getResponseByStatusCode, hash, resolveUrlString } from './utils/common';
+import {
+    dateFormat,
+    getResponseByStatusCode,
+    hash,
+    isValidVnpayDateFormat,
+    resolveUrlString,
+} from './utils/common';
 import {
     VNPayConfig,
     BuildPaymentUrl,
@@ -144,9 +150,12 @@ export class VNPay {
             ...data,
         };
 
-        const timeGMT7 = timezone(new Date()).tz('Asia/Ho_Chi_Minh').format();
-        dataToBuild.vnp_CreateDate = dateFormat(new Date(timeGMT7), 'yyyyMMddHHmmss');
         dataToBuild.vnp_Amount = dataToBuild.vnp_Amount * 100;
+
+        if (!isValidVnpayDateFormat(dataToBuild?.vnp_CreateDate ?? 0)) {
+            const timeGMT7 = timezone(new Date()).tz('Asia/Ho_Chi_Minh').format();
+            dataToBuild.vnp_CreateDate = dateFormat(new Date(timeGMT7), 'yyyyMMddHHmmss');
+        }
 
         const redirectUrl = new URL(
             resolveUrlString(

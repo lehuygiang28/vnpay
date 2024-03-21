@@ -30,6 +30,18 @@ export function dateFormat(date: Date, format = 'yyyyMMddHHmmss'): number {
     );
 }
 
+/**
+ * Validate if the date is match with format `yyyyMMddHHmmss` or not
+ * @param date The date to be validated
+ * @returns True if the date is valid, false otherwise
+ */
+export function isValidVnpayDateFormat(date: number): boolean {
+    const dateString = date.toString();
+    const regex =
+        /^\d{4}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])([01][0-9]|2[0-3])[0-5][0-9][0-5][0-9]$/;
+    return regex.test(dateString);
+}
+
 export function generateRandomString(length: number) {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

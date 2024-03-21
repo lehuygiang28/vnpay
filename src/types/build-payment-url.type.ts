@@ -39,7 +39,12 @@ export type BuildPaymentUrl = {
 
     /**
      * Là thời gian phát sinh giao dịch định dạng yyyyMMddHHmmss(Time zone GMT+7)
+     *
+     * Nếu `vnp_CreateDate` truyền vào không đúng định dạng, sẽ tự động lấy thời gian hiện tại
+     *
      * @en Transaction date format yyyyMMddHHmmss(Time zone GMT+7)
+     *
+     * If `vnp_CreateDate` is not in the correct format, it will be the current time
      * @example 20170829103111
      */
     vnp_CreateDate?: number;
