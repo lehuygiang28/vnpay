@@ -65,6 +65,7 @@ export class VNPay {
         vnp_CurrCode = VnpCurrCode.VND,
         vnp_Locale = VnpLocale.VN,
         testMode = false,
+        endPoint = GATEWAY_ENDPOINT,
         ...config
     }: VNPayConfig) {
         if (testMode) {
@@ -150,7 +151,7 @@ export class VNPay {
                 const redirectUrl = new URL(
                     resolveUrlString(
                         this.globalDefaultConfig.api_Host ?? VNPAY_GATEWAY_SANDBOX_HOST,
-                        GATEWAY_ENDPOINT,
+                        this.globalDefaultConfig.endPoint ?? GATEWAY_ENDPOINT,
                     ),
                 );
                 Object.entries(dataToBuild)
