@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2024-03-21
+
+### Breaking Change
+
+-   Rename `api_Host` to `vnpayHost` in `VnPay` constructor
+-   Methods `buildPaymentUrl`, `verifyReturnUrl` and `verifyIpnCall` no longer return promise
+-   Remove `verifyIpnUrl` method
+
+### Updated
+
+-   Add `paymentEndpoint` to `VnPay` constructor for custom payment endpoint when build payment url
+-   Update examples
+-   Update test cases
+
+### Bugfix
+
+-   Fix can not set `vnp_CreateDate` in `buildPaymentUrl` method
+
 ## [0.9.6] - 2024-03-15
 
 ### Bugfix
