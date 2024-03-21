@@ -18,7 +18,7 @@ let portToListen = 3000;
 const vnpay = new VNPay({
     tmnCode: '2QXUI4B4',
     secureSecret: 'secret',
-    api_Host: 'https://sandbox.vnpayment.vn',
+    vnpayHost: 'https://sandbox.vnpayment.vn',
     testMode: true, // optional
     hashAlgorithm: 'SHA512', // optional
 });
@@ -30,11 +30,11 @@ app.get('/', (req: Request, res: Response) => {
 /**
  * This is the get request that you will call to get the payment url to payment with VNPay
  */
-app.get('/payment-url', async (req: Request, res: Response) => {
+app.get('/payment-url', (req: Request, res: Response) => {
     /**
      * This data is hard-coded for example, you can get it from the body or query of the request
      */
-    const urlString = await vnpay.buildPaymentUrl({
+    const urlString = vnpay.buildPaymentUrl({
         vnp_Amount: 10000,
         vnp_IpAddr: '1.1.1.1',
         vnp_TxnRef: '123456',
@@ -56,9 +56,9 @@ app.get('/payment-url', async (req: Request, res: Response) => {
  */
 app.get(
     '/vnpay-ipn',
-    async (req: Request<any, any, any, ReturnQueryFromVNPay>, res: Response<IpnResponse>) => {
+    (req: Request<any, any, any, ReturnQueryFromVNPay>, res: Response<IpnResponse>) => {
         try {
-            const verify: VerifyReturnUrl = await vnpay.verifyIpnCall({ ...req.query });
+            const verify: VerifyReturnUrl = vnpay.verifyIpnCall({ ...req.query });
             if (!verify.isVerified) {
                 return res.json(IpnFailChecksum);
             }
@@ -104,29 +104,26 @@ app.get(
  * WARNING: Do not use this endpoint to handle the result of the payment, this should be used to handle redirect user from VNPay to your website
  * After the payment process is done, VNPay will redirect use page to the return url that you provided in the payment url
  */
-app.get(
-    '/vnpay-return',
-    async (req: Request<any, any, any, ReturnQueryFromVNPay>, res: Response) => {
-        let verify: VerifyReturnUrl;
-        try {
-            verify = await vnpay.verifyReturnUrl({ ...req.query });
-            if (!verify.isVerified) {
-                return res.status(200).json({
-                    message: verify?.message ?? 'Payment failed!',
-                    status: verify.isSuccess,
-                });
-            }
-        } catch (error) {
-            console.log(`verify error: ${error}`);
-            return res.status(400).json({ message: 'verify error', status: false });
+app.get('/vnpay-return', (req: Request<any, any, any, ReturnQueryFromVNPay>, res: Response) => {
+    let verify: VerifyReturnUrl;
+    try {
+        verify = vnpay.verifyReturnUrl({ ...req.query });
+        if (!verify.isVerified) {
+            return res.status(200).json({
+                message: verify?.message ?? 'Payment failed!',
+                status: verify.isSuccess,
+            });
         }
+    } catch (error) {
+        console.log(`verify error: ${error}`);
+        return res.status(400).json({ message: 'verify error', status: false });
+    }
 
-        return res.status(200).json({
-            message: verify?.message ?? 'Payment successful!',
-            status: verify.isSuccess,
-        });
-    },
-);
+    return res.status(200).json({
+        message: verify?.message ?? 'Payment successful!',
+        status: verify.isSuccess,
+    });
+});
 
 // Use portfinder to find an open port to listen on
 portfinder.getPort({ port: portToListen }, (err, port) => {

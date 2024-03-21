@@ -23,7 +23,7 @@ import { Refund, RefundResponse } from './types/refund.type';
 import { Bank } from './types/bank.type';
 
 type GlobalConfig = Omit<VNPayConfig, 'testMode'> & {
-    api_Host: string;
+    vnpayHost: string;
     vnp_Locale: VnpLocale;
     vnp_CurrCode: string;
     vnp_Command: string;
@@ -42,10 +42,13 @@ type GlobalConfig = Omit<VNPayConfig, 'testMode'> & {
  *     api_Host: 'https://sandbox.vnpayment.vn',
  *     tmnCode: 'TMNCODE',
  *     secureSecret: 'SERCRET',
+ *     testMode: true, // optional
+ *     hashAlgorithm: 'SHA512', // optional
+ *     paymentEndpoint: 'paymentv2/vpcpay.html', // optional
  * });
  *
  * const tnx = '12345678'; // Generate your own transaction code
- * const urlString = await vnpay.buildPaymentUrl({
+ * const urlString = vnpay.buildPaymentUrl({
  *     vnp_Amount: 100000,
  *      vnp_IpAddr: '192.168.0.1',
  *      vnp_ReturnUrl: 'http://localhost:8888/order/vnpay_return',
@@ -60,7 +63,7 @@ export class VNPay {
     private BUFFER_ENCODE: BufferEncoding = 'utf-8';
 
     public constructor({
-        api_Host = VNPAY_GATEWAY_SANDBOX_HOST,
+        vnpayHost = VNPAY_GATEWAY_SANDBOX_HOST,
         vnp_Version = VNP_VERSION,
         vnp_CurrCode = VnpCurrCode.VND,
         vnp_Locale = VnpLocale.VN,
@@ -69,7 +72,7 @@ export class VNPay {
         ...config
     }: VNPayConfig) {
         if (testMode) {
-            api_Host = VNPAY_GATEWAY_SANDBOX_HOST;
+            vnpayHost = VNPAY_GATEWAY_SANDBOX_HOST;
         }
 
         if (config?.hashAlgorithm) {
@@ -77,7 +80,7 @@ export class VNPay {
         }
 
         this.globalDefaultConfig = {
-            api_Host,
+            vnpayHost,
             vnp_Version,
             vnp_CurrCode,
             vnp_Locale,
@@ -105,7 +108,7 @@ export class VNPay {
     public async getBankList() {
         const response = await fetch(
             resolveUrlString(
-                this.globalDefaultConfig.api_Host ?? VNPAY_GATEWAY_SANDBOX_HOST,
+                this.globalDefaultConfig.vnpayHost ?? VNPAY_GATEWAY_SANDBOX_HOST,
                 GET_BANK_LIST_ENDPOINT,
             ),
             {
@@ -120,7 +123,7 @@ export class VNPay {
         bankList.forEach(
             (b) =>
                 (b.logo_link = resolveUrlString(
-                    this.globalDefaultConfig.api_Host ?? VNPAY_GATEWAY_SANDBOX_HOST,
+                    this.globalDefaultConfig.vnpayHost ?? VNPAY_GATEWAY_SANDBOX_HOST,
                     b.logo_link.slice(1),
                 )),
         );
@@ -133,51 +136,44 @@ export class VNPay {
      *
      * @param {BuildPaymentUrl} data - Payload that contains the information to build the payment url
      * @returns {string} The payment url string
+     * @see https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/#t%E1%BA%A1o-url-thanh-to%C3%A1n
      */
-    public buildPaymentUrl(data: BuildPaymentUrl): Promise<string> {
-        return new Promise((resolve, reject) => {
-            try {
-                const validatedPayload = data;
+    public buildPaymentUrl(data: BuildPaymentUrl): string {
+        const dataToBuild = {
+            ...this.defaultConfig,
+            ...data,
+        };
 
-                const dataToBuild = {
-                    ...this.defaultConfig,
-                    ...validatedPayload,
-                };
+        const timeGMT7 = timezone(new Date()).tz('Asia/Ho_Chi_Minh').format();
+        dataToBuild.vnp_CreateDate = dateFormat(new Date(timeGMT7), 'yyyyMMddHHmmss');
+        dataToBuild.vnp_Amount = dataToBuild.vnp_Amount * 100;
 
-                const timeGMT7 = timezone(new Date()).tz('Asia/Ho_Chi_Minh').format();
-                dataToBuild.vnp_CreateDate = dateFormat(new Date(timeGMT7), 'yyyyMMddHHmmss');
-                dataToBuild.vnp_Amount = dataToBuild.vnp_Amount * 100;
+        const redirectUrl = new URL(
+            resolveUrlString(
+                this.globalDefaultConfig.vnpayHost ?? VNPAY_GATEWAY_SANDBOX_HOST,
+                this.globalDefaultConfig.paymentEndpoint ?? PAYMENT_ENDPOINT,
+            ),
+        );
+        Object.entries(dataToBuild)
+            .sort(([key1], [key2]) => key1.toString().localeCompare(key2.toString()))
+            .forEach(([key, value]) => {
+                // Skip empty value
+                if (!value || value === '' || value === undefined || value === null) {
+                    return;
+                }
 
-                const redirectUrl = new URL(
-                    resolveUrlString(
-                        this.globalDefaultConfig.api_Host ?? VNPAY_GATEWAY_SANDBOX_HOST,
-                        this.globalDefaultConfig.paymentEndpoint ?? PAYMENT_ENDPOINT,
-                    ),
-                );
-                Object.entries(dataToBuild)
-                    .sort(([key1], [key2]) => key1.toString().localeCompare(key2.toString()))
-                    .forEach(([key, value]) => {
-                        // Skip empty value
-                        if (!value || value === '' || value === undefined || value === null) {
-                            return;
-                        }
+                redirectUrl.searchParams.append(key, value.toString());
+            });
 
-                        redirectUrl.searchParams.append(key, value.toString());
-                    });
+        const signed = hash(
+            this.globalDefaultConfig.secureSecret,
+            Buffer.from(redirectUrl.search.slice(1).toString(), this.BUFFER_ENCODE),
+            this.HASH_ALGORITHM,
+        );
 
-                const signed = hash(
-                    this.globalDefaultConfig.secureSecret,
-                    Buffer.from(redirectUrl.search.slice(1).toString(), this.BUFFER_ENCODE),
-                    this.HASH_ALGORITHM,
-                );
+        redirectUrl.searchParams.append('vnp_SecureHash', signed);
 
-                redirectUrl.searchParams.append('vnp_SecureHash', signed);
-
-                return resolve(redirectUrl.toString());
-            } catch (error) {
-                return reject(error);
-            }
-        });
+        return redirectUrl.toString();
     }
 
     /**
@@ -185,62 +181,54 @@ export class VNPay {
      * @en Method to verify the return url from VNPay
      *
      * @param {ReturnQueryFromVNPay} query - The object of data return from VNPay
-     * @returns {Promise<VerifyReturnUrl>} The return object
+     * @returns {VerifyReturnUrl} The return object
+     * @see https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/#code-returnurl
      */
-    public verifyReturnUrl(query: ReturnQueryFromVNPay): Promise<VerifyReturnUrl> {
-        return new Promise((resolve, reject) => {
-            try {
-                const vnpayReturnQuery = query;
-                const secureHash = vnpayReturnQuery.vnp_SecureHash;
+    public verifyReturnUrl(query: ReturnQueryFromVNPay): VerifyReturnUrl {
+        const secureHash = query.vnp_SecureHash;
 
-                // Will be remove when append to URLSearchParams
-                delete vnpayReturnQuery.vnp_SecureHash;
-                delete vnpayReturnQuery.vnp_SecureHashType;
+        // Will be remove when append to URLSearchParams
+        delete query.vnp_SecureHash;
+        delete query.vnp_SecureHashType;
 
-                const outputResults = {
-                    isVerified: true,
-                    isSuccess: vnpayReturnQuery.vnp_ResponseCode === '00',
-                    message: getResponseByStatusCode(
-                        vnpayReturnQuery.vnp_ResponseCode?.toString() ?? '',
-                        this.globalDefaultConfig.vnp_Locale,
-                    ),
-                };
+        const outputResults = {
+            isVerified: true,
+            isSuccess: query.vnp_ResponseCode === '00',
+            message: getResponseByStatusCode(
+                query.vnp_ResponseCode?.toString() ?? '',
+                this.globalDefaultConfig.vnp_Locale,
+            ),
+        };
 
-                const searchParams = new URLSearchParams();
-                Object.entries(vnpayReturnQuery)
-                    .sort(([key1], [key2]) => key1.toString().localeCompare(key2.toString()))
-                    .forEach(([key, value]) => {
-                        // Skip empty value
-                        if (value === '' || value === undefined || value === null) {
-                            return;
-                        }
-
-                        searchParams.append(key, value.toString());
-                    });
-
-                const signed = hash(
-                    this.globalDefaultConfig.secureSecret,
-                    Buffer.from(searchParams.toString(), this.BUFFER_ENCODE),
-                    this.HASH_ALGORITHM,
-                );
-
-                if (secureHash !== signed) {
-                    Object.assign(outputResults, {
-                        isVerified: false,
-                        message: 'Wrong checksum',
-                    });
+        const searchParams = new URLSearchParams();
+        Object.entries(query)
+            .sort(([key1], [key2]) => key1.toString().localeCompare(key2.toString()))
+            .forEach(([key, value]) => {
+                // Skip empty value
+                if (value === '' || value === undefined || value === null) {
+                    return;
                 }
 
-                const returnObject = {
-                    ...vnpayReturnQuery,
-                    ...outputResults,
-                };
+                searchParams.append(key, value.toString());
+            });
 
-                resolve(returnObject);
-            } catch (error) {
-                reject(error);
-            }
-        });
+        const signed = hash(
+            this.globalDefaultConfig.secureSecret,
+            Buffer.from(searchParams.toString(), this.BUFFER_ENCODE),
+            this.HASH_ALGORITHM,
+        );
+
+        if (secureHash !== signed) {
+            Object.assign(outputResults, {
+                isVerified: false,
+                message: 'Wrong checksum',
+            });
+        }
+
+        return {
+            ...query,
+            ...outputResults,
+        };
     }
 
     /**
@@ -257,10 +245,11 @@ export class VNPay {
      * Then respond to VNPay the verification result through the `IpnResponse`
      *
      * @param {ReturnQueryFromVNPay} query The object of data return from VNPay
-     * @returns {Promise<VerifyIpnCall>} The return object
+     * @returns {VerifyIpnCall} The return object
+     * @see https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/#code-ipn-url
      */
-    public async verifyIpnCall(query: ReturnQueryFromVNPay): Promise<VerifyIpnCall> {
-        const result = await this.verifyReturnUrl(query);
+    public verifyIpnCall(query: ReturnQueryFromVNPay): VerifyIpnCall {
+        const result = this.verifyReturnUrl(query);
         return {
             ...result,
             vnp_Amount: result.vnp_Amount / 100,
@@ -268,25 +257,12 @@ export class VNPay {
     }
 
     /**
-     * @deprecated Use `verifyIpnCall` instead
-     *
-     * Phương thức xác thực tính đúng đắn của lời gọi ipn từ VNPay
-     * @en Method to verify the ipn url from VNPay
-     *
-     * @param query The object of data return from VNPay
-     * @returns The return object
-     */
-    public verifyIpnUrl(query: ReturnQueryFromVNPay): Promise<VerifyReturnUrl> {
-        return this.verifyReturnUrl(query);
-    }
-
-    /**
      * Đây là API để hệ thống merchant truy vấn kết quả thanh toán của giao dịch tại hệ thống VNPAY.
      * @en This is the API for the merchant system to query the payment result of the transaction at the VNPAY system.
-     * @see https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#truy-van-ket-qua-thanh-toan-PAY
      *
      * @param {QueryDr} query - The data to query
      * @returns {Promise<QueryDrResponseFromVNPay>} The data return from VNPay
+     * @see https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#truy-van-ket-qua-thanh-toan-PAY
      */
     public async queryDr(query: QueryDr): Promise<QueryDrResponseFromVNPay> {
         const command = 'querydr';
@@ -297,7 +273,7 @@ export class VNPay {
 
         const url = new URL(
             resolveUrlString(
-                this.globalDefaultConfig.api_Host ?? VNPAY_GATEWAY_SANDBOX_HOST,
+                this.globalDefaultConfig.vnpayHost ?? VNPAY_GATEWAY_SANDBOX_HOST,
                 QUERY_DR_REFUND_ENDPOINT,
             ),
         );
@@ -388,7 +364,7 @@ export class VNPay {
 
         const url = new URL(
             resolveUrlString(
-                this.globalDefaultConfig.api_Host ?? VNPAY_GATEWAY_SANDBOX_HOST,
+                this.globalDefaultConfig.vnpayHost ?? VNPAY_GATEWAY_SANDBOX_HOST,
                 QUERY_DR_REFUND_ENDPOINT,
             ),
         );

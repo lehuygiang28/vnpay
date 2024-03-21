@@ -31,7 +31,7 @@ async function main() {
     const vnpay = new VNPay({
         tmnCode: 'K8C1PIGA',
         secureSecret: secret,
-        api_Host: 'https://sandbox.vnpayment.vn',
+        vnpayHost: 'https://sandbox.vnpayment.vn',
     });
 
     const bankList = await vnpay.getBankList();
@@ -41,7 +41,7 @@ async function main() {
     const orderId = `123456-${createDate.getTime()}`;
 
     // Create payment url
-    const urlString = await vnpay.buildPaymentUrl({
+    const urlString = vnpay.buildPaymentUrl({
         vnp_Amount: 10000,
         vnp_IpAddr: '1.1.1.1',
         vnp_TxnRef: orderId,
@@ -68,7 +68,7 @@ async function main() {
     };
 
     try {
-        const verify: VerifyReturnUrl = await vnpay.verifyReturnUrl({
+        const verify: VerifyReturnUrl = vnpay.verifyReturnUrl({
             ...queryResponseFromVNPay,
             vnp_SecureHash: getSampleSecureHash(queryResponseFromVNPay, secret),
         });
