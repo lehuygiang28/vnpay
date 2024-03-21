@@ -32,12 +32,12 @@ export type VNPayConfig = {
     vnp_Locale?: VnpLocale;
 
     /**
-     * Đường dẫn tới API của VNPay
+     * Đường dẫn tới Host API của VNPay
      * @en API host url of VNPay
      * @default 'https://sandbox.vnpayment.vn'
      * @example 'https://sandbox.vnpayment.vn'
      */
-    api_Host?: string;
+    vnpayHost?: string;
 
     /**
      * Payment endpoint API của VNPay
@@ -48,7 +48,8 @@ export type VNPayConfig = {
     paymentEndpoint?: string;
 
     /**
-     * Chế độ test
+     * Khi được bật, chế độ test sẽ tự động ghi đè `vnpayHost` thành sandbox
+     * @en When using test mode, `vnpayHost` should be set to sandbox
      * @default false
      */
     testMode?: boolean;
