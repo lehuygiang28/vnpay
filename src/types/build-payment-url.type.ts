@@ -1,4 +1,5 @@
-import { VnpLocale, VnpOrderType } from '../enums';
+import { ProductCode } from '../constants';
+import { VnpLocale } from '../enums';
 
 export type BuildPaymentUrl = {
     /**
@@ -64,12 +65,12 @@ export type BuildPaymentUrl = {
     vnp_Locale?: VnpLocale;
 
     /**
-     * Loại đơn hàng
-     * @en Order type
+     * Loại đơn hàng/ Mã sản phẩm
+     * @en Order type/ Product Code
      * @default 'other'
-     * @enum {VnpOrderType} - [VnpOrderType]
+     * @enum {ProductCode} - [ProductCode]
      */
-    vnp_OrderType?: VnpOrderType | string;
+    vnp_OrderType?: ProductCode | string;
 
     /**
      * Mã Ngân hàng thanh toán

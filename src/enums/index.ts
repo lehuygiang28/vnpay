@@ -21,11 +21,6 @@ export const VnpLocale = {
 } as const;
 export type VnpLocale = (typeof VnpLocale)[keyof typeof VnpLocale];
 
-export const VnpOrderType = {
-    OTHER: 'other',
-} as const;
-export type VnpOrderType = (typeof VnpOrderType)[keyof typeof VnpOrderType];
-
 export enum VnpTransactionType {
     PAYMENT = '01',
     FULL_REFUND = '02',

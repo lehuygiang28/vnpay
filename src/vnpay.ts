@@ -8,8 +8,9 @@ import {
     QUERY_DR_RESPONSE_MAP,
     REFUND_RESPONSE_MAP,
     GET_BANK_LIST_ENDPOINT,
+    ProductCode,
 } from './constants';
-import { HashAlgorithm, VnpCurrCode, VnpLocale, VnpOrderType } from './enums';
+import { HashAlgorithm, VnpCurrCode, VnpLocale } from './enums';
 import {
     dateFormat,
     getResponseByStatusCode,
@@ -90,7 +91,7 @@ export class VNPay {
             vnp_Version,
             vnp_CurrCode,
             vnp_Locale,
-            vnp_OrderType: VnpOrderType.OTHER,
+            vnp_OrderType: ProductCode.Other,
             vnp_Command: VNP_DEFAULT_COMMAND,
             ...config,
         };

@@ -21,4 +21,6 @@ export const ProductCode = {
     AirlineTickets: 250007,
     CardCode: 260000,
     Pharmacy_MedicalServices: 270000,
-};
+    Other: 'other',
+} as const;
+export type ProductCode = typeof ProductCode;
