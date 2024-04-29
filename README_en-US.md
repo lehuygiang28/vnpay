@@ -43,7 +43,7 @@ import { VNPay } from 'vnpay';
 const vnpay = new VNPay({
     tmnCode: '2QXUI4B4',
     secureSecret: 'secret',
-    api_Host: 'https://sandbox.vnpayment.vn',
+    vnpayHost: 'https://sandbox.vnpayment.vn',
     testMode: true, // optional
     hashAlgorithm: 'SHA512', // optional
 });

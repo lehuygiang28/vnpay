@@ -2,7 +2,8 @@ import crypto from 'crypto';
 import { VNPay } from '../src/vnpay';
 import { dateFormat } from '../src/utils';
 import { ReturnQueryFromVNPay, VerifyReturnUrl } from '../src/types';
-import { RefundTransactionType, VnpLocale, VnpOrderType } from '../src/enums';
+import { RefundTransactionType, VnpLocale } from '../src/enums';
+import { ProductCode } from '../src/constants';
 
 /**
  * This function is used to generate secure hash for testing purpose only
@@ -46,7 +47,7 @@ async function main() {
         vnp_IpAddr: '1.1.1.1',
         vnp_TxnRef: orderId,
         vnp_OrderInfo: '123456',
-        vnp_OrderType: VnpOrderType.OTHER,
+        vnp_OrderType: ProductCode.Other,
         vnp_ReturnUrl: 'http://localhost:3000/return',
         vnp_Locale: VnpLocale.VN,
     });
