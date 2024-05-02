@@ -1,5 +1,6 @@
 import { VNPay } from '../src/vnpay';
-import { VnpLocale, VnpOrderType } from '../src/enums';
+import { VnpLocale } from '../src/enums';
+import { ProductCode } from '../src/constants';
 import { BuildPaymentUrl } from '../src/types';
 import { dateFormat } from '../src/utils';
 
@@ -21,7 +22,7 @@ describe('buildPaymentUrl', () => {
             vnp_ReturnUrl: 'https://example.com/return',
             vnp_CurrCode: 'VND',
             vnp_Locale: VnpLocale.VN,
-            vnp_OrderType: VnpOrderType.OTHER,
+            vnp_OrderType: ProductCode.Other,
             vnp_BankCode: 'NCB',
             vnp_CreateDate: 20210101070000,
         };
