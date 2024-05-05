@@ -18,19 +18,19 @@ VNPay documents: [https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/](ht
 Install `vnpay` with `npm`:
 
 ```bash
-npm install vnpay
+$ npm install vnpay
 ```
 
 Install `vnpay` with `yarn`:
 
 ```bash
-yarn add vnpay
+$ yarn add vnpay
 ```
 
 Install `vnpay` with `pnpm`:
 
 ```bash
-pnpm add vnpay
+$ pnpm add vnpay
 ```
 
 ## Usage:
@@ -102,6 +102,12 @@ _Note:_
 #### Example here: <a href="https://github.com/lehuygiang28/vnpay/blob/main/example/express.ts" target="_blank">Click here</a>
 
 ## Contribution
+
+### Getting Started
+
+Before contributing, please read our [Contribution Guidelines](.github/CONTRIBUTING.md).
+
+### Contributors
 
 <a href="https://github.com/lehuygiang28/vnpay/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=lehuygiang28/vnpay&max=20" />

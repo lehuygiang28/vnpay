@@ -18,19 +18,19 @@ Tài liệu từ VNPay: [https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-h
 Cài đặt `vnpay` với `npm`:
 
 ```bash
-npm install vnpay
+$ npm install vnpay
 ```
 
 Cài đặt `vnpay` với `yarn`:
 
 ```bash
-yarn add vnpay
+$ yarn add vnpay
 ```
 
 Cài đặt `vnpay` với `pnpm`:
 
 ```bash
-pnpm add vnpay
+$ pnpm add vnpay
 ```
 
 ## Sử dụng:
@@ -101,7 +101,13 @@ _Ghi chú:_
 
 #### Code tham khảo: <a href="https://github.com/lehuygiang28/vnpay/blob/main/example/express.ts" target="_blank">Bấm vào đây</a>
 
-## Contribution
+## Đóng góp
+
+### Bắt đầu
+
+Trước khi bắt đầu, hãy đảm bảo rằng bạn đã đọc [hướng dẫn đóng góp](.github/CONTRIBUTING.md).
+
+### Người đóng góp
 
 <a href="https://github.com/lehuygiang28/vnpay/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=lehuygiang28/vnpay&max=20" />
