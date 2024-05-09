@@ -101,6 +101,12 @@ _Ghi chú:_
 
 #### Code tham khảo: <a href="https://github.com/lehuygiang28/vnpay/blob/main/example/express.ts" target="_blank">Bấm vào đây</a>
 
+## Hỗ trợ
+
+#### Vnpay is an open-source and free project. If you find this library useful, please give it a ⭐️ on GitHub and buy the author a cup of coffee.
+
+<a href="https://www.buymeacoffee.com/lehuygiang28" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+
 ## Đóng góp
 
 ### Bắt đầu

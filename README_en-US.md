@@ -101,6 +101,12 @@ _Note:_
 
 #### Example here: <a href="https://github.com/lehuygiang28/vnpay/blob/main/example/express.ts" target="_blank">Click here</a>
 
+## Support
+
+#### `VNPay` is an open-source and free project. If you find it useful, please consider supporting it by starring ⭐️ the repository and buying me a coffee.
+
+<a href="https://www.buymeacoffee.com/lehuygiang28" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+
 ## Contribution
 
 ### Getting Started
