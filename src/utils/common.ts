@@ -31,6 +31,24 @@ export function dateFormat(date: Date, format = 'yyyyMMddHHmmss'): number {
 }
 
 /**
+ * Parse a vnpay date format number to date
+ * @param dateNumber An vnpay date format number
+ * @returns Date
+ */
+export function parseDate(dateNumber: number | string): Date {
+    const dateString = dateNumber.toString();
+
+    const year = parseInt(dateString.slice(0, 4));
+    const month = parseInt(dateString.slice(4, 6)) - 1; // months are 0-indexed in JavaScript
+    const day = parseInt(dateString.slice(6, 8));
+    const hour = parseInt(dateString.slice(8, 10));
+    const minute = parseInt(dateString.slice(10, 12));
+    const second = parseInt(dateString.slice(12, 14));
+
+    return new Date(year, month, day, hour, minute, second);
+}
+
+/**
  * Validate if the date is match with format `yyyyMMddHHmmss` or not
  * @param date The date to be validated
  * @returns True if the date is valid, false otherwise
