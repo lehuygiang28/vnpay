@@ -238,6 +238,7 @@ export class VNPay {
         return {
             ...query,
             ...outputResults,
+            vnp_Amount: query.vnp_Amount / 100,
         };
     }
 
@@ -259,11 +260,7 @@ export class VNPay {
      * @see https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/#code-ipn-url
      */
     public verifyIpnCall(query: ReturnQueryFromVNPay): VerifyIpnCall {
-        const result = this.verifyReturnUrl(query);
-        return {
-            ...result,
-            vnp_Amount: result.vnp_Amount / 100,
-        };
+        return this.verifyReturnUrl(query);
     }
 
     /**
