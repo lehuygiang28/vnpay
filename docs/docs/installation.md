@@ -29,7 +29,7 @@ $ pnpm add vnpay
 ### Import thư viện
 
 ```typescript
-import { VnPay } from 'vnpay';
+import { VNPay } from 'vnpay';
 ```
 
 ### Khởi tạo đối tượng

@@ -11,7 +11,11 @@
 
 <strong>Thư viện mã nguồn mở hỗ trợ thanh toán qua [VNPay](https://vnpay.vn).</strong>
 
-Tài liệu từ VNPay: [https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/](https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/)
+## Tài liệu
+
+### Tài liệu của thư viện: [vnpay-lib.vercel.app](https://vnpay-lib.vercel.app/)
+
+### Tài liệu từ VNPay: [sandbox.vnpayment.vn/apis](https://sandbox.vnpayment.vn/apis)
 
 ## Cài đặt:
 
@@ -48,58 +52,6 @@ const vnpay = new VNPay({
     hashAlgorithm: 'SHA512', // optional
 });
 ```
-
-#### Các phương thức
-
-<table>
-    <thead>
-        <tr>
-            <th>Phương thức</th>
-            <th>Mô Tả</th>
-            <th>Trạng thái</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><code>getBankList</code></td>
-            <td>Lấy danh sách ngân hàng VNPay hỗ trợ</td>
-            <td style="text-align:center">✅</td>
-        </tr>
-        <tr>
-            <td><code>buildPaymentUrl</code></td>
-            <td>Tạo đường dẫn thanh toán</td>
-            <td style="text-align:center">✅</td>
-        </tr>
-        <tr>
-            <td><code>verifyIpnCall</code></td>
-            <td>Xác thực lời gọi <a href="https://en.wikipedia.org/wiki/Instant_payment_notification" target="_blank">ipn</a> từ VNPay</td>
-            <td style="text-align:center">✅</td>
-        </tr>
-        <tr>
-            <td><code>verifyReturnUrl</code></td>
-            <td>Xác thực kết quả trả về từ VNPay</td>
-            <td style="text-align:center">✅</td>
-        </tr>
-        <tr>
-            <td><code>queryDr</code></td>
-            <td>Truy vấn kết quả giao dịch</td>
-            <td style="text-align:center">✅</td>
-        </tr>
-        <tr>
-            <td><code>refund</code></td>
-            <td>Tạo yêu cầu hoàn tiền</td>
-            <td style="text-align:center">✅</td>
-        </tr>
-    </tbody>
-</table>
-
-_Ghi chú:_
-
--   Biểu tượng ✅ cho biết công việc đã được hoàn thành.
--   Biểu tượng 📝 cho biết công việc cần được thực hiện.
--   Biểu tượng ❗ cho biết công việc cần sự giúp đỡ.
-
-#### Code tham khảo: <a href="https://github.com/lehuygiang28/vnpay/blob/main/example/express.ts" target="_blank">Bấm vào đây</a>
 
 ## Hỗ trợ
 
