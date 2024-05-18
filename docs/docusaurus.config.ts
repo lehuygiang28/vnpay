@@ -113,12 +113,6 @@ const config: Config = {
             defaultMode: 'dark',
             respectPrefersColorScheme: true,
         },
-        algolia: {
-            appId: '',
-            apiKey: '',
-            indexName: 'vnpay-docs',
-            contextualSearch: true,
-        },
     } satisfies Preset.ThemeConfig,
     plugins: [
         [
