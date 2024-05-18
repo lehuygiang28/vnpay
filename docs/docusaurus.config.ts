@@ -17,6 +17,8 @@ const config: Config = {
     // If you aren't using GitHub pages, you don't need these.
     organizationName: 'lehuygiang28', // Usually your GitHub org/user name.
     projectName: 'vnpay', // Usually your repo name.
+    deploymentBranch: 'docs-page',
+    trailingSlash: false,
 
     onBrokenLinks: 'warn',
     onBrokenMarkdownLinks: 'warn',
