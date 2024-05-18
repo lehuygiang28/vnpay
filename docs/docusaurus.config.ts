@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
     title: 'Open-source VNPay library documentation',
     tagline: 'An open-source library for VNPay',
-    favicon: 'img/favicon.ico',
+    // favicon: 'img/favicon.ico',
 
     // Set the production url of your site here
     url: 'https://vnpay-lib.vercel.app',
@@ -55,10 +55,10 @@ const config: Config = {
         // image: 'img/docusaurus-social-card.jpg',
         navbar: {
             title: 'lehuygiang28/VNPay',
-            logo: {
-                alt: 'My Site Logo',
-                src: 'img/logo.svg',
-            },
+            // logo: {
+            //     alt: 'My Site Logo',
+            //     src: 'img/logo.svg',
+            // },
             items: [
                 {
                     type: 'docSidebar',
