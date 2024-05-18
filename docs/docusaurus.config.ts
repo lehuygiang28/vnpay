@@ -114,6 +114,15 @@ const config: Config = {
             respectPrefersColorScheme: true,
         },
     } satisfies Preset.ThemeConfig,
+    plugins: [
+        [
+            'vercel-analytics',
+            {
+                debug: true,
+                mode: 'auto',
+            },
+        ],
+    ],
 };
 
 export default config;
