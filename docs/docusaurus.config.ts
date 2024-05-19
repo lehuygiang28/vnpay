@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
     title: 'Open-source VNPay library documentation',
     tagline: 'An open-source library for VNPay',
-    // favicon: 'img/favicon.ico',
+    favicon: 'https://github.githubassets.com/favicons/favicon.png',
 
     // Set the production url of your site here
     url: 'https://vnpay-lib.vercel.app',
@@ -112,6 +112,12 @@ const config: Config = {
         colorMode: {
             defaultMode: 'dark',
             respectPrefersColorScheme: true,
+        },
+        algolia: {
+            appId: '9HOG6FAKY7',
+            apiKey: '44a99b1006be22882c8aba292e0176e6',
+            indexName: 'vnpay-lib',
+            contextualSearch: true,
         },
     } satisfies Preset.ThemeConfig,
     plugins: [
