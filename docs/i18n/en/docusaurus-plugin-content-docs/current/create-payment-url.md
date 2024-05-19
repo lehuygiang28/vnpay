@@ -2,11 +2,11 @@
 sidebar_position: 3
 ---
 
-# Tạo URL thanh toán
+# Create Payment URL
 
-Tạo đường dẫn thanh toán cho VNPay.
+Create a payment URL for VNPay.
 
-## Tạo URL thanh toán
+## Create Payment URL
 
 ```typescript
 import { ProductCode, VnpLocale } from 'vnpay';
@@ -17,45 +17,46 @@ const paymentUrl = vnpay.buildPaymentUrl({
     vnp_Amount: 10000,
     vnp_IpAddr: '13.160.92.202',
     vnp_TxnRef: '12345',
-    vnp_OrderInfo: 'Thanh toan don hang 12345',
+    vnp_OrderInfo: 'Payment for order 12345',
     vnp_OrderType: ProductCode.Other,
     vnp_ReturnUrl: 'http://localhost:3000/vnpay-return',
-    vnp_Locale: VnpLocale.VN, // 'vn' hoặc 'en'
+    vnp_Locale: VnpLocale.VN, // 'vn' or 'en'
 });
 ```
 
-## Các thuộc tính
+## Properties
 
-| Thuộc tính    | Mô tả                                          | Ghi chú                                                                                                                                                                                       |
-| ------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| vnp_Amount    | Số tiền thanh toán                             | Đơn vị VND. Số tiền đã được tự động tính toán, không cần nhân 100 lần theo VNPay                                                                                                              |
-| vnp_IpAddr    | Địa chỉ IP của khách hàng thực hiện giao dịch. | Ví dụ: 13.160.92.202                                                                                                                                                                          |
-| vnp_TxnRef    | Mã đơn hàng ở phía khách hàng                  | Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY. Không được trùng lặp trong ngày. Ví dụ: 23554                                                                               |
-| vnp_OrderInfo | Thông tin đơn hàng                             | Quy định dữ liệu gửi sang VNPAY (Tiếng Việt không dấu và không bao gồm các ký tự đặc biệt). Ví dụ: Nap tien cho thue bao 0123456789. So tien 100,000 VND                                      |
-| vnp_OrderType | Loại đơn hàng                                  | Mỗi hàng hóa sẽ thuộc một nhóm danh mục do VNPAY quy định. Sử dụng enum có sẵn từ `ProductCode` hoặc xem thêm bảng [Danh mục hàng hóa](https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/) |
-| vnp_ReturnUrl | Đường dẫn trả về sau khi thanh toán            | URL thông báo kết quả giao dịch khi Khách hàng kết thúc thanh toán. Ví dụ: https://domain.vn/VnPayReturn                                                                                      |
-| vnp_Locale    | Ngôn ngữ hiển thị trên cổng thanh toán         | Hiện tại hỗ trợ Tiếng Việt (vn), Tiếng Anh (en)                                                                                                                                               |
+| Property      | Description                                       | Note                                                                                                                                                                                                           |
+| ------------- | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| vnp_Amount    | Payment amount                                    | In VND. The amount has been automatically calculated, no need to multiply by 100 as per VNPay                                                                                                                  |
+| vnp_IpAddr    | IP address of the customer making the transaction | Example: 13.160.92.202                                                                                                                                                                                         |
+| 202           |
+| vnp_TxnRef    | Customer's order code                             | This code is unique and used to distinguish orders sent to VNPAY. It should not be duplicated within a day. Example: 23554                                                                                     |
+| vnp_OrderInfo | Order information                                 | Data regulations sent to VNPAY (Vietnamese without accents and does not include special characters). Example: Top up for subscriber 0123456789. Amount 100,000 VND                                             |
+| vnp_OrderType | Order type                                        | Each product will belong to a category group as regulated by VNPAY. Use the available enum from ProductCode or see more in the [Product Category](https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/) table |
+| vnp_ReturnUrl | Return path after payment                         | This is the URL to which VNPay will redirect the user after the payment is completed. For example: https://domain.vn/VnPayReturn                                                                               |
+| vnp_Locale    | Language displayed on the payment gateway         | Currently supports Vietnamese (vn), English (en)                                                                                                                                                               |
 
-Xem thêm các thuộc tính khác tại [VNPay](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91).
+See more properties at [VNPay](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91).
 
-## Sử dụng trong Express
+## Use in Express
 
-### Với MVC
+### With MVC
 
-Các bước tạo URL thanh toán trong Express với MVC:
+Steps to create a payment URL in Express with MVC:
 
-1. Tạo một route để xử lý đơn hàng
-2. Sau khi tạo đơn hàng, tiến hành tạo URL thanh toán
-3. Chuyển hướng khách hàng đến URL thanh toán
-4. Sau khi thanh toán, VNPay sẽ chuyển hướng khách hàng đến `vnp_ReturnUrl`
+1. Create a route to handle orders
+2. After creating the order, proceed to create the payment URL
+3. Redirect the customer to the payment URL
+4. After payment, VNPay will redirect the customer to `vnp_ReturnUrl`
 
 ```typescript title="controllers/order.controller.ts"
-// Route xử lý đơn hàng
+// Route to handle orders
 app.post('/order', async (req, res) => {
-    // Tạo đơn hàng
-    const order = await createOrder(req.body); // Hàm tạo đơn hàng, bạn cần tự cài đặt
+    // Create order
+    const order = await createOrder(req.body); // Order creation function, you need to implement it yourself
 
-    // Tạo URL thanh toán
+    // Create payment URL
     const paymentUrl = vnpay.buildPaymentUrl({
         vnp_Amount: 10000,
         vnp_IpAddr:
@@ -63,8 +64,8 @@ app.post('/order', async (req, res) => {
             req.connection.remoteAddress ||
             req.socket.remoteAddress ||
             req.ip,
-        vnp_TxnRef: '12345',
-        vnp_OrderInfo: 'Thanh toan don hang 12345',
+        vnp_TxnRef: order.orderId,
+        vnp_OrderInfo: `Payment for order ${order.orderId}`,
         vnp_OrderType: ProductCode.Other,
         vnp_ReturnUrl: 'http://localhost:3000/vnpay-return',
         vnp_Locale: VnpLocale.VN,
@@ -74,27 +75,27 @@ app.post('/order', async (req, res) => {
 });
 ```
 
-### Với API
+### With API
 
-Các bước tạo URL thanh toán trong Express với API:
+Steps to create a payment URL in Express with API:
 
-1. Backend tạo một API để xử lý đơn hàng
-2. Frontend gọi API để tạo đơn hàng
-3. Sau khi tạo đơn hàng, tiến hành tạo URL thanh toán
-4. Trả về URL thanh toán và/hoặc thông tin đơn hàng cho Frontend
-5. Frontend chuyển hướng khách hàng đến URL thanh toán
-6. Sau khi thanh toán, VNPay sẽ chuyển hướng khách hàng đến `vnp_ReturnUrl`
+1. Backend creates an API to handle orders
+2. Frontend calls API to create order
+3. After creating the order, proceed to create the payment URL
+4. Return the payment URL and/or order information to Frontend
+5. Frontend redirects the customer to the payment URL
+6. After payment, VNPay will redirect the customer to `vnp_ReturnUrl`
 
 ```typescript title="server.ts"
-// API xử lý đơn hàng
+// API to handle orders
 app.post('/api/order', async (req, res) => {
-    // Tạo đơn hàng
-    const order = await createOrder(req.body); // Hàm tạo đơn hàng, bạn cần tự cài đặt
+    // Create order
+    const order = await createOrder(req.body); // Order creation function, you need to implement it yourself
 
-    // Lấy returnUrl từ frontend gửi lên, nếu không có thì sử dụng mặc định
+    // Get returnUrl from frontend, if not use default
     const returnUrl = req.body?.returnUrl || 'http://localhost:3000/vnpay-return';
 
-    // Tạo URL thanh toán
+    // Create payment URL
     const paymentUrl = vnpay.buildPaymentUrl({
         vnp_Amount: 10000,
         vnp_IpAddr:
@@ -102,10 +103,10 @@ app.post('/api/order', async (req, res) => {
             req.connection.remoteAddress ||
             req.socket.remoteAddress ||
             req.ip,
-        vnp_TxnRef: '12345',
-        vnp_OrderInfo: 'Thanh toan don hang 12345',
+        vnp_TxnRef: order.orderId,
+        vnp_OrderInfo: `Payment for order ${order.orderId}`,
         vnp_OrderType: ProductCode.Other,
-        vnp_ReturnUrl: returnUrl, // Đường dẫn nên là của frontend
+        vnp_ReturnUrl: returnUrl, // The path should be of the frontend
         vnp_Locale: VnpLocale.VN,
     });
 

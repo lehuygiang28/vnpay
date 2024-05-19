@@ -2,31 +2,31 @@
 sidebar_position: 4
 ---
 
-# Cài đặt IPN url
+# Setting up IPN url
 
-Khi thanh toán hoàn tất, VNPay sẽ gửi lời gọi IPN (Instant Payment Notification) đến URL IPN mà bạn đã cài đặt. Để xác thực lời gọi IPN, bạn có thể sử dụng thư viện VNPay.
+When the payment is completed, VNPay will send an IPN (Instant Payment Notification) call to the IPN URL that you have set up. To verify the IPN call, you can use the VNPay library.
 
-## Cài đặt IPN url môi trường sandbox
+## Setting up IPN url for sandbox environment
 
-**Lưu ý**: Để cài đặt IPN url môi trường production, bạn cần liên hệ với VNPay để được hỗ trợ.
+**Note**: To set up the IPN url for the production environment, you need to contact VNPay for support.
 
-1. Đăng nhập vào merchant portal của VNPay tại [đây](https://sandbox.vnpayment.vn/merchantv2/Users/Login.htm)
-2. Tại góc trên bên phải, chọn thông tin tài khoản:
+1. Log in to the VNPay merchant portal at [here](https://sandbox.vnpayment.vn/merchantv2/Users/Login.htm)
+2. At the top right corner, select `Account Information`:
  <p align="center">
-     ![Chọn thông tin tài khoản](/img/ipn-step-2.png)
+     ![Select account information](/img/en/ipn-step-2.png)
  </p>
-3. Sau khi chọn thông tin tài khoản, VNPay sẽ hiện thị 1 danh sách rất nhiều website. Và bạn không cần quan tâm điều đó
-4. Từ bất kì 1 website nào đó, kéo màn hình sang phải và chọn vào icon chỉnh sửa:
+3. After selecting account information, VNPay will display a list of many websites. And you don't need to care about that
+4. From any website, scroll to the right and select the edit icon:
  <p align="center">
-     ![Chọn vào icon chỉnh sửa](/img/ipn-step-4.png)
+     ![Select the edit icon](/img/en/ipn-step-4.png)
  </p>
-5. Cấu hình IPN:
+5. Configure IPN:
  <p align="center">
-     ![Cấu hình IPN](/img/ipn-step-5.png)
+     ![Configure IPN](/img/en/ipn-step-5.png)
  </p>
 
-## Cài đặt IPN url môi trường production
+## Setting up IPN url for production environment
 
-:::caution Chú ý
-Để cài đặt IPN url môi trường production, bạn cần liên hệ với VNPay để được hỗ trợ.
+:::caution Note
+To set up the IPN url for the production environment, you need to contact VNPay for support.
 :::

@@ -2,63 +2,100 @@
 sidebar_position: 5
 ---
 
-# Xác thực lời gọi IPN
+# Verify IPN Call
 
-Khi thanh toán hoàn tất, VNPay sẽ gửi lời gọi IPN (Instant Payment Notification) đến URL IPN mà bạn đã cài đặt. Để xác thực lời gọi IPN, bạn có thể sử dụng thư viện VNPay.
+When the payment is completed, VNPay will send an IPN (Instant Payment Notification) call to the IPN URL that you have set up. To verify the IPN call, you can use the VNPay library.
 
-## Xác thực IPN
+## Verify IPN
 
 ```typescript
 import { VerifyIpnCall } from 'vnpay';
 
+/* ... */
+
 const verify: VerifyIpnCall = vnpay.verifyIpnCall(req.query);
 ```
 
-## Các thuộc tính của đối tượng `VerifyIpnCall`
+## Properties of the `VerifyIpnCall`
 
-Thông tin sau khi xác thực và của VNPay trả về
+Information after verification and returned by VNPay
 
-| Thuộc tính | Kiểu dữ liệu | Mô tả                                                           |
-| ---------- | ------------ | --------------------------------------------------------------- |
-| isSuccess  | boolean      | Kết quả của đơn hàng thanh toán                                 |
-| isVerified | boolean      | Kết quả xác thực tính toàn vẹn của dữ liệu khi nhận về từ VNPay |
-| message    | string       | Thông báo xác thực                                              |
+| Property   | Data Type | Description                                                                                                                                            |
+| ---------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| isSuccess  | boolean   | The result of the payment order                                                                                                                        |
+| isVerified | boolean   | The result of verifying the integrity of the data received from VNPay                                                                                  |
+| message    | string    | Verification message                                                                                                                                   |
+| vnp_Amount | number    | The payment amount, automatically calculated by the library                                                                                            |
+| ...        | ...       | Other parameters that VNPay will return, refer [here](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91-1) |
 
-Xem thêm các thuộc tính VNPay sẽ trả về tại [VNPay](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91-1).
+See more properties VNPay will return at [VNPay](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91-1).
 :::tip
-Các tham số mà VNPay trả về cũng nằm trong đối tượng `VerifyIpnCall`.
+The parameters that VNPay returns are also in the `VerifyIpnCall`.
 :::
 
-## Sử dụng trong Express
+## Use in Express
 
-### Với MVC
+Steps to verify the return URL in Express:
 
-Các bước xác thực URL trả về trong Express với MVC:
-
-1. Tạo một route để xử lý URL trả về
-2. Xác thực URL trả về
-3. Xử lý thông tin trả về từ VNPay
+1. Create a route to handle the return URL
+2. Verify the return URL
+3. Handle the information returned from VNPay
+4. Update the order status in your database
+5. Update the status back to VNPay to let them know that you have confirmed the order
 
 ```typescript title="controllers/payment.controller.ts"
-// Route xử lý URL trả về
-// Thay vì gửi text bạn có thể render template hoặc chuyển hướng khách hàng đến trang cần thiết
-app.get('/vnpay-return', (req, res) => {
-    let verify: VerifyReturnUrl;
+import {
+    IpnFailChecksum,
+    IpnOrderNotFound,
+    IpnInvalidAmount,
+    InpOrderAlreadyConfirmed,
+    IpnUnknownError,
+    IpnSuccess,
+} from 'vnpay';
+
+/* ... */
+
+app.get('/vnpay-ipn', async (req, res) => {
     try {
-        // Sử dụng try-catch để bắt lỗi nếu query không hợp lệ, không đủ dữ liệu
-        verify = vnpay.verifyReturnUrl(req.query);
+        const verify: VerifyReturnUrl = vnpay.verifyIpnCall(req.query);
         if (!verify.isVerified) {
-            return res.send('Xác thực tính toàn vẹn dữ liệu không thành công');
+            return res.json(IpnFailChecksum);
         }
-        if (!verify.isSuccess) {
-            return res.send('Đơn hàng thanh toán không thành công');
+
+        // Find the order in your database
+        const foundOrder = await findOrderById(verify.vnp_TxnRef); // Method to find an order by id, you need to implement it
+
+        // If the order is not found or the order code does not match
+        if (!foundOrder || verify.vnp_TxnRef !== foundOrder.orderId) {
+            return res.json(IpnOrderNotFound);
         }
+
+        // If the payment amount does not match
+        if (verify.vnp_Amount !== foundOrder.amount) {
+            return res.json(IpnInvalidAmount);
+        }
+
+        // If the order has been confirmed before
+        if (foundOrder.status === 'completed') {
+            return res.json(InpOrderAlreadyConfirmed);
+        }
+
+        /**
+         * After verifying the order is complete,
+         * you can update the order status in your database
+         */
+        foundOrder.status = 'completed';
+        await updateOrder(foundOrder); // Function to update the order status, you need to implement it
+
+        // Then update the status back to VNPay to let them know that you have confirmed the order
+        return res.json(IpnSuccess);
     } catch (error) {
-        return res.send('Dữ liệu không hợp lệ');
+        /**
+         * Handle exceptions
+         * For example, insufficient data, invalid data, database update failure
+         */
+        console.log(`verify error: ${error}`);
+        return res.json(IpnUnknownError);
     }
-
-    // Kiểm tra thông tin đơn hàng và xử lý
-
-    return res.send('Xác thực URL trả về thành công');
 });
 ```

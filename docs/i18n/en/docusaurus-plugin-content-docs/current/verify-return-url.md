@@ -2,61 +2,58 @@
 sidebar_position: 6
 ---
 
-# Xác thực URL thông báo trả về
+# Verify Return URL
 
-Khi khách hàng thanh toán thành công, VNPay sẽ chuyển hướng khách hàng đến URL thông báo trả về (`vnp_ReturnUrl`) mà bạn đã cung cấp.
+When the customer successfully makes a payment, VNPay will redirect the customer to the return notification URL (`vnp_ReturnUrl`) that you have provided.
 
-## Xác thực URL trả về
+## Verify Return URL
 
 ```typescript
 import { VerifyReturnUrl } from 'vnpay';
 
+/* ... */
+
 const verify: VerifyReturnUrl = vnpay.verifyReturnUrl(req.query);
 ```
 
-## Các thuộc tính của đối tượng `VerifyReturnUrl`
+## Properties of the `VerifyReturnUrl`
 
-Thông tin sau khi xác thực và của VNPay trả về
+Information after verification and returned by VNPay
 
-| Thuộc tính | Kiểu dữ liệu | Mô tả                                                           |
-| ---------- | ------------ | --------------------------------------------------------------- |
-| isSuccess  | boolean      | Kết quả của đơn hàng thanh toán                                 |
-| isVerified | boolean      | Kết quả xác thực tính toàn vẹn của dữ liệu khi nhận về từ VNPay |
-| message    | string       | Thông báo xác thực                                              |
+:::info
+Similar to the properties of the [`VerifyIpnCall`](./verify-ipn-call.md#properties-of-the-verifyipncall)
+:::
 
-Xem thêm các thuộc tính VNPay sẽ trả về tại [VNPay](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91-1).
-Các thuộc tính VNPay trả về cũng nằm trong đối tượng `VerifyReturnUrl`.
+## Use in Express
 
-## Sử dụng trong Express
+### With MVC
 
-### Với MVC
+Steps to verify the return URL in Express with MVC:
 
-Các bước xác thực URL trả về trong Express với MVC:
-
-1. Tạo một route để xử lý URL trả về
-2. Xác thực URL trả về
-3. Xử lý thông tin trả về từ VNPay
+1. Create a route to handle the return URL
+2. Verify the return URL
+3. Handle the information returned from VNPay
 
 ```typescript title="controllers/payment.controller.ts"
-// Route xử lý URL trả về
-// Thay vì gửi text bạn có thể render template hoặc chuyển hướng khách hàng đến trang cần thiết
+// Route to handle return URL
+// Instead of sending text, you can render a template or redirect the customer to the necessary page
 app.get('/vnpay-return', (req, res) => {
     let verify: VerifyReturnUrl;
     try {
-        // Sử dụng try-catch để bắt lỗi nếu query không hợp lệ, không đủ dữ liệu
+        // Use try-catch to catch errors if the query is invalid or lacks data
         verify = vnpay.verifyReturnUrl(req.query);
         if (!verify.isVerified) {
-            return res.send('Xác thực tính toàn vẹn dữ liệu không thành công');
+            return res.send('Data integrity verification failed');
         }
         if (!verify.isSuccess) {
-            return res.send('Đơn hàng thanh toán không thành công');
+            return res.send('Payment order failed');
         }
     } catch (error) {
-        return res.send('Dữ liệu không hợp lệ');
+        return res.send('Invalid data');
     }
 
-    // Kiểm tra thông tin đơn hàng và xử lý
+    // Check order information and handle
 
-    return res.send('Xác thực URL trả về thành công');
+    return res.send('Return URL verification successful');
 });
 ```

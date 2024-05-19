@@ -28,7 +28,7 @@ const config: Config = {
     // may want to replace "en" with "zh-Hans".
     i18n: {
         defaultLocale: 'vi',
-        locales: ['vi'],
+        locales: ['vi', 'en'],
     },
 
     presets: [
@@ -60,10 +60,10 @@ const config: Config = {
             //     src: 'img/logo.svg',
             // },
             items: [
-                // {
-                //     type: 'localeDropdown',
-                //     position: 'right',
-                // },
+                {
+                    type: 'localeDropdown',
+                    position: 'right',
+                },
                 {
                     href: 'https://github.com/lehuygiang28/vnpay',
                     label: 'GitHub',
