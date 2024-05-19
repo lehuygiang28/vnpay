@@ -5,13 +5,29 @@ slug: /
 
 # Giới thiệu
 
+## Mô tả
+
 Thư viện [VNPay](https://github.com/lehuygiang28/vnpay) là một dự án mã nguồn mở, và hoàn toàn miễn phí nhằm giúp mọi người có thể tích hợp thanh toán trực tuyến một cách dễ dàng và nhanh chóng với VNPay.
 
-## Bắt đầu
+## Tài liệu
 
-Bạn có thể tìm hiểu cách tích hợp VNPay vào website của mình thông qua các tài liệu chính thức của VNPay tại [đây](https://sandbox.vnpayment.vn/apis/).
+-   Tìm hiểu cách sử dụng thư viện VNPay tại [đây](installation.md).
+-   Bạn cũng có thể tìm hiểu cách VNPay hoạt động tại [đây](https://sandbox.vnpayment.vn/apis/).
+
+-   `vnpay` trên [GitHub](https://github.com/lehuygiang28/vnpay)
+-   `vnpay` trên [NPM](https://www.npmjs.com/package/vnpay)
 
 ## Môi trường
 
--   [Node.js](https://nodejs.org/en/download/) phiên bản 18.0 hoặc cao hơn.
--   Khi cài đặt Node.js, bạn nên chọn tất cả các tùy chọn liên quan đến các gói phụ thuộc.
+-   [Node.js](https://nodejs.org/en/download/) phiên bản 18.0 hoặc cao hơn (khuyến nghị).
+-   Tương thích với cả TypeScript và JavaScript.
+
+## Tác giả
+
+_[github.com/lehuygiang28](https://github.com/lehuygiang28)_
+
+## Người đóng góp
+
+<a href="https://github.com/lehuygiang28/vnpay/graphs/contributors" target="_blank">
+  <img src="https://contrib.rocks/image?repo=lehuygiang28/vnpay&max=20" class="contributors_img" />
+</a>
