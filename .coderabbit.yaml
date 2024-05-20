@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: "en-US"
+early_access: true
+reviews:
+  request_changes_workflow: true
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+  auto_review:
+    enabled: true
+    ignore_title_keywords:
+      - "[skip review]"
+      - "Automatic PR"
+    drafts: false
+    base_branches:
+      - "main"
+  path_instructions:
+    - path: "**/*.ts"
+      instructions: "Review the TypeScript code of the NPM package to ensure it adheres to the principles of awesome and clean code. This includes proper use of functions, classes, modules. Also, ensure the code follows best practices for package development, such as clear and concise documentation, proper error handling, and efficient data structures and algorithms. The code should also conform to the ESLint rules configured in the codebase. Highlight any deviations and suggest appropriate corrections. Using design patterns that promote code reusability and readability is encouraged."
+chat:
+  auto_reply: true
