@@ -8,9 +8,8 @@ import {
     QUERY_DR_RESPONSE_MAP,
     REFUND_RESPONSE_MAP,
     GET_BANK_LIST_ENDPOINT,
-    ProductCode,
 } from './constants';
-import { HashAlgorithm, VnpCurrCode, VnpLocale } from './enums';
+import { HashAlgorithm, VnpCurrCode, VnpLocale, ProductCode } from './enums';
 import {
     dateFormat,
     getResponseByStatusCode,
@@ -21,6 +20,8 @@ import {
 import {
     VNPayConfig,
     BuildPaymentUrl,
+    BuildPaymentUrlOptions,
+    BuildPaymentUrlLogger,
     ReturnQueryFromVNPay,
     VerifyReturnUrl,
     VerifyIpnCall,
@@ -28,14 +29,8 @@ import {
 import { QueryDr, BodyRequestQueryDr, QueryDrResponseFromVNPay } from './types/query-dr.type';
 import { Refund, RefundResponse } from './types/refund.type';
 import { Bank } from './types/bank.type';
-
-type GlobalConfig = Omit<VNPayConfig, 'testMode'> & {
-    vnpayHost: string;
-    vnp_Locale: VnpLocale;
-    vnp_CurrCode: string;
-    vnp_Command: string;
-    vnp_OrderType: string;
-};
+import { DefaultConfig, GlobalConfig } from './types/common.type';
+import { consoleLogger } from './utils';
 
 /**
  * Lớp hỗ trợ thanh toán qua VNPay
@@ -66,8 +61,10 @@ type GlobalConfig = Omit<VNPayConfig, 'testMode'> & {
  */
 export class VNPay {
     private globalDefaultConfig: GlobalConfig;
-    private HASH_ALGORITHM: HashAlgorithm = 'SHA512';
+    private HASH_ALGORITHM = HashAlgorithm.SHA512;
     private BUFFER_ENCODE: BufferEncoding = 'utf-8';
+    private isEnableLog = false;
+    private readonly loggerFn = (data: unknown) => {};
 
     public constructor({
         vnpayHost = VNPAY_GATEWAY_SANDBOX_HOST,
@@ -86,6 +83,17 @@ export class VNPay {
             this.HASH_ALGORITHM = config.hashAlgorithm;
         }
 
+        if (config?.enableLog) {
+            this.isEnableLog = config.enableLog;
+            // Default logger to console
+            this.loggerFn = consoleLogger;
+        }
+
+        if (config?.loggerFn) {
+            // Custom logger function
+            this.loggerFn = config.loggerFn;
+        }
+
         this.globalDefaultConfig = {
             vnpayHost,
             vnp_Version,
@@ -101,7 +109,7 @@ export class VNPay {
      * Lấy cấu hình mặc định của VNPay
      * @en Get default config of VNPay
      */
-    public get defaultConfig() {
+    public get defaultConfig(): DefaultConfig {
         return {
             vnp_TmnCode: this.globalDefaultConfig.tmnCode,
             vnp_Version: this.globalDefaultConfig.vnp_Version,
@@ -143,14 +151,20 @@ export class VNPay {
      *
      * @param {BuildPaymentUrl} data - Payload that contains the information to build the payment url
      * @returns {string} The payment url string
-     * @see https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/#t%E1%BA%A1o-url-thanh-to%C3%A1n
+     * @see https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#tao-url-thanh-toan
      */
-    public buildPaymentUrl(data: BuildPaymentUrl): string {
+    public buildPaymentUrl<Logger extends keyof BuildPaymentUrlLogger>(
+        data: BuildPaymentUrl,
+        options?: BuildPaymentUrlOptions<Logger>,
+    ): string {
         const dataToBuild = {
             ...this.defaultConfig,
             ...data,
         };
 
+        /**
+         * Multiply by 100 to follow VNPay standard, see docs for more detail
+         */
         dataToBuild.vnp_Amount = dataToBuild.vnp_Amount * 100;
 
         if (!isValidVnpayDateFormat(dataToBuild?.vnp_CreateDate ?? 0)) {
@@ -180,8 +194,39 @@ export class VNPay {
             Buffer.from(redirectUrl.search.slice(1).toString(), this.BUFFER_ENCODE),
             this.HASH_ALGORITHM,
         );
-
         redirectUrl.searchParams.append('vnp_SecureHash', signed);
+
+        if (this.isEnableLog) {
+            const data2Log: BuildPaymentUrlLogger = {
+                createdAt: new Date(),
+                paymentUrl: options?.hashInUrl
+                    ? redirectUrl.toString()
+                    : (() => {
+                          const cloneUrl = new URL(redirectUrl.toString());
+                          cloneUrl.searchParams.delete('vnp_SecureHash');
+                          return cloneUrl.toString();
+                      })(),
+                ...dataToBuild,
+            };
+
+            const { logger } = options || {};
+
+            if (logger) {
+                const { type, fields, loggerFn } = logger;
+
+                fields.forEach((field) => {
+                    if (
+                        (type === 'omit' && fields.includes(field)) ||
+                        (type === 'pick' && !fields.includes(field))
+                    ) {
+                        delete data2Log[field];
+                    }
+                });
+
+                // Exec logger function, or default logger
+                (loggerFn || this.loggerFn)(data2Log);
+            }
+        }
 
         return redirectUrl.toString();
     }

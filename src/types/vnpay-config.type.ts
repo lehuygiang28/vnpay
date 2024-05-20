@@ -61,4 +61,23 @@ export type VNPayConfig = {
      * @default 'SHA512'
      */
     hashAlgorithm?: HashAlgorithm;
+
+    /**
+     * Bật chức năng logging
+     *
+     * @en Enable logging feature
+     * @default false
+     */
+    enableLog?: boolean;
+
+    /**
+     * Phương thức cho phép bạn tự tùy chỉnh log
+     *
+     * - data có thể thay đổi theo từng method khác nhau
+     *
+     * @en Method that allows you to customize the log
+     * @param data Data to log, it can be change to each method
+     * @returns
+     */
+    loggerFn?: (data: unknown) => void;
 };

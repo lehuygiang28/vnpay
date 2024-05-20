@@ -1,3 +1,4 @@
+export * from './common.type';
 export * from './vnpay-config.type';
 export * from './build-payment-url.type';
 export * from './return-from-vnpay.type';

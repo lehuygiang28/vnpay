@@ -1,5 +1,4 @@
-import { ProductCode } from '../constants';
-import { VnpLocale } from '../enums';
+import { DefaultConfig, GlobalConfig, OmitFields, PickFields } from './common.type';
 
 export type BuildPaymentUrl = {
     /**
@@ -55,14 +54,14 @@ export type BuildPaymentUrl = {
      * @en Currency code using for payment. Currently only support VND
      * @example VND
      */
-    vnp_CurrCode?: string;
+    vnp_CurrCode?: GlobalConfig['vnp_CurrCode'];
 
     /**
      * Ngôn ngữ giao diện hiển thị. Hiện tại hỗ trợ Tiếng Việt (vn), Tiếng Anh (en)
      * @en Language display on payment gateway. Currently support Vietnamese (vn), English (en)
      * @example vn
      */
-    vnp_Locale?: VnpLocale;
+    vnp_Locale?: GlobalConfig['vnp_Locale'];
 
     /**
      * Loại đơn hàng/ Mã sản phẩm
@@ -70,7 +69,7 @@ export type BuildPaymentUrl = {
      * @default 'other'
      * @enum {ProductCode} - [ProductCode]
      */
-    vnp_OrderType?: ProductCode | string;
+    vnp_OrderType?: GlobalConfig['vnp_OrderType'];
 
     /**
      * Mã Ngân hàng thanh toán
@@ -78,4 +77,15 @@ export type BuildPaymentUrl = {
      * @example NCB
      */
     vnp_BankCode?: string;
+};
+
+export type BuildPaymentUrlLogger = {
+    createdAt: Date;
+    paymentUrl: string;
+} & DefaultConfig &
+    BuildPaymentUrl;
+
+export type BuildPaymentUrlOptions<Fields extends keyof BuildPaymentUrlLogger> = {
+    hashInUrl?: boolean;
+    logger: OmitFields<BuildPaymentUrlLogger, Fields> | PickFields<BuildPaymentUrlLogger, Fields>;
 };
