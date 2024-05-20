@@ -6,9 +6,13 @@ if (!window.va) {
         };
 }
 
-va('event', {
-    name: window?.location?.pathname ?? 'default-path',
-    data: {
-        type: 'pageview',
-    },
-});
+var pushState = history.pushState;
+history.pushState = function () {
+    pushState.apply(history, arguments);
+    va('event', {
+        name: window.location.pathname,
+        data: {
+            type: 'pageview',
+        },
+    });
+};
