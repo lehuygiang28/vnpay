@@ -29,3 +29,8 @@ export type PickFields<ObjectToDo, Fields extends keyof ObjectToDo> = {
     fields: Fields[];
     loggerFn?: (data: Pick<ObjectToDo, Fields>) => void;
 };
+
+export type AllFields<ObjectToDo> = {
+    type?: 'all';
+    loggerFn?: (data: ObjectToDo) => void;
+};

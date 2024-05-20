@@ -1,4 +1,4 @@
-import { DefaultConfig, GlobalConfig, OmitFields, PickFields } from './common.type';
+import { DefaultConfig, GlobalConfig, OmitFields, AllFields, PickFields } from './common.type';
 
 export type BuildPaymentUrl = {
     /**
@@ -87,5 +87,8 @@ export type BuildPaymentUrlLogger = {
 
 export type BuildPaymentUrlOptions<Fields extends keyof BuildPaymentUrlLogger> = {
     hashInUrl?: boolean;
-    logger: OmitFields<BuildPaymentUrlLogger, Fields> | PickFields<BuildPaymentUrlLogger, Fields>;
+    logger:
+        | AllFields<BuildPaymentUrlLogger>
+        | OmitFields<BuildPaymentUrlLogger, Fields>
+        | PickFields<BuildPaymentUrlLogger, Fields>;
 };

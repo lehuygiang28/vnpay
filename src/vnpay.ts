@@ -212,19 +212,21 @@ export class VNPay {
             const { logger } = options || {};
 
             if (logger) {
-                const { type, fields, loggerFn } = logger;
+                if ('fields' in logger) {
+                    const { type, fields } = logger;
 
-                fields.forEach((field) => {
-                    if (
-                        (type === 'omit' && fields.includes(field)) ||
-                        (type === 'pick' && !fields.includes(field))
-                    ) {
-                        delete data2Log[field];
-                    }
-                });
+                    fields?.forEach((field) => {
+                        if (
+                            (type === 'omit' && fields.includes(field)) ||
+                            (type === 'pick' && !fields.includes(field))
+                        ) {
+                            delete data2Log[field];
+                        }
+                    });
+                }
 
                 // Exec logger function, or default logger
-                (loggerFn || this.loggerFn)(data2Log);
+                (logger?.loggerFn || this.loggerFn)(data2Log);
             }
         }
 
