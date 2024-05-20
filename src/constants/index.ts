@@ -1,4 +1,3 @@
-export * from './product-code.constant';
 export * from './response-map.constant';
 export * from './api-endpoint.constant';
 export * from './ipn-result-for-vnpay.constant';
