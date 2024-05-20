@@ -11,6 +11,7 @@ import {
     IpnInvalidAmount,
     InpOrderAlreadyConfirmed,
 } from '../src/constants';
+import { HashAlgorithm, ProductCode } from '../src/enums';
 
 const app = express();
 let portToListen = 3000;
@@ -20,7 +21,7 @@ const vnpay = new VNPay({
     secureSecret: 'secret',
     vnpayHost: 'https://sandbox.vnpayment.vn',
     testMode: true, // optional
-    hashAlgorithm: 'SHA512', // optional
+    hashAlgorithm: HashAlgorithm.SHA512, // optional
 });
 
 app.get('/', (req: Request, res: Response) => {
@@ -38,8 +39,8 @@ app.get('/payment-url', (req: Request, res: Response) => {
         vnp_Amount: 10000,
         vnp_IpAddr: '1.1.1.1',
         vnp_TxnRef: '123456',
-        vnp_OrderInfo: '123456',
-        vnp_OrderType: 'other',
+        vnp_OrderInfo: 'Payment for order 123456',
+        vnp_OrderType: ProductCode.Other,
         vnp_ReturnUrl: `http://localhost:${portToListen}/vnpay-return`,
     });
     // redirect to payment url if you use a server like MVC or SSR

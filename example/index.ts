@@ -2,8 +2,7 @@ import crypto from 'crypto';
 import { VNPay } from '../src/vnpay';
 import { dateFormat } from '../src/utils';
 import { ReturnQueryFromVNPay, VerifyReturnUrl } from '../src/types';
-import { RefundTransactionType, VnpLocale } from '../src/enums';
-import { ProductCode } from '../src/constants';
+import { RefundTransactionType, VnpLocale, ProductCode } from '../src/enums';
 
 /**
  * This function is used to generate secure hash for testing purpose only
