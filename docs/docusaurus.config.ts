@@ -123,6 +123,12 @@ const config: Config = {
             },
         ],
     ],
+    scripts: [
+        {
+            src: '/js/analytics.js',
+            defer: true,
+        },
+    ],
 };
 
 export default config;
