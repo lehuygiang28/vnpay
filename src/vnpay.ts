@@ -153,9 +153,9 @@ export class VNPay {
      * @returns {string} The payment url string
      * @see https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#tao-url-thanh-toan
      */
-    public buildPaymentUrl<Logger extends keyof BuildPaymentUrlLogger>(
+    public buildPaymentUrl<LoggerFields extends keyof BuildPaymentUrlLogger>(
         data: BuildPaymentUrl,
-        options?: BuildPaymentUrlOptions<Logger>,
+        options?: BuildPaymentUrlOptions<LoggerFields>,
     ): string {
         const dataToBuild = {
             ...this.defaultConfig,
@@ -215,19 +215,20 @@ export class VNPay {
                 if ('fields' in logger) {
                     const { type, fields } = logger;
 
-                    fields?.forEach((field) => {
+                    Object.keys(data2Log).forEach((key) => {
+                        const keyAssert = key as unknown as LoggerFields;
                         if (
-                            (type === 'omit' && fields.includes(field)) ||
-                            (type === 'pick' && !fields.includes(field))
+                            (type === 'omit' && fields.includes(keyAssert)) ||
+                            (type === 'pick' && !fields.includes(keyAssert))
                         ) {
-                            delete data2Log[field];
+                            delete data2Log[keyAssert];
                         }
                     });
                 }
-
-                // Exec logger function, or default logger
-                (logger?.loggerFn || this.loggerFn)(data2Log);
             }
+
+            // Exec logger function, or default logger
+            (logger?.loggerFn || this.loggerFn)(data2Log);
         }
 
         return redirectUrl.toString();
