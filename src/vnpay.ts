@@ -437,7 +437,7 @@ export class VNPay {
      * Đây là API để hệ thống merchant gửi yêu cầu hoàn tiền cho giao dịch qua hệ thống Cổng thanh toán VNPAY.
      *
      * @en This is the API for the merchant system to refund the transaction at the VNPAY system.
-     * @param data {Refund} - The data to request refund
+     * @param {Refund} data - The data to request refund
      * @returns The data return from VNPay
      * @see https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#hoan-tien-thanh-toan-PAY
      */

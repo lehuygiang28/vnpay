@@ -17,14 +17,10 @@ export type QueryDr = Pick<BuildPaymentUrl, 'vnp_TxnRef' | 'vnp_OrderInfo' | 'vn
          * Thời gian ghi nhận giao dịch tại hệ thống của merchant tính theo GMT+7, định dạng: yyyyMMddHHmmss, tham khảo giá trị:
          * - Thanh toán PAY giống vnp_CreateDate của vnp_Command=pay
          * - Thanh toán bằng mã Token giống "vnp_create_date" của "vnp_Command=pay_and_create" và "vnp_command=token_pay"
-         * - Thanh toán trả góp giống "transaction": {"mcDate": ""} chiều khởi tạo giao dịch trả góp
-         * - Thanh toán định kỳ giống "transaction": {"mcDate": ""} chiều khởi tạo yêu cầu thanh toán định kỳ
          *
          * @en Transaction time recorded at merchant system according to GMT + 7, format: yyyyMMddHHmmss, refer to value:
          * - PAY payment same as vnp_CreateDate of vnp_Command = pay
          * - Payment by Token code same as "vnp_create_date" of "vnp_Command = pay_and_create" and "vnp_command = token_pay"
-         * - Installment payment same as "transaction": {"mcDate": ""} in the afternoon of initiating the installment payment transaction
-         * - Periodic payment same as "transaction": {"mcDate": ""} in the afternoon of initiating the periodic payment request
          */
         vnp_TransactionDate: number;
 
