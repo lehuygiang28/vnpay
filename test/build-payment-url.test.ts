@@ -2,7 +2,6 @@ import { VNPay } from '../src/vnpay';
 import { VnpLocale, ProductCode, VnpCurrCode } from '../src/enums';
 import { BuildPaymentUrl } from '../src/types';
 import { consoleLogger, dateFormat } from '../src/utils';
-import exp from 'constants';
 
 describe('buildPaymentUrl', () => {
     let vnpay: VNPay;

@@ -1,3 +1,5 @@
+// eslint-disable-next-line no-undef
 module.exports = {
-  presets: [require.resolve('@docusaurus/core/lib/babel/preset')],
+    // eslint-disable-next-line no-undef
+    presets: [require.resolve('@docusaurus/core/lib/babel/preset')],
 };

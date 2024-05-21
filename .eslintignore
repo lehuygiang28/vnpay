@@ -1,0 +1,10 @@
+node_modules/
+dist/
+lib/
+
+docs/.docusaurus/
+docs/build/
+docs/node_modules/
+docs/static/js
+
+.DS_Store

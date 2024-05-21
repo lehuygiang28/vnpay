@@ -1,44 +1,44 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
-language: "en-US"
+language: 'en-US'
 early_access: true
 reviews:
-  request_changes_workflow: true
-  high_level_summary: true
-  poem: false
-  review_status: true
-  collapse_walkthrough: false
-  profile: assertive
-  tools:
-    markdownlint:
-      enabled: true
-    ast-grep:
-      essential_rules: true
-    github-checks:
-      enabled: true
-      timeout_ms: 90000
-    ruff:
-      enabled: false
-    shellcheck:
-      enabled: true
-  auto_review:
-    enabled: true
-    ignore_title_keywords:
-      - "[skip review]"
-      - "Automatic PR"
-    drafts: false
-    base_branches:
-      - "main"
-  path_instructions:
-    - path: "**/*.ts"
-      instructions: "Review the TypeScript code of the NPM package to ensure it adheres to the principles of awesome and clean code. This includes proper use of functions, classes, modules. Also, ensure the code follows best practices for package development, such as clear and concise documentation, proper error handling, and efficient data structures and algorithms. The code should also conform to the ESLint rules configured in the codebase. Highlight any deviations and suggest appropriate corrections. Using design patterns that promote code reusability and readability is encouraged."
-    - path: "**/*.md"
-      instructions: "Review the Markdown files to ensure they are well-structured follow Docusaurus's best practices, easy to read, and contain accurate and up-to-date information. Check for proper formatting, grammar, and spelling. Ensure that the content is relevant and engaging for the target audience. Highlight any inconsistencies or errors and suggest improvements to enhance the overall quality of the documentation."
-    - path: "test/**/*"
-      instructions: "Review the test files to ensure they cover all the relevant use cases and edge cases of the codebase. Check for proper test coverage, assertions, and error handling. Ensure that the tests are well-organized, easy to read, and provide meaningful feedback. Highlight any missing or redundant tests and suggest improvements to enhance the overall quality of the test suite."
+    request_changes_workflow: true
+    high_level_summary: true
+    poem: false
+    review_status: true
+    collapse_walkthrough: false
+    profile: assertive
+    tools:
+        markdownlint:
+            enabled: true
+        ast-grep:
+            essential_rules: true
+        github-checks:
+            enabled: true
+            timeout_ms: 90000
+        ruff:
+            enabled: false
+        shellcheck:
+            enabled: true
+    auto_review:
+        enabled: true
+        ignore_title_keywords:
+            - '[skip review]'
+            - 'Automatic PR'
+        drafts: false
+        base_branches:
+            - 'main'
+    path_instructions:
+        - path: '**/*.ts'
+          instructions: 'Review the TypeScript code of the NPM package to ensure it adheres to the principles of awesome and clean code. This includes proper use of functions, classes, modules. Also, ensure the code follows best practices for package development, such as clear and concise documentation, proper error handling, and efficient data structures and algorithms. The code should also conform to the ESLint rules configured in the codebase. Highlight any deviations and suggest appropriate corrections. Using design patterns that promote code reusability and readability is encouraged.'
+        - path: '**/*.md'
+          instructions: "Review the Markdown files to ensure they are well-structured follow Docusaurus's best practices, easy to read, and contain accurate and up-to-date information. Check for proper formatting, grammar, and spelling. Ensure that the content is relevant and engaging for the target audience. Highlight any inconsistencies or errors and suggest improvements to enhance the overall quality of the documentation."
+        - path: 'test/**/*'
+          instructions: 'Review the test files to ensure they cover all the relevant use cases and edge cases of the codebase. Check for proper test coverage, assertions, and error handling. Ensure that the tests are well-organized, easy to read, and provide meaningful feedback. Highlight any missing or redundant tests and suggest improvements to enhance the overall quality of the test suite.'
 chat:
-  auto_reply: true
+    auto_reply: true
 knowledge_base:
-  learnings:
-    scope: auto
-  issues:
-    scope: auto
+    learnings:
+        scope: auto
+    issues:
+        scope: auto
