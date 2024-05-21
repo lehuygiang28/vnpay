@@ -1,7 +1,7 @@
 import { VNPay } from '../src/vnpay';
 import { VnpLocale, ProductCode, VnpCurrCode } from '../src/enums';
 import { BuildPaymentUrl } from '../src/types';
-import { consoleLogger, dateFormat } from '../src/utils';
+import { consoleLogger, dateFormat, ignoreLogger } from '../src/utils';
 
 describe('buildPaymentUrl', () => {
     let vnpay: VNPay;
@@ -13,6 +13,11 @@ describe('buildPaymentUrl', () => {
             tmnCode: 'TEST_TMN_CODE',
             secureSecret: 'test_secret',
             enableLog: true,
+            /**
+             * Ignore log global, since it's for test only
+             * If need test log feature, re-enable it in method scope
+             */
+            loggerFn: ignoreLogger,
         });
         baseInput = {
             vnp_Amount: 1000,
