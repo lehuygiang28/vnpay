@@ -32,7 +32,7 @@ $ pnpm add vnpay
 import { VNPay } from 'vnpay';
 ```
 
-### Khởi tạo đối tượng
+### Khởi tạo đối tượng {#init-vnpay}
 
 ```typescript
 import { ignoreLogger } from 'vnpay';
