@@ -17,20 +17,3 @@ export type DefaultConfig = Pick<
     vnp_TmnCode: string;
     vnp_Locale: VnpLocale;
 };
-
-export type OmitFields<ObjectToDo, Fields extends keyof ObjectToDo> = {
-    type: 'omit';
-    fields: Fields[];
-    loggerFn?: (data: Omit<ObjectToDo, Fields>) => void;
-};
-
-export type PickFields<ObjectToDo, Fields extends keyof ObjectToDo> = {
-    type: 'pick';
-    fields: Fields[];
-    loggerFn?: (data: Pick<ObjectToDo, Fields>) => void;
-};
-
-export type AllFields<ObjectToDo> = {
-    type?: 'all';
-    loggerFn?: (data: ObjectToDo) => void;
-};

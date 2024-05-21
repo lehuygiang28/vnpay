@@ -1,4 +1,5 @@
-import { DefaultConfig, GlobalConfig, OmitFields, AllFields, PickFields } from './common.type';
+import { DefaultConfig, GlobalConfig } from './common.type';
+import { LoggerData, LoggerOptions } from './logger.type';
 
 export type BuildPaymentUrl = {
     /**
@@ -79,16 +80,14 @@ export type BuildPaymentUrl = {
     vnp_BankCode?: string;
 };
 
-export type BuildPaymentUrlLogger = {
-    createdAt: Date;
-    paymentUrl: string;
-} & DefaultConfig &
-    BuildPaymentUrl;
+export type BuildPaymentUrlLogger = LoggerData<
+    {
+        createdAt: Date;
+        paymentUrl: string;
+    } & DefaultConfig &
+        BuildPaymentUrl
+>;
 
 export type BuildPaymentUrlOptions<Fields extends keyof BuildPaymentUrlLogger> = {
     hashInUrl?: boolean;
-    logger:
-        | AllFields<BuildPaymentUrlLogger>
-        | OmitFields<BuildPaymentUrlLogger, Fields>
-        | PickFields<BuildPaymentUrlLogger, Fields>;
-};
+} & LoggerOptions<BuildPaymentUrlLogger, Fields>;
