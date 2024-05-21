@@ -1,47 +1,52 @@
 import { VnpTransactionType } from '../enums';
 import { BuildPaymentUrl } from './build-payment-url.type';
+import { ResultVerified } from './common.type';
+import { LoggerData, LoggerOptions } from './logger.type';
 import { ReturnQueryFromVNPay } from './return-from-vnpay.type';
 
-export type QueryDr = Pick<BuildPaymentUrl, 'vnp_TxnRef' | 'vnp_OrderInfo' | 'vnp_CreateDate'> &
-    Pick<ReturnQueryFromVNPay, 'vnp_TxnRef'> & {
-        /**
-         * Mã hệ thống merchant tự sinh ứng với mỗi yêu cầu truy vấn giao dịch.
-         * Mã này là duy nhất dùng để phân biệt các yêu cầu truy vấn giao dịch. Không được trùng lặp trong ngày.
-         * @en Merchant system code automatically generated for each transaction query request.
-         * This code is unique to distinguish transaction query requests. Not duplicated in a day.
-         *
-         */
-        vnp_RequestId: string;
+export type QueryDr = Required<
+    Pick<BuildPaymentUrl, 'vnp_TxnRef' | 'vnp_OrderInfo' | 'vnp_CreateDate'> &
+        Pick<ReturnQueryFromVNPay, 'vnp_TxnRef'>
+> & {
+    /**
+     * Mã hệ thống merchant tự sinh ứng với mỗi yêu cầu truy vấn giao dịch.
+     * Mã này là duy nhất dùng để phân biệt các yêu cầu truy vấn giao dịch. Không được trùng lặp trong ngày.
+     * @en Merchant system code automatically generated for each transaction query request.
+     * This code is unique to distinguish transaction query requests. Not duplicated in a day.
+     *
+     */
+    vnp_RequestId: string;
 
-        /**
-         * Thời gian ghi nhận giao dịch tại hệ thống của merchant tính theo GMT+7, định dạng: yyyyMMddHHmmss, tham khảo giá trị:
-         * - Thanh toán PAY giống vnp_CreateDate của vnp_Command=pay
-         * - Thanh toán bằng mã Token giống "vnp_create_date" của "vnp_Command=pay_and_create" và "vnp_command=token_pay"
-         *
-         * @en Transaction time recorded at merchant system according to GMT + 7, format: yyyyMMddHHmmss, refer to value:
-         * - PAY payment same as vnp_CreateDate of vnp_Command = pay
-         * - Payment by Token code same as "vnp_create_date" of "vnp_Command = pay_and_create" and "vnp_command = token_pay"
-         */
-        vnp_TransactionDate: number;
+    /**
+     * Thời gian ghi nhận giao dịch tại hệ thống của merchant tính theo GMT+7, định dạng: yyyyMMddHHmmss, tham khảo giá trị:
+     * - Thanh toán PAY giống vnp_CreateDate của vnp_Command=pay
+     * - Thanh toán bằng mã Token giống "vnp_create_date" của "vnp_Command=pay_and_create" và "vnp_command=token_pay"
+     *
+     * @en Transaction time recorded at merchant system according to GMT + 7, format: yyyyMMddHHmmss, refer to value:
+     * - PAY payment same as vnp_CreateDate of vnp_Command = pay
+     * - Payment by Token code same as "vnp_create_date" of "vnp_Command = pay_and_create" and "vnp_command = token_pay"
+     */
+    vnp_TransactionDate: number;
 
-        /**
-         * 	Địa chỉ IP của máy chủ thực hiện gọi API
-         * @en IP address of the server that calls the API
-         */
-        vnp_IpAddr: string;
+    /**
+     * 	Địa chỉ IP của máy chủ thực hiện gọi API
+     * @en IP address of the server that calls the API
+     */
+    vnp_IpAddr: string;
 
-        /**
-         * Mã giao dịch ghi nhận tại hệ thống VNPAY.
-         * @en Transaction code recorded in VNPAY system.
-         * @example 20170829153052
-         */
-        vnp_TransactionNo: number;
-    };
+    /**
+     * Mã giao dịch ghi nhận tại hệ thống VNPAY.
+     * @en Transaction code recorded in VNPAY system.
+     * @example 20170829153052
+     */
+    vnp_TransactionNo: number;
+};
 
 export type BodyRequestQueryDr = QueryDr & {
     vnp_SecureHash: string;
     vnp_TmnCode: string;
     vnp_Command: string;
+    vnp_Version: string;
 };
 
 export type QueryDrResponseFromVNPay = Pick<BuildPaymentUrl, 'vnp_TxnRef' | 'vnp_Amount'> & {
@@ -55,7 +60,7 @@ export type QueryDrResponseFromVNPay = Pick<BuildPaymentUrl, 'vnp_TxnRef' | 'vnp
      * If the API is executed successfully, the value of the response code is 00.
      * To learn more about the response code, refer to the table below.
      */
-    vnp_ResponseCode: number;
+    vnp_ResponseCode: string | number;
 
     /**
      * Loại giao dịch tại hệ thống VNPAY
@@ -125,3 +130,15 @@ export type QueryDrResponseFromVNPay = Pick<BuildPaymentUrl, 'vnp_TxnRef' | 'vnp
     vnp_PromotionAmount?: number;
     vnp_TransactionNo?: number | string;
 };
+
+export type QueryDrResponse = QueryDrResponseFromVNPay & ResultVerified;
+
+export type QueryDrResponseLogger = LoggerData<
+    {
+        createdAt: Date;
+    } & QueryDrResponse
+>;
+
+export type QueryDrResponseOptions<Fields extends keyof QueryDrResponseLogger> = {
+    withHash?: boolean;
+} & LoggerOptions<QueryDrResponseLogger, Fields>;

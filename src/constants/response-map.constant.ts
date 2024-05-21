@@ -1,5 +1,7 @@
 import { VnpLocale } from '../enums';
 
+export const WRONG_CHECKSUM_KEY = 'WRONG_CHECKSUM_KEY';
+
 export const RESPONSE_MAP = new Map<string, Record<VnpLocale, string>>([
     ['00', { vn: 'Giao dịch thành công', en: 'Approved' }],
     ['01', { vn: 'Giao dịch đã tồn tại', en: 'Transaction is already exist' }],
@@ -101,6 +103,7 @@ export const RESPONSE_MAP = new Map<string, Record<VnpLocale, string>>([
             en: 'Banking system is under maintenance',
         },
     ],
+    [WRONG_CHECKSUM_KEY, { vn: 'Sai checksum', en: 'Wrong checksum' }],
     ['default', { vn: 'Giao dịch thất bại', en: 'Failure' }],
 ]);
 
@@ -148,6 +151,7 @@ export const QUERY_DR_RESPONSE_MAP = new Map<string, Record<VnpLocale, string>>(
             en: 'Other errors (remaining errors, not in the list of error codes listed)',
         },
     ],
+    [WRONG_CHECKSUM_KEY, { vn: 'Sai checksum', en: 'Wrong checksum' }],
     ['default', { vn: 'Giao dịch thất bại', en: 'Failure' }],
 ]);
 
@@ -202,6 +206,7 @@ export const REFUND_RESPONSE_MAP = new Map<string, Record<VnpLocale, string>>([
             en: 'Other errors (remaining errors, not in the list of error codes listed)',
         },
     ],
+    [WRONG_CHECKSUM_KEY, { vn: 'Sai checksum', en: 'Wrong checksum' }],
     ['default', { vn: 'Giao dịch thất bại', en: 'Failure' }],
 ]);
 
@@ -250,4 +255,5 @@ export const TRANSACTION_STATUS_RESPONSE_MAP = new Map<string, Record<VnpLocale,
             en: 'Refund transaction is rejected',
         },
     ],
+    [WRONG_CHECKSUM_KEY, { vn: 'Sai checksum', en: 'Wrong checksum' }],
 ]);
