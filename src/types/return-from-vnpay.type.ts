@@ -1,9 +1,12 @@
+import { VnpCardType } from '../enums';
 import { BuildPaymentUrl } from './build-payment-url.type';
 
-export type ReturnQueryFromVNPay = Pick<
-    BuildPaymentUrl,
-    'vnp_Amount' | 'vnp_OrderInfo' | 'vnp_TxnRef'
-> & {
+export type ReturnQueryFromVNPay = Pick<BuildPaymentUrl, 'vnp_OrderInfo' | 'vnp_TxnRef'> & {
+    /**
+     * Số tiền thanh toán
+     */
+    vnp_Amount: number | string;
+
     /**
      * Mã tmn của đối tác
      * @en Merchant tmn code
@@ -29,7 +32,7 @@ export type ReturnQueryFromVNPay = Pick<
      * @en Type of customer account/card used: `ATM`, `QRCODE`
      * @example ATM
      */
-    vnp_CardType?: string;
+    vnp_CardType?: VnpCardType | string;
 
     /**
      * Thời gian thanh toán. Định dạng: yyyyMMddHHmmss
@@ -91,28 +94,3 @@ export type ReturnQueryFromVNPay = Pick<
      */
     vnp_SecureHash?: string;
 };
-
-export type VerifyReturnUrl = ReturnQueryFromVNPay & {
-    /**
-     * Trạng thái giao dịch
-     * @en Transaction status
-     * @example true
-     */
-    isSuccess: boolean;
-
-    /**
-     * Trạng thái xác nhận tính đúng đắn
-     * @en Xác nhận tính đúng đắn thành công
-     * @example true
-     */
-    isVerified: boolean;
-
-    /**
-     * Thông báo lỗi
-     * @en Error message
-     * @example 'Giao dịch thành công'
-     */
-    message: string;
-};
-
-export type VerifyIpnCall = VerifyReturnUrl;
