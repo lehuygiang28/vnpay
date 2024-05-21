@@ -172,4 +172,4 @@ API host url of VNPay
 
 ## Source
 
-[types/vnpay-config.type.ts:3](https://github.com/lehuygiang28/vnpay/blob/ffb3f1a6e2e5cee6cec7ba4f806a92950f9f7872/src/types/vnpay-config.type.ts#L3)
+[types/vnpay-config.type.ts:3](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/types/vnpay-config.type.ts#L3)

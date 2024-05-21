@@ -12,7 +12,7 @@ https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/
 
 #### Source
 
-[enums/product-code.enum.ts:21](https://github.com/lehuygiang28/vnpay/blob/ffb3f1a6e2e5cee6cec7ba4f806a92950f9f7872/src/enums/product-code.enum.ts#L21)
+[enums/product-code.enum.ts:21](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/enums/product-code.enum.ts#L21)
 
 ***
 
@@ -22,7 +22,7 @@ https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/
 
 #### Source
 
-[enums/product-code.enum.ts:10](https://github.com/lehuygiang28/vnpay/blob/ffb3f1a6e2e5cee6cec7ba4f806a92950f9f7872/src/enums/product-code.enum.ts#L10)
+[enums/product-code.enum.ts:10](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/enums/product-code.enum.ts#L10)
 
 ***
 
@@ -32,7 +32,7 @@ https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/
 
 #### Source
 
-[enums/product-code.enum.ts:22](https://github.com/lehuygiang28/vnpay/blob/ffb3f1a6e2e5cee6cec7ba4f806a92950f9f7872/src/enums/product-code.enum.ts#L22)
+[enums/product-code.enum.ts:22](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/enums/product-code.enum.ts#L22)
 
 ***
 
@@ -42,7 +42,7 @@ https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/
 
 #### Source
 
-[enums/product-code.enum.ts:8](https://github.com/lehuygiang28/vnpay/blob/ffb3f1a6e2e5cee6cec7ba4f806a92950f9f7872/src/enums/product-code.enum.ts#L8)
+[enums/product-code.enum.ts:8](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/enums/product-code.enum.ts#L8)
 
 ***
 
@@ -52,7 +52,7 @@ https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/
 
 #### Source
 
-[enums/product-code.enum.ts:13](https://github.com/lehuygiang28/vnpay/blob/ffb3f1a6e2e5cee6cec7ba4f806a92950f9f7872/src/enums/product-code.enum.ts#L13)
+[enums/product-code.enum.ts:13](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/enums/product-code.enum.ts#L13)
 
 ***
 
@@ -62,7 +62,7 @@ https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/
 
 #### Source
 
-[enums/product-code.enum.ts:7](https://github.com/lehuygiang28/vnpay/blob/ffb3f1a6e2e5cee6cec7ba4f806a92950f9f7872/src/enums/product-code.enum.ts#L7)
+[enums/product-code.enum.ts:7](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/enums/product-code.enum.ts#L7)
 
 ***
 
@@ -72,7 +72,7 @@ https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/
 
 #### Source
 
-[enums/product-code.enum.ts:9](https://github.com/lehuygiang28/vnpay/blob/ffb3f1a6e2e5cee6cec7ba4f806a92950f9f7872/src/enums/product-code.enum.ts#L9)
+[enums/product-code.enum.ts:9](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/enums/product-code.enum.ts#L9)
 
 ***
 
@@ -82,7 +82,7 @@ https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/
 
 #### Source
 
-[enums/product-code.enum.ts:14](https://github.com/lehuygiang28/vnpay/blob/ffb3f1a6e2e5cee6cec7ba4f806a92950f9f7872/src/enums/product-code.enum.ts#L14)
+[enums/product-code.enum.ts:14](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/enums/product-code.enum.ts#L14)
 
 ***
 
@@ -92,7 +92,7 @@ https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/
 
 #### Source
 
-[enums/product-code.enum.ts:15](https://github.com/lehuygiang28/vnpay/blob/ffb3f1a6e2e5cee6cec7ba4f806a92950f9f7872/src/enums/product-code.enum.ts#L15)
+[enums/product-code.enum.ts:15](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/enums/product-code.enum.ts#L15)
 
 ***
 
@@ -102,7 +102,7 @@ https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/
 
 #### Source
 
-[enums/product-code.enum.ts:5](https://github.com/lehuygiang28/vnpay/blob/ffb3f1a6e2e5cee6cec7ba4f806a92950f9f7872/src/enums/product-code.enum.ts#L5)
+[enums/product-code.enum.ts:5](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/enums/product-code.enum.ts#L5)
 
 ***
 
@@ -112,7 +112,7 @@ https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/
 
 #### Source
 
-[enums/product-code.enum.ts:16](https://github.com/lehuygiang28/vnpay/blob/ffb3f1a6e2e5cee6cec7ba4f806a92950f9f7872/src/enums/product-code.enum.ts#L16)
+[enums/product-code.enum.ts:16](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/enums/product-code.enum.ts#L16)
 
 ***
 
@@ -122,7 +122,7 @@ https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/
 
 #### Source
 
-[enums/product-code.enum.ts:12](https://github.com/lehuygiang28/vnpay/blob/ffb3f1a6e2e5cee6cec7ba4f806a92950f9f7872/src/enums/product-code.enum.ts#L12)
+[enums/product-code.enum.ts:12](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/enums/product-code.enum.ts#L12)
 
 ***
 
@@ -132,7 +132,7 @@ https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/
 
 #### Source
 
-[enums/product-code.enum.ts:18](https://github.com/lehuygiang28/vnpay/blob/ffb3f1a6e2e5cee6cec7ba4f806a92950f9f7872/src/enums/product-code.enum.ts#L18)
+[enums/product-code.enum.ts:18](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/enums/product-code.enum.ts#L18)
 
 ***
 
@@ -142,7 +142,7 @@ https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/
 
 #### Source
 
-[enums/product-code.enum.ts:17](https://github.com/lehuygiang28/vnpay/blob/ffb3f1a6e2e5cee6cec7ba4f806a92950f9f7872/src/enums/product-code.enum.ts#L17)
+[enums/product-code.enum.ts:17](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/enums/product-code.enum.ts#L17)
 
 ***
 
@@ -152,7 +152,7 @@ https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/
 
 #### Source
 
-[enums/product-code.enum.ts:24](https://github.com/lehuygiang28/vnpay/blob/ffb3f1a6e2e5cee6cec7ba4f806a92950f9f7872/src/enums/product-code.enum.ts#L24)
+[enums/product-code.enum.ts:24](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/enums/product-code.enum.ts#L24)
 
 ***
 
@@ -162,7 +162,7 @@ https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/
 
 #### Source
 
-[enums/product-code.enum.ts:20](https://github.com/lehuygiang28/vnpay/blob/ffb3f1a6e2e5cee6cec7ba4f806a92950f9f7872/src/enums/product-code.enum.ts#L20)
+[enums/product-code.enum.ts:20](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/enums/product-code.enum.ts#L20)
 
 ***
 
@@ -172,7 +172,7 @@ https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/
 
 #### Source
 
-[enums/product-code.enum.ts:23](https://github.com/lehuygiang28/vnpay/blob/ffb3f1a6e2e5cee6cec7ba4f806a92950f9f7872/src/enums/product-code.enum.ts#L23)
+[enums/product-code.enum.ts:23](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/enums/product-code.enum.ts#L23)
 
 ***
 
@@ -182,7 +182,7 @@ https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/
 
 #### Source
 
-[enums/product-code.enum.ts:6](https://github.com/lehuygiang28/vnpay/blob/ffb3f1a6e2e5cee6cec7ba4f806a92950f9f7872/src/enums/product-code.enum.ts#L6)
+[enums/product-code.enum.ts:6](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/enums/product-code.enum.ts#L6)
 
 ***
 
@@ -192,7 +192,7 @@ https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/
 
 #### Source
 
-[enums/product-code.enum.ts:11](https://github.com/lehuygiang28/vnpay/blob/ffb3f1a6e2e5cee6cec7ba4f806a92950f9f7872/src/enums/product-code.enum.ts#L11)
+[enums/product-code.enum.ts:11](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/enums/product-code.enum.ts#L11)
 
 ***
 
@@ -202,4 +202,4 @@ https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/
 
 #### Source
 
-[enums/product-code.enum.ts:19](https://github.com/lehuygiang28/vnpay/blob/ffb3f1a6e2e5cee6cec7ba4f806a92950f9f7872/src/enums/product-code.enum.ts#L19)
+[enums/product-code.enum.ts:19](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/enums/product-code.enum.ts#L19)

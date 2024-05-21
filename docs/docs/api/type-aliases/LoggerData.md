@@ -20,4 +20,4 @@ The type of the data object.
 
 ## Source
 
-[types/logger.type.ts:11](https://github.com/lehuygiang28/vnpay/blob/ffb3f1a6e2e5cee6cec7ba4f806a92950f9f7872/src/types/logger.type.ts#L11)
+[types/logger.type.ts:11](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/types/logger.type.ts#L11)
