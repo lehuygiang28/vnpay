@@ -1,0 +1,9 @@
+node_modules/
+dist/
+lib/
+
+docs/.docusaurus/
+docs/build/
+docs/node_modules/
+
+.DS_Store

@@ -24,9 +24,14 @@ Thông tin sau khi xác thực và của VNPay trả về
 Giống với các thuộc tính của đối tượng [`VerifyIpnCall`](./verify-ipn-call.md#các-thuộc-tính-của-đối-tượng-verifyipncall)
 :::
 
-## Sử dụng trong Express
+## Sử dụng
 
-### Với MVC
+### Sử dụng logger
+
+-   Tương tự như khi tạo URL thanh toán, bạn có thể sử dụng logger để ghi log thông tin xác thực return URL
+    [xem tại đây](./create-payment-url.md#use-logger).
+
+### Với Express MVC
 
 Các bước xác thực URL trả về trong Express với MVC:
 

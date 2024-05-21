@@ -24,7 +24,13 @@ const paymentUrl = vnpay.buildPaymentUrl({
 });
 ```
 
-## Các thuộc tính
+## API
+
+```ts
+buildPaymentUrl(params: BuildPaymentUrl, options?: BuildPaymentUrlOptions): string
+```
+
+### Các thuộc tính của `BuildPaymentUrl` {#build-payment-url}
 
 | Thuộc tính    | Mô tả                                          | Ghi chú                                                                                                                                                                                       |
 | ------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -38,9 +44,76 @@ const paymentUrl = vnpay.buildPaymentUrl({
 
 Xem thêm các thuộc tính khác tại [VNPay](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91).
 
-## Sử dụng trong Express
+### Các thuộc tính của `BuildPaymentUrlOptions` {#build-payment-url-options}
 
-### Với MVC
+| Thuộc tính | Kiểu dữ liệu                     | Mô tả                         | Ghi chú  |
+| ---------- | -------------------------------- | ----------------------------- | -------- |
+| withHash   | boolean                          | Cho phép `paymentUrl` có hash | Tùy chọn |
+| logger     | [LoggerOptions](#logger-options) | Các option ghi log            | Tùy chọn |
+
+#### `LoggerOptions` {#logger-options}
+
+| Thuộc tính | Kiểu dữ liệu | Mô tả                                                       | Ghi chú                       |
+| ---------- | ------------ | ----------------------------------------------------------- | ----------------------------- |
+| type       | string       | Chế độ chọn trường log, có thể là `pick`, `omit` hoặc `all` | `all` hoặc `pick` hoặc `omit` |
+| fields     | string[]     | Chọn các trường cần hoặc không cần log, tùy theo `type`     | Tùy chọn                      |
+| loggerFn   | Function     | Hàm ghi log, nhận vào một object và thực thi                | Tùy chọn                      |
+
+## Sử dụng
+
+### Sử dụng logger {#use-logger}
+
+```typescript
+import { ProductCode, VnpLocale, consoleLogger } from 'vnpay';
+
+/* ... */
+
+const paymentUrl = vnpay.buildPaymentUrl(
+    {
+        vnp_Amount: 10000,
+        vnp_IpAddr: '1.1.1.1',
+        vnp_TxnRef: '123456',
+        vnp_OrderInfo: 'Payment for order 123456',
+        vnp_OrderType: ProductCode.Other,
+        vnp_ReturnUrl: `http://localhost:${port}/vnpay-return`,
+    },
+    {
+        logger: {
+            type: 'pick', // Chế độ chọn trường log, có thể là 'pick', 'omit' hoặc 'all'
+            fields: ['createdAt', 'method', 'paymentUrl'], // Chọn các trường cần log
+            loggerFn: consoleLogger, // Log dữ liệu ra console, có thể thay bằng hàm khác
+        },
+    },
+);
+```
+
+### Sử dụng custom logger
+
+```typescript
+import { ProductCode, VnpLocale, consoleLogger } from 'vnpay';
+
+/* ... */
+
+const paymentUrl = vnpay.buildPaymentUrl(
+    {
+        vnp_Amount: 10000,
+        vnp_IpAddr: '1.1.1.1',
+        vnp_TxnRef: '123456',
+        vnp_OrderInfo: 'Payment for order 123456',
+        vnp_OrderType: ProductCode.Other,
+        vnp_ReturnUrl: `http://localhost:${port}/vnpay-return`,
+    },
+    {
+        logger: {
+            type: 'pick', // Chế độ chọn trường log, có thể là 'pick', 'omit' hoặc 'all'
+            fields: ['createdAt', 'method', 'paymentUrl'], // Chọn các trường cần log
+            loggerFn: (data) => logToDatabase(data), // Hàm lưu log vào database, bạn cần tự cài đặt
+        },
+    },
+);
+```
+
+### Với Express MVC
 
 Các bước tạo URL thanh toán trong Express với MVC:
 
@@ -74,7 +147,7 @@ app.post('/order', async (req, res) => {
 });
 ```
 
-### Với API
+### Với Express API
 
 Các bước tạo URL thanh toán trong Express với API:
 

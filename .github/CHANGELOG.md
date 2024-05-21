@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [1.1.1] - 2024-05-02
 
-- Update docs, fix typos in examples
+-   Update docs, fix typos in examples
 
 ## [1.1.0] - 2024-03-21
 

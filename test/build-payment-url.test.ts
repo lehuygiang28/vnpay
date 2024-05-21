@@ -1,8 +1,7 @@
 import { VNPay } from '../src/vnpay';
-import { VnpLocale } from '../src/enums';
-import { ProductCode } from '../src/constants';
+import { VnpLocale, ProductCode, VnpCurrCode } from '../src/enums';
 import { BuildPaymentUrl } from '../src/types';
-import { dateFormat } from '../src/utils';
+import { consoleLogger, dateFormat, ignoreLogger } from '../src/utils';
 
 describe('buildPaymentUrl', () => {
     let vnpay: VNPay;
@@ -13,6 +12,12 @@ describe('buildPaymentUrl', () => {
             vnpayHost: 'http://sandbox.vnpayment.vn',
             tmnCode: 'TEST_TMN_CODE',
             secureSecret: 'test_secret',
+            enableLog: true,
+            /**
+             * Ignore log global, since it's for test only
+             * If need test log feature, re-enable it in method scope
+             */
+            loggerFn: ignoreLogger,
         });
         baseInput = {
             vnp_Amount: 1000,
@@ -20,7 +25,7 @@ describe('buildPaymentUrl', () => {
             vnp_TxnRef: 'ref1234567',
             vnp_IpAddr: '127.0.0.1',
             vnp_ReturnUrl: 'https://example.com/return',
-            vnp_CurrCode: 'VND',
+            vnp_CurrCode: VnpCurrCode.VND,
             vnp_Locale: VnpLocale.VN,
             vnp_OrderType: ProductCode.Other,
             vnp_BankCode: 'NCB',
@@ -147,5 +152,88 @@ describe('buildPaymentUrl', () => {
         const result = vnpay.buildPaymentUrl(input);
 
         expect(result).toContain(`vnp_CreateDate=${currentTime}`);
+    });
+
+    it('should log the object to the console', () => {
+        // Arrange
+        const input: BuildPaymentUrl = { ...baseInput };
+        const consoleLogMock = jest.spyOn(console, 'log').mockImplementation();
+
+        // Act
+        vnpay.buildPaymentUrl(input, {
+            logger: {
+                loggerFn: consoleLogger,
+            },
+        });
+
+        // Assert
+        expect(consoleLogMock).toHaveBeenCalledTimes(1);
+        expect(consoleLogMock).toHaveBeenCalledWith(
+            expect.objectContaining({
+                paymentUrl: expect.any(String),
+                createdAt: expect.any(Date),
+                vnp_Amount: expect.any(Number),
+            }),
+        );
+        consoleLogMock.mockRestore();
+    });
+
+    it('should log the object with only one field is `paymentUrl`', () => {
+        // Arrange
+        const input: BuildPaymentUrl = { ...baseInput };
+        const consoleLogMock = jest.spyOn(console, 'log').mockImplementation();
+
+        // Act
+        vnpay.buildPaymentUrl(input, {
+            logger: {
+                type: 'pick',
+                fields: ['paymentUrl'],
+                loggerFn(data) {
+                    console.log(data);
+                },
+            },
+        });
+
+        // Assert
+        expect(consoleLogMock).toHaveBeenCalledTimes(1);
+        expect(consoleLogMock).toHaveBeenCalledWith(
+            expect.objectContaining({ paymentUrl: expect.any(String) }),
+        );
+        expect(consoleLogMock).toHaveBeenCalledWith({ paymentUrl: expect.any(String) });
+        consoleLogMock.mockRestore();
+    });
+
+    it('should log the object with other fields except `paymentUrl`', () => {
+        // Arrange
+        const input: BuildPaymentUrl = { ...baseInput };
+        const consoleLogMock = jest.spyOn(console, 'log').mockImplementation();
+
+        // Act
+        vnpay.buildPaymentUrl(input, {
+            logger: {
+                type: 'omit',
+                fields: ['paymentUrl'],
+                loggerFn(data) {
+                    console.log(data);
+                },
+            },
+        });
+
+        // Assert
+        expect(consoleLogMock).toHaveBeenCalledTimes(1);
+        expect(consoleLogMock).toHaveBeenCalledWith(
+            expect.not.objectContaining({ paymentUrl: expect.any(String) }),
+        );
+        expect(consoleLogMock).toHaveBeenCalledWith(
+            expect.objectContaining({
+                createdAt: expect.any(Date),
+                vnp_TmnCode: expect.any(String),
+                vnp_Version: expect.any(String),
+                vnp_Locale: expect.any(String),
+                vnp_Command: expect.any(String),
+                vnp_Amount: expect.any(Number),
+            }),
+        );
+        consoleLogMock.mockRestore();
     });
 });
