@@ -19,6 +19,11 @@ export enum VnpLocale {
     EN = 'en',
 }
 
+export enum VnpCardType {
+    ATM = 'ATM',
+    QRCODE = 'QRCODE',
+}
+
 export enum VnpTransactionType {
     PAYMENT = '01',
     FULL_REFUND = '02',
