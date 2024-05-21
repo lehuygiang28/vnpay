@@ -8,7 +8,7 @@
 
 #### Source
 
-[enums/index.ts:29](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/enums/index.ts#L29)
+[enums/index.ts:29](https://github.com/lehuygiang28/vnpay/blob/e5d2c2c4802c32c8fbad34e0595b2cfeb2281905/src/enums/index.ts#L29)
 
 ***
 
@@ -18,7 +18,7 @@
 
 #### Source
 
-[enums/index.ts:30](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/enums/index.ts#L30)
+[enums/index.ts:30](https://github.com/lehuygiang28/vnpay/blob/e5d2c2c4802c32c8fbad34e0595b2cfeb2281905/src/enums/index.ts#L30)
 
 ***
 
@@ -28,4 +28,4 @@
 
 #### Source
 
-[enums/index.ts:28](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/enums/index.ts#L28)
+[enums/index.ts:28](https://github.com/lehuygiang28/vnpay/blob/e5d2c2c4802c32c8fbad34e0595b2cfeb2281905/src/enums/index.ts#L28)

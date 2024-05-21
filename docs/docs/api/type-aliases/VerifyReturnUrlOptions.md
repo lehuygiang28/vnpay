@@ -14,4 +14,4 @@
 
 ## Source
 
-[types/verify-return-url.type.ts:34](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/types/verify-return-url.type.ts#L34)
+[types/verify-return-url.type.ts:34](https://github.com/lehuygiang28/vnpay/blob/e5d2c2c4802c32c8fbad34e0595b2cfeb2281905/src/types/verify-return-url.type.ts#L34)

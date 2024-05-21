@@ -167,4 +167,4 @@ Reference code of transaction on merchant system. This code is unique to disting
 
 ## Source
 
-[types/build-payment-url.type.ts:4](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/types/build-payment-url.type.ts#L4)
+[types/build-payment-url.type.ts:4](https://github.com/lehuygiang28/vnpay/blob/e5d2c2c4802c32c8fbad34e0595b2cfeb2281905/src/types/build-payment-url.type.ts#L4)

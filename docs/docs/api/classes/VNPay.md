@@ -50,7 +50,7 @@ const urlString = vnpay.buildPaymentUrl({
 
 #### Source
 
-[vnpay.ts:75](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/vnpay.ts#L75)
+[vnpay.ts:75](https://github.com/lehuygiang28/vnpay/blob/e5d2c2c4802c32c8fbad34e0595b2cfeb2281905/src/vnpay.ts#L75)
 
 ## Properties
 
@@ -60,7 +60,7 @@ const urlString = vnpay.buildPaymentUrl({
 
 #### Source
 
-[vnpay.ts:71](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/vnpay.ts#L71)
+[vnpay.ts:71](https://github.com/lehuygiang28/vnpay/blob/e5d2c2c4802c32c8fbad34e0595b2cfeb2281905/src/vnpay.ts#L71)
 
 ***
 
@@ -70,7 +70,7 @@ const urlString = vnpay.buildPaymentUrl({
 
 #### Source
 
-[vnpay.ts:70](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/vnpay.ts#L70)
+[vnpay.ts:70](https://github.com/lehuygiang28/vnpay/blob/e5d2c2c4802c32c8fbad34e0595b2cfeb2281905/src/vnpay.ts#L70)
 
 ***
 
@@ -80,7 +80,7 @@ const urlString = vnpay.buildPaymentUrl({
 
 #### Source
 
-[vnpay.ts:69](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/vnpay.ts#L69)
+[vnpay.ts:69](https://github.com/lehuygiang28/vnpay/blob/e5d2c2c4802c32c8fbad34e0595b2cfeb2281905/src/vnpay.ts#L69)
 
 ***
 
@@ -90,7 +90,7 @@ const urlString = vnpay.buildPaymentUrl({
 
 #### Source
 
-[vnpay.ts:72](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/vnpay.ts#L72)
+[vnpay.ts:72](https://github.com/lehuygiang28/vnpay/blob/e5d2c2c4802c32c8fbad34e0595b2cfeb2281905/src/vnpay.ts#L72)
 
 ## Accessors
 
@@ -110,7 +110,7 @@ Get default config of VNPay
 
 #### Source
 
-[vnpay.ts:118](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/vnpay.ts#L118)
+[vnpay.ts:118](https://github.com/lehuygiang28/vnpay/blob/e5d2c2c4802c32c8fbad34e0595b2cfeb2281905/src/vnpay.ts#L118)
 
 ## Methods
 
@@ -148,7 +148,7 @@ https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#tao-url-thanh-toa
 
 #### Source
 
-[vnpay.ts:162](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/vnpay.ts#L162)
+[vnpay.ts:162](https://github.com/lehuygiang28/vnpay/blob/e5d2c2c4802c32c8fbad34e0595b2cfeb2281905/src/vnpay.ts#L162)
 
 ***
 
@@ -162,7 +162,7 @@ https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#tao-url-thanh-toa
 
 #### Source
 
-[vnpay.ts:129](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/vnpay.ts#L129)
+[vnpay.ts:129](https://github.com/lehuygiang28/vnpay/blob/e5d2c2c4802c32c8fbad34e0595b2cfeb2281905/src/vnpay.ts#L129)
 
 ***
 
@@ -180,7 +180,7 @@ https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#tao-url-thanh-toa
 
 #### Source
 
-[vnpay.ts:73](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/vnpay.ts#L73)
+[vnpay.ts:73](https://github.com/lehuygiang28/vnpay/blob/e5d2c2c4802c32c8fbad34e0595b2cfeb2281905/src/vnpay.ts#L73)
 
 ***
 
@@ -206,7 +206,7 @@ https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#tao-url-thanh-toa
 
 #### Source
 
-[vnpay.ts:532](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/vnpay.ts#L532)
+[vnpay.ts:532](https://github.com/lehuygiang28/vnpay/blob/e5d2c2c4802c32c8fbad34e0595b2cfeb2281905/src/vnpay.ts#L532)
 
 ***
 
@@ -238,7 +238,7 @@ https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#tr
 
 #### Source
 
-[vnpay.ts:348](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/vnpay.ts#L348)
+[vnpay.ts:348](https://github.com/lehuygiang28/vnpay/blob/e5d2c2c4802c32c8fbad34e0595b2cfeb2281905/src/vnpay.ts#L348)
 
 ***
 
@@ -405,7 +405,7 @@ https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#ho
 
 #### Source
 
-[vnpay.ts:444](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/vnpay.ts#L444)
+[vnpay.ts:444](https://github.com/lehuygiang28/vnpay/blob/e5d2c2c4802c32c8fbad34e0595b2cfeb2281905/src/vnpay.ts#L444)
 
 ***
 
@@ -451,7 +451,7 @@ https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#code-ipn-url
 
 #### Source
 
-[vnpay.ts:316](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/vnpay.ts#L316)
+[vnpay.ts:316](https://github.com/lehuygiang28/vnpay/blob/e5d2c2c4802c32c8fbad34e0595b2cfeb2281905/src/vnpay.ts#L316)
 
 ***
 
@@ -489,4 +489,4 @@ https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#code-returnurl
 
 #### Source
 
-[vnpay.ts:232](https://github.com/lehuygiang28/vnpay/blob/e8e94e8a800b1952e47648e8b76237a738bccbb7/src/vnpay.ts#L232)
+[vnpay.ts:232](https://github.com/lehuygiang28/vnpay/blob/e5d2c2c4802c32c8fbad34e0595b2cfeb2281905/src/vnpay.ts#L232)
