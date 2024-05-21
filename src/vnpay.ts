@@ -206,7 +206,7 @@ export class VNPay {
             const data2Log: BuildPaymentUrlLogger = {
                 createdAt: new Date(),
                 method: this.buildPaymentUrl.name,
-                paymentUrl: options?.hashInUrl
+                paymentUrl: options?.withHash
                     ? redirectUrl.toString()
                     : (() => {
                           const cloneUrl = new URL(redirectUrl.toString());

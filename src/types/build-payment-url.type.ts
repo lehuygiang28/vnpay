@@ -89,5 +89,5 @@ export type BuildPaymentUrlLogger = LoggerData<
 >;
 
 export type BuildPaymentUrlOptions<Fields extends keyof BuildPaymentUrlLogger> = {
-    hashInUrl?: boolean;
+    withHash?: boolean;
 } & LoggerOptions<BuildPaymentUrlLogger, Fields>;
