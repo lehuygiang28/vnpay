@@ -65,6 +65,9 @@ export type VNPayConfig = {
     /**
      * Bật chức năng logging
      *
+     *
+     * Disable it, then no logger will be used in any method
+     *
      * @en Enable logging feature
      * @default false
      */
