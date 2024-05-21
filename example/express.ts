@@ -1,5 +1,4 @@
 import express, { Request, Response } from 'express';
-import portfinder from 'portfinder';
 import { VNPay } from '../src/vnpay';
 import { ReturnQueryFromVNPay, VerifyReturnUrl } from '../src/types';
 import {
@@ -12,9 +11,10 @@ import {
     InpOrderAlreadyConfirmed,
 } from '../src/constants';
 import { HashAlgorithm, ProductCode } from '../src/enums';
+import { consoleLogger, ignoreLogger } from '../src/utils';
 
 const app = express();
-let portToListen = 3000;
+const port = 3000;
 
 const vnpay = new VNPay({
     tmnCode: '2QXUI4B4',
@@ -22,10 +22,22 @@ const vnpay = new VNPay({
     vnpayHost: 'https://sandbox.vnpayment.vn',
     testMode: true, // optional
     hashAlgorithm: HashAlgorithm.SHA512, // optional
+
+    /**
+     * Use enableLog if you want to log
+     * Disable it, then no logger will be used in any method
+     */
+    enableLog: true, // optional
+
+    /**
+     * Use ignoreLogger if you don't want to log console globally,
+     * Then you still re-use loggerFn in each method that allow you to log
+     */
+    loggerFn: ignoreLogger, // optional
 });
 
 app.get('/', (req: Request, res: Response) => {
-    return res.json({ port: portToListen, message: 'Hello World!' });
+    return res.json({ port: port, message: 'Hello World!' });
 });
 
 /**
@@ -35,14 +47,23 @@ app.get('/payment-url', (req: Request, res: Response) => {
     /**
      * This data is hard-coded for example, you can get it from the body or query of the request
      */
-    const urlString = vnpay.buildPaymentUrl({
-        vnp_Amount: 10000,
-        vnp_IpAddr: '1.1.1.1',
-        vnp_TxnRef: '123456',
-        vnp_OrderInfo: 'Payment for order 123456',
-        vnp_OrderType: ProductCode.Other,
-        vnp_ReturnUrl: `http://localhost:${portToListen}/vnpay-return`,
-    });
+    const urlString = vnpay.buildPaymentUrl(
+        {
+            vnp_Amount: 10000,
+            vnp_IpAddr: '1.1.1.1',
+            vnp_TxnRef: '123456',
+            vnp_OrderInfo: 'Payment for order 123456',
+            vnp_OrderType: ProductCode.Other,
+            vnp_ReturnUrl: `http://localhost:${port}/vnpay-return`,
+        },
+        {
+            logger: {
+                type: 'pick',
+                fields: ['createdAt', 'method', 'paymentUrl'], // Select fields want to log
+                loggerFn: consoleLogger, // Log to console, or use your custom logger
+            },
+        },
+    );
     // redirect to payment url if you use a server like MVC or SSR
     // res.redirect(urlString);
 
@@ -59,7 +80,15 @@ app.get(
     '/vnpay-ipn',
     (req: Request<any, any, any, ReturnQueryFromVNPay>, res: Response<IpnResponse>) => {
         try {
-            const verify: VerifyReturnUrl = vnpay.verifyIpnCall({ ...req.query });
+            const verify: VerifyReturnUrl = vnpay.verifyIpnCall(
+                { ...req.query },
+                {
+                    logger: {
+                        type: 'all', // Log all fields
+                        loggerFn: consoleLogger,
+                    },
+                },
+            );
             if (!verify.isVerified) {
                 return res.json(IpnFailChecksum);
             }
@@ -108,7 +137,16 @@ app.get(
 app.get('/vnpay-return', (req: Request<any, any, any, ReturnQueryFromVNPay>, res: Response) => {
     let verify: VerifyReturnUrl;
     try {
-        verify = vnpay.verifyReturnUrl({ ...req.query });
+        verify = vnpay.verifyReturnUrl(
+            { ...req.query },
+            {
+                logger: {
+                    type: 'pick',
+                    fields: ['createdAt', 'method', 'isVerified', 'message'], // Select fields want to log
+                    loggerFn: (data) => console.log(data), // Log to console, or use your custom logger
+                },
+            },
+        );
         if (!verify.isVerified) {
             return res.status(200).json({
                 message: verify?.message ?? 'Payment failed!',
@@ -126,15 +164,7 @@ app.get('/vnpay-return', (req: Request<any, any, any, ReturnQueryFromVNPay>, res
     });
 });
 
-// Use portfinder to find an open port to listen on
-portfinder.getPort({ port: portToListen }, (err, port) => {
-    if (err) {
-        console.log(err);
-    } else {
-        app.listen(port, () => {
-            console.log(`Example app listening on port ${port}!`);
-            console.log(`Goto http://localhost:${port}/payment-url to get the sample payment url`);
-            portToListen = port;
-        });
-    }
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}!`);
+    console.log(`Goto http://localhost:${port}/payment-url to get the sample payment url`);
 });
