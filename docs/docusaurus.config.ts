@@ -122,6 +122,19 @@ const config: Config = {
                 mode: 'auto',
             },
         ],
+        [
+            'docusaurus-plugin-typedoc',
+            {
+                entryPoints: ['../src/index.ts'],
+                tsconfig: '../tsconfig.doc.json',
+                out: './docs/api',
+                readme: 'none',
+                mergeReadme: false,
+                hideBreadcrumbs: true,
+                hidePageHeader: true,
+                entryFileName: 'index.md',
+            },
+        ],
     ],
     scripts: [
         {
