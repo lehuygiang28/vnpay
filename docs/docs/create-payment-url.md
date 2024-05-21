@@ -30,7 +30,7 @@ const paymentUrl = vnpay.buildPaymentUrl({
 buildPaymentUrl(params: BuildPaymentUrl, options?: BuildPaymentUrlOptions): string
 ```
 
-### Các thuộc tính của `BuildPaymentUrl`
+### Các thuộc tính của `BuildPaymentUrl` {#build-payment-url}
 
 | Thuộc tính    | Mô tả                                          | Ghi chú                                                                                                                                                                                       |
 | ------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -44,12 +44,20 @@ buildPaymentUrl(params: BuildPaymentUrl, options?: BuildPaymentUrlOptions): stri
 
 Xem thêm các thuộc tính khác tại [VNPay](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91).
 
-### Các thuộc tính của `BuildPaymentUrlOptions`
+### Các thuộc tính của `BuildPaymentUrlOptions` {#build-payment-url-options}
 
-| Thuộc tính | Kiểu dữ liệu                                         | Mô tả                         | Ghi chú  |
-| ---------- | ---------------------------------------------------- | ----------------------------- | -------- |
-| withHash   | boolean                                              | Cho phép `paymentUrl` có hash | Tùy chọn |
-| logger     | [LoggerOptions](./api/type-aliases/LoggerOptions.md) | Các option ghi log            | Tùy chọn |
+| Thuộc tính | Kiểu dữ liệu                     | Mô tả                         | Ghi chú  |
+| ---------- | -------------------------------- | ----------------------------- | -------- |
+| withHash   | boolean                          | Cho phép `paymentUrl` có hash | Tùy chọn |
+| logger     | [LoggerOptions](#logger-options) | Các option ghi log            | Tùy chọn |
+
+#### `LoggerOptions` {#logger-options}
+
+| Thuộc tính | Kiểu dữ liệu | Mô tả                                                       | Ghi chú                       |
+| ---------- | ------------ | ----------------------------------------------------------- | ----------------------------- |
+| type       | string       | Chế độ chọn trường log, có thể là `pick`, `omit` hoặc `all` | `all` hoặc `pick` hoặc `omit` |
+| fields     | string[]     | Chọn các trường cần hoặc không cần log, tùy theo `type`     | Tùy chọn                      |
+| loggerFn   | Function     | Hàm ghi log, nhận vào một object và thực thi                | Tùy chọn                      |
 
 ## Sử dụng
 
