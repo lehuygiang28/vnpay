@@ -33,7 +33,14 @@ Xem thêm các thuộc tính VNPay sẽ trả về tại [VNPay](https://sandbox
 Các tham số mà VNPay trả về cũng nằm trong đối tượng `VerifyIpnCall`.
 :::
 
-## Sử dụng trong Express
+## Sử dụng
+
+### Sử dụng logger
+
+-   Tương tự như khi tạo URL thanh toán, bạn có thể sử dụng logger để ghi log thông tin xác thực IPN
+    [xem tại đây](./create-payment-url.md#use-logger).
+
+### Với Express
 
 Các bước xác thực URL trả về trong Express:
 
