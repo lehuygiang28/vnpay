@@ -1,6 +1,11 @@
+import timezone from 'moment-timezone';
 import { RESPONSE_MAP } from '../constants/response-map.constant';
 import { HashAlgorithm, VnpLocale } from '../enums';
 import crypto, { BinaryLike } from 'crypto';
+
+export function getDateInGMT7(date: Date): Date {
+    return timezone(new Date()).tz('Asia/Ho_Chi_Minh').toDate();
+}
 
 /**
  * Định dạng lại ngày theo định dạng của VNPay, mặc định là yyyyMMddHHmmss

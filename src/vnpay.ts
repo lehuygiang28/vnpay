@@ -9,6 +9,7 @@ import {
     REFUND_RESPONSE_MAP,
     GET_BANK_LIST_ENDPOINT,
     numberRegex,
+    WRONG_CHECKSUM_KEY,
 } from './constants';
 import { HashAlgorithm, VnpCurrCode, VnpLocale, ProductCode } from './enums';
 import {
@@ -31,7 +32,14 @@ import {
     VerifyIpnCallLogger,
     VerifyIpnCallOptions,
 } from './types';
-import { QueryDr, BodyRequestQueryDr, QueryDrResponseFromVNPay } from './types/query-dr.type';
+import {
+    QueryDr,
+    BodyRequestQueryDr,
+    QueryDrResponseFromVNPay,
+    QueryDrResponse,
+    QueryDrResponseLogger,
+    QueryDrResponseOptions,
+} from './types/query-dr.type';
 import { Refund, RefundResponse } from './types/refund.type';
 import { Bank } from './types/bank.type';
 import { DefaultConfig, GlobalConfig } from './types/common.type';
@@ -339,13 +347,17 @@ export class VNPay {
 
     /**
      * Đây là API để hệ thống merchant truy vấn kết quả thanh toán của giao dịch tại hệ thống VNPAY.
+     *
      * @en This is the API for the merchant system to query the payment result of the transaction at the VNPAY system.
      *
-     * @param {QueryDr} query - The data to query
-     * @returns {Promise<QueryDrResponseFromVNPay>} The data return from VNPay
+     * @param {QueryDr} query - The data to query payment result
+     * @returns {Promise<QueryDrResponse>} The data return from VNPay and after verified
      * @see https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#truy-van-ket-qua-thanh-toan-PAY
      */
-    public async queryDr(query: QueryDr): Promise<QueryDrResponseFromVNPay> {
+    public async queryDr<LoggerFields extends keyof QueryDrResponseLogger>(
+        query: QueryDr,
+        options?: QueryDrResponseOptions<LoggerFields>,
+    ): Promise<QueryDrResponse> {
         const command = 'querydr';
         const dataQuery = {
             vnp_Version: this.globalDefaultConfig.vnp_Version ?? VNP_VERSION,
@@ -359,14 +371,14 @@ export class VNPay {
             ),
         );
 
-        const stringToCheckSum =
+        const stringToCreateHash =
             `${dataQuery.vnp_RequestId}|${dataQuery.vnp_Version}|${command}` +
             `|${this.globalDefaultConfig.tmnCode}|${dataQuery.vnp_TxnRef}|${dataQuery.vnp_TransactionDate}` +
             `|${dataQuery.vnp_CreateDate}|${dataQuery.vnp_IpAddr}|${dataQuery.vnp_OrderInfo}`;
 
-        const signed = hash(
+        const requestHashed = hash(
             this.globalDefaultConfig.secureSecret,
-            Buffer.from(stringToCheckSum, this.BUFFER_ENCODE),
+            Buffer.from(stringToCreateHash, this.BUFFER_ENCODE),
             this.HASH_ALGORITHM,
         );
 
@@ -374,7 +386,7 @@ export class VNPay {
             ...dataQuery,
             vnp_Command: command,
             vnp_TmnCode: this.globalDefaultConfig.tmnCode,
-            vnp_SecureHash: signed,
+            vnp_SecureHash: requestHashed,
         };
 
         const response = await fetch(url.toString(), {
@@ -391,46 +403,55 @@ export class VNPay {
 
         const responseData = (await response.json()) as QueryDrResponseFromVNPay;
 
-        if (
-            Number(responseData.vnp_ResponseCode) >= 90 &&
-            Number(responseData.vnp_ResponseCode) <= 99
-        ) {
-            return {
-                ...responseData,
-                vnp_Message: getResponseByStatusCode(
-                    responseData.vnp_ResponseCode?.toString(),
-                    this.globalDefaultConfig.vnp_Locale,
-                    QUERY_DR_RESPONSE_MAP,
-                ),
-            };
-        }
+        const message = getResponseByStatusCode(
+            responseData.vnp_ResponseCode?.toString() ?? '',
+            this.globalDefaultConfig.vnp_Locale,
+            QUERY_DR_RESPONSE_MAP,
+        );
+        const outputResults = {
+            isVerified: true,
+            isSuccess: responseData.vnp_ResponseCode == '00',
+            message,
+            ...responseData,
+            vnp_Message: message,
+        };
 
-        let stringToCheckSumResponse =
+        let stringToCreateHashOfResponse =
             `${responseData.vnp_ResponseId}|${responseData.vnp_Command}|${responseData.vnp_ResponseCode}` +
             `|${responseData.vnp_Message}|${this.defaultConfig.vnp_TmnCode}|${responseData.vnp_TxnRef}` +
             `|${responseData.vnp_Amount}|${responseData.vnp_BankCode}|${responseData.vnp_PayDate}` +
             `|${responseData.vnp_TransactionNo}|${responseData.vnp_TransactionType}|${responseData.vnp_TransactionStatus}` +
             `|${responseData.vnp_OrderInfo}|${responseData.vnp_PromotionCode}|${responseData.vnp_PromotionAmount}`;
-        stringToCheckSumResponse = stringToCheckSumResponse.replace(/undefined/g, '');
+        stringToCreateHashOfResponse = stringToCreateHashOfResponse.replace(/undefined/g, '');
 
-        const signedResponse = hash(
+        const responseHashed = hash(
             this.globalDefaultConfig.secureSecret,
-            Buffer.from(stringToCheckSumResponse, this.BUFFER_ENCODE),
+            Buffer.from(stringToCreateHashOfResponse, this.BUFFER_ENCODE),
             this.HASH_ALGORITHM,
         );
 
-        if (signedResponse !== responseData.vnp_SecureHash) {
-            throw new Error('Wrong checksum from VNPay response');
+        if (responseHashed !== responseData.vnp_SecureHash) {
+            Object.assign(outputResults, {
+                isVerified: false,
+                message: getResponseByStatusCode(
+                    WRONG_CHECKSUM_KEY,
+                    this.globalDefaultConfig.vnp_Locale,
+                    QUERY_DR_RESPONSE_MAP,
+                ),
+            });
         }
 
-        return {
-            ...responseData,
-            vnp_Message: getResponseByStatusCode(
-                responseData.vnp_ResponseCode?.toString(),
-                this.globalDefaultConfig.vnp_Locale,
-                QUERY_DR_RESPONSE_MAP,
-            ),
-        };
+        if (this.isEnableLog) {
+            const data2Log: QueryDrResponseLogger = {
+                createdAt: new Date(),
+                method: this.queryDr.name,
+                ...outputResults,
+            };
+
+            this.logData(data2Log, options);
+        }
+
+        return outputResults;
     }
 
     /**
