@@ -8,6 +8,7 @@ import {
     QUERY_DR_RESPONSE_MAP,
     REFUND_RESPONSE_MAP,
     GET_BANK_LIST_ENDPOINT,
+    numberRegex,
 } from './constants';
 import { HashAlgorithm, VnpCurrCode, VnpLocale, ProductCode } from './enums';
 import {
@@ -25,17 +26,22 @@ import {
     ReturnQueryFromVNPay,
     VerifyReturnUrl,
     VerifyIpnCall,
+    VerifyReturnUrlLogger,
+    VerifyReturnUrlOptions,
+    VerifyIpnCallLogger,
+    VerifyIpnCallOptions,
 } from './types';
 import { QueryDr, BodyRequestQueryDr, QueryDrResponseFromVNPay } from './types/query-dr.type';
 import { Refund, RefundResponse } from './types/refund.type';
 import { Bank } from './types/bank.type';
 import { DefaultConfig, GlobalConfig } from './types/common.type';
-import { consoleLogger } from './utils';
+import { consoleLogger, ignoreLogger } from './utils';
+import { LoggerOptions } from './types/logger.type';
 
 /**
  * Lớp hỗ trợ thanh toán qua VNPay
  * @en VNPay class to support VNPay payment
- * @see https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/
+ * @see https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html
  *
  * @example
  * import { VNPay } from 'vnpay';
@@ -64,7 +70,7 @@ export class VNPay {
     private HASH_ALGORITHM = HashAlgorithm.SHA512;
     private BUFFER_ENCODE: BufferEncoding = 'utf-8';
     private isEnableLog = false;
-    private readonly loggerFn = (data: unknown) => {};
+    private readonly globalLoggerFn = (data: unknown) => {};
 
     public constructor({
         vnpayHost = VNPAY_GATEWAY_SANDBOX_HOST,
@@ -86,12 +92,12 @@ export class VNPay {
         if (config?.enableLog) {
             this.isEnableLog = config.enableLog;
             // Default logger to console
-            this.loggerFn = consoleLogger;
+            this.globalLoggerFn = consoleLogger;
         }
 
         if (config?.loggerFn) {
             // Custom logger function
-            this.loggerFn = config.loggerFn;
+            this.globalLoggerFn = config.loggerFn;
         }
 
         this.globalDefaultConfig = {
@@ -199,6 +205,7 @@ export class VNPay {
         if (this.isEnableLog) {
             const data2Log: BuildPaymentUrlLogger = {
                 createdAt: new Date(),
+                method: this.buildPaymentUrl.name,
                 paymentUrl: options?.hashInUrl
                     ? redirectUrl.toString()
                     : (() => {
@@ -208,27 +215,7 @@ export class VNPay {
                       })(),
                 ...dataToBuild,
             };
-
-            const { logger } = options || {};
-
-            if (logger) {
-                if ('fields' in logger) {
-                    const { type, fields } = logger;
-
-                    Object.keys(data2Log).forEach((key) => {
-                        const keyAssert = key as unknown as LoggerFields;
-                        if (
-                            (type === 'omit' && fields.includes(keyAssert)) ||
-                            (type === 'pick' && !fields.includes(keyAssert))
-                        ) {
-                            delete data2Log[keyAssert];
-                        }
-                    });
-                }
-            }
-
-            // Exec logger function, or default logger
-            (logger?.loggerFn || this.loggerFn)(data2Log);
+            this.logData(data2Log, options);
         }
 
         return redirectUrl.toString();
@@ -240,26 +227,33 @@ export class VNPay {
      *
      * @param {ReturnQueryFromVNPay} query - The object of data return from VNPay
      * @returns {VerifyReturnUrl} The return object
-     * @see https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/#code-returnurl
+     * @see https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#code-returnurl
      */
-    public verifyReturnUrl(query: ReturnQueryFromVNPay): VerifyReturnUrl {
-        const secureHash = query.vnp_SecureHash;
+    public verifyReturnUrl<LoggerFields extends keyof VerifyReturnUrlLogger>(
+        query: ReturnQueryFromVNPay,
+        options?: VerifyReturnUrlOptions<LoggerFields>,
+    ): VerifyReturnUrl {
+        const { vnp_SecureHash, vnp_SecureHashType, ...cloneQuery } = query;
 
-        // Will be remove when append to URLSearchParams
-        delete query.vnp_SecureHash;
-        delete query.vnp_SecureHashType;
+        if (typeof cloneQuery?.vnp_Amount !== 'number') {
+            const res = numberRegex.test(cloneQuery?.vnp_Amount ?? '');
+            if (!res) {
+                throw new Error('Invalid amount');
+            }
+            cloneQuery.vnp_Amount = Number(cloneQuery.vnp_Amount) / 100;
+        }
 
         const outputResults = {
             isVerified: true,
-            isSuccess: query.vnp_ResponseCode === '00',
+            isSuccess: cloneQuery.vnp_ResponseCode === '00',
             message: getResponseByStatusCode(
-                query.vnp_ResponseCode?.toString() ?? '',
+                cloneQuery.vnp_ResponseCode?.toString() ?? '',
                 this.globalDefaultConfig.vnp_Locale,
             ),
         };
 
         const searchParams = new URLSearchParams();
-        Object.entries(query)
+        Object.entries(cloneQuery)
             .sort(([key1], [key2]) => key1.toString().localeCompare(key2.toString()))
             .forEach(([key, value]) => {
                 // Skip empty value
@@ -276,18 +270,30 @@ export class VNPay {
             this.HASH_ALGORITHM,
         );
 
-        if (secureHash !== signed) {
+        if (vnp_SecureHash !== signed) {
             Object.assign(outputResults, {
                 isVerified: false,
                 message: 'Wrong checksum',
             });
         }
-
-        return {
-            ...query,
+        const result = {
+            ...cloneQuery,
             ...outputResults,
-            vnp_Amount: query.vnp_Amount / 100,
+            vnp_Amount: cloneQuery.vnp_Amount / 100,
         };
+
+        if (this.isEnableLog) {
+            const data2Log: VerifyReturnUrlLogger = {
+                createdAt: new Date(),
+                method: this.verifyReturnUrl.name,
+                ...result,
+                vnp_SecureHash: options?.withHash ? vnp_SecureHash : undefined,
+            };
+
+            this.logData(data2Log, options);
+        }
+
+        return result;
     }
 
     /**
@@ -305,10 +311,30 @@ export class VNPay {
      *
      * @param {ReturnQueryFromVNPay} query The object of data return from VNPay
      * @returns {VerifyIpnCall} The return object
-     * @see https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/#code-ipn-url
+     * @see https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#code-ipn-url
      */
-    public verifyIpnCall(query: ReturnQueryFromVNPay): VerifyIpnCall {
-        return this.verifyReturnUrl(query);
+    public verifyIpnCall<LoggerFields extends keyof VerifyIpnCallLogger>(
+        query: ReturnQueryFromVNPay,
+        options?: VerifyIpnCallOptions<LoggerFields>,
+    ): VerifyIpnCall {
+        const hash = query.vnp_SecureHash;
+        const result = this.verifyReturnUrl(query, { logger: { loggerFn: ignoreLogger } });
+
+        if (this.isEnableLog) {
+            const data2Log: VerifyIpnCallLogger = {
+                createdAt: new Date(),
+                method: this.verifyIpnCall.name,
+                ...result,
+            };
+
+            if (options?.withHash) {
+                Object.assign(data2Log, { vnp_SecureHash: hash });
+            }
+
+            this.logData(data2Log, options);
+        }
+
+        return result;
     }
 
     /**
@@ -407,6 +433,14 @@ export class VNPay {
         };
     }
 
+    /**
+     * Đây là API để hệ thống merchant gửi yêu cầu hoàn tiền cho giao dịch qua hệ thống Cổng thanh toán VNPAY.
+     *
+     * @en This is the API for the merchant system to refund the transaction at the VNPAY system.
+     * @param data {Refund} - The data to request refund
+     * @returns The data return from VNPay
+     * @see https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#hoan-tien-thanh-toan-PAY
+     */
     public async refund(data: Refund) {
         const vnp_Command = 'refund';
 
@@ -493,5 +527,27 @@ export class VNPay {
                 REFUND_RESPONSE_MAP,
             ),
         };
+    }
+
+    private logData<T extends object, LoggerFields extends keyof T>(
+        data: T,
+        options?: LoggerOptions<T, LoggerFields>,
+    ): void {
+        if (options?.logger && 'fields' in options.logger) {
+            const { type, fields } = options.logger;
+
+            Object.keys(data).forEach((key) => {
+                const keyAssert = key as unknown as LoggerFields;
+                if (
+                    (type === 'omit' && fields.includes(keyAssert)) ||
+                    (type === 'pick' && !fields.includes(keyAssert))
+                ) {
+                    delete data[keyAssert];
+                }
+            });
+        }
+
+        // Exec logger function, or default global logger
+        (options?.logger?.loggerFn || this.globalLoggerFn)(data);
     }
 }
