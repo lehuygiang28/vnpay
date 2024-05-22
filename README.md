@@ -1,4 +1,4 @@
-# vnpay
+# VNPay Lib
 
 <div style="text-align: center;">
     <h5>
@@ -8,6 +8,12 @@
     </h5>
 </div>
 <br/>
+
+<p align="center">
+<a href="https://www.npmjs.com/package/vnpay" target="_blank"><img src="https://img.shields.io/npm/v/vnpay" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/package/vnpay" target="_blank"><img src="https://img.shields.io/npm/l/vnpay" alt="Package License"><a>
+<a href="https://www.npmjs.com/package/vnpay" target="_blank"><img src="https://img.shields.io/npm/dm/vnpay" alt="NPM Downloads"></a>
+</p>
 
 <strong>Thư viện mã nguồn mở hỗ trợ thanh toán qua [VNPay](https://vnpay.vn).</strong>
 
@@ -57,7 +63,7 @@ const vnpay = new VNPay({
 
 #### Thư viện VNPay là một dự án mã nguồn mở và miễn phí. Nếu bạn thấy nó hữu ích, hãy xem xét hỗ trợ bằng cách tặng một ⭐️ trên [GitHub](https://github.com/lehuygiang28/vnpay) và mua tác giả một cốc cà phê.
 
-<a href="https://www.buymeacoffee.com/lehuygiang28" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+<a href="https://www.buymeacoffee.com/lehuygiang28" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png" alt="Buy Me A Coffee"></a>
 
 ## Đóng góp
 

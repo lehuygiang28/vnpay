@@ -1,4 +1,4 @@
-# VNPay API Nodejs
+# VNPay Lib
 
 <div style="text-align: center;">
     <h5>
@@ -8,6 +8,12 @@
     </h5>
 </div>
 <br/>
+
+<p align="center">
+<a href="https://www.npmjs.com/package/vnpay" target="_blank"><img src="https://img.shields.io/npm/v/vnpay" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/package/vnpay" target="_blank"><img src="https://img.shields.io/npm/l/vnpay" alt="Package License"><a>
+<a href="https://www.npmjs.com/package/vnpay" target="_blank"><img src="https://img.shields.io/npm/dm/vnpay" alt="NPM Downloads"></a>
+</p>
 
 <strong>An open-source library support to payment with [VNPay](https://vnpay.vn).</strong>
 
@@ -57,7 +63,7 @@ const vnpay = new VNPay({
 
 #### `VNPay` is an open-source and free project. If you find it useful, please consider supporting it by starring ⭐️ the repository on [Github](https://github.com/lehuygiang28/vnpay) and buying me a coffee.
 
-<a href="https://www.buymeacoffee.com/lehuygiang28" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+<a href="https://www.buymeacoffee.com/lehuygiang28" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png" alt="Buy Me A Coffee"></a>
 
 ## Contribution
 
