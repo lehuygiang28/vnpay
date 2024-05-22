@@ -41,6 +41,8 @@ const config: Config = {
                     // Please change this to your repo.
                     // Remove this to remove the "edit this page" links.
                     editUrl: 'https://github.com/lehuygiang28/vnpay/tree/main/docs',
+                    showLastUpdateTime: true,
+                    showLastUpdateAuthor: true,
                 },
                 blog: false,
                 theme: {
@@ -53,6 +55,27 @@ const config: Config = {
     themeConfig: {
         // Replace with your project's social card
         // image: 'img/docusaurus-social-card.jpg',
+        metadata: [
+            {
+                name: 'description',
+                content: 'An open-source nodejs library support to payment with VNPay',
+            },
+            { name: 'og:title', content: 'vnpay' },
+            {
+                name: 'og:description',
+                content: 'An open-source nodejs library support to payment with VNPay',
+            },
+            { name: 'og:url', content: 'https://vnpay-lib.vercel.app' },
+            { name: 'og:site_name', content: 'vnpay' },
+            { name: 'og:type', content: 'website' },
+            { name: 'og:locale', content: 'vi_VN' },
+            { name: 'og:locale:alternate', content: 'en_US' },
+            {
+                name: 'keywords',
+                content:
+                    'vnpay, nodejs, payment, library, open-source, vnpay api, vnpay doc, vnpay sandbox, vnpay test, vnpay node, vnpay nodejs',
+            },
+        ],
         navbar: {
             title: 'lehuygiang28/VNPay',
             // logo: {
@@ -102,6 +125,7 @@ const config: Config = {
         prism: {
             theme: prismThemes.vsLight,
             darkTheme: prismThemes.dracula,
+            defaultLanguage: 'typescript',
         },
         colorMode: {
             defaultMode: 'dark',
@@ -112,6 +136,17 @@ const config: Config = {
             apiKey: '44a99b1006be22882c8aba292e0176e6',
             indexName: 'vnpay-lib',
             contextualSearch: true,
+        },
+        announcementBar: {
+            id: 'help_us',
+            content: `
+            We are looking for contributors to help us translate our docs to English. 
+            If you're interested, please check out 
+            <a target="_blank" rel="noopener noreferrer" href="https://github.com/lehuygiang28/vnpay/issues/9">this issue on GitHub</a>.
+        `,
+            backgroundColor: '#fafbfc',
+            textColor: '#091E42',
+            isCloseable: true,
         },
     } satisfies Preset.ThemeConfig,
     plugins: [
