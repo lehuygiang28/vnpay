@@ -1,14 +1,10 @@
----
-sidebar_position: 8
----
-
 # Giao dịch hoàn tiền (refund) {#refund}
 
 Đây là API để hệ thống merchant gửi yêu cầu hoàn tiền cho giao dịch qua hệ thống Cổng thanh toán VNPAY.
 
 :::warning Chú ý:
 
--   `refund` là 1 trong các chức năng bị hạn chế bởi VNPAY trong môi trường sandbox, bạn cần liên hệ VNPAY để được hỗ trợ.
+-   `refund` là một trong các chức năng bị hạn chế bởi VNPAY trong môi trường sandbox, bạn cần liên hệ VNPAY để được hỗ trợ.
 -   Xem thêm tại [issue#12](https://github.com/lehuygiang28/vnpay/issues/12)
 
 :::

@@ -140,7 +140,11 @@ export class VNPay {
         };
     }
 
-    public async getBankList() {
+    /**
+     *
+     * @returns {Promise<Bank[]>} List of banks
+     */
+    public async getBankList(): Promise<Bank[]> {
         const response = await fetch(
             resolveUrlString(
                 this.globalDefaultConfig.vnpayHost ?? VNPAY_GATEWAY_SANDBOX_HOST,

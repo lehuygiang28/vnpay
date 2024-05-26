@@ -1,7 +1,3 @@
----
-sidebar_position: 7
----
-
 # Truy vấn kết quả giao dịch (queryDr) {#query-dr}
 
 Đây là API để hệ thống merchant truy vấn kết quả thanh toán của giao dịch tại hệ thống VNPAY.

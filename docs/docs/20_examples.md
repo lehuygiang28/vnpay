@@ -1,7 +1,3 @@
----
-sidebar_position: 9
----
-
 # Các ví dụ
 
 ## Dự án mẫu với Express MVC

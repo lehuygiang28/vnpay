@@ -1,7 +1,3 @@
----
-sidebar_position: 4
----
-
 # Cài đặt IPN url
 
 Khi thanh toán hoàn tất, VNPay sẽ gửi lời gọi IPN (Instant Payment Notification) đến URL IPN mà bạn đã cài đặt. Để xác thực lời gọi IPN, bạn có thể sử dụng thư viện VNPay.

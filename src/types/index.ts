@@ -7,3 +7,4 @@ export { Refund, RefundResponse, RefundResponseFromVNPay } from './refund.type';
 export * from './logger.type';
 export * from './verify-return-url.type';
 export * from './verify-ipn-call.type';
+export * from './bank.type';
