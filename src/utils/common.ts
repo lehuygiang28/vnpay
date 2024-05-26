@@ -65,9 +65,17 @@ export function isValidVnpayDateFormat(date: number): boolean {
     return regex.test(dateString);
 }
 
-export function generateRandomString(length: number) {
+export function generateRandomString(
+    length: number,
+    options?: {
+        onlyNumber?: boolean;
+    },
+) {
     let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    if (options?.onlyNumber) {
+        characters = '0123456789';
+    }
     const charactersLength = characters.length;
     for (let i = 0; i < length; i++) {
         result += `${characters[(Math.random() * charactersLength) | 0]}`;

@@ -1,7 +1,3 @@
----
-sidebar_position: 6
----
-
 # Xác thực URL thông báo trả về
 
 Khi khách hàng thanh toán thành công, VNPay sẽ chuyển hướng khách hàng đến URL thông báo trả về (`vnp_ReturnUrl`) mà bạn đã cung cấp.

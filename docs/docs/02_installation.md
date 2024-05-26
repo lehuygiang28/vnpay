@@ -1,7 +1,3 @@
----
-sidebar_position: 2
----
-
 # Hướng dẫn cài đặt
 
 ## Cài đặt với các trình quản lý thư viện

@@ -1,7 +1,3 @@
----
-sidebar_position: 3
----
-
 # Tạo URL thanh toán
 
 Tạo đường dẫn thanh toán cho VNPay.
@@ -41,6 +37,7 @@ buildPaymentUrl(params: BuildPaymentUrl, options?: BuildPaymentUrlOptions): stri
 | vnp_OrderType | Loại đơn hàng                                  | Mỗi hàng hóa sẽ thuộc một nhóm danh mục do VNPAY quy định. Sử dụng enum có sẵn từ `ProductCode` hoặc xem thêm bảng [Danh mục hàng hóa](https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/) |
 | vnp_ReturnUrl | Đường dẫn trả về sau khi thanh toán            | URL thông báo kết quả giao dịch khi Khách hàng kết thúc thanh toán. Ví dụ: https://domain.vn/VnPayReturn                                                                                      |
 | vnp_Locale    | Ngôn ngữ hiển thị trên cổng thanh toán         | Hiện tại hỗ trợ Tiếng Việt (vn), Tiếng Anh (en)                                                                                                                                               |
+| vnp_BankCode  | Mã ngân hàng                                   | Mã ngân hàng lựa chọn thanh toán, xem thêm [tại đây](get-bank-list)                                                                                                                           |
 
 Xem thêm các thuộc tính khác tại [VNPay](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91).
 

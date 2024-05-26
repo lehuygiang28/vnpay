@@ -1,7 +1,3 @@
----
-sidebar_position: 5
----
-
 # Xác thực lời gọi IPN
 
 Khi thanh toán hoàn tất, VNPay sẽ gửi lời gọi IPN (Instant Payment Notification) đến URL IPN mà bạn đã cài đặt. Để xác thực lời gọi IPN, bạn có thể sử dụng thư viện VNPay.
@@ -38,7 +34,7 @@ Các tham số mà VNPay trả về cũng nằm trong đối tượng `VerifyIpn
 ### Sử dụng logger
 
 -   Tương tự như khi tạo URL thanh toán, bạn có thể sử dụng logger để ghi log thông tin xác thực IPN
-    [xem tại đây](./create-payment-url.md#use-logger).
+    [xem tại đây](create-payment-url.md#use-logger).
 
 ### Với Express
 
