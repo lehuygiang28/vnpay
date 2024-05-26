@@ -1,12 +1,13 @@
 import { RefundTransactionType } from '../enums';
 import { BuildPaymentUrl } from './build-payment-url.type';
+import { ResultVerified } from './common.type';
+import { LoggerData, LoggerOptions } from './logger.type';
 import { QueryDr, QueryDrResponseFromVNPay } from './query-dr.type';
 
-export type Refund = Pick<
-    QueryDr,
-    'vnp_RequestId' | 'vnp_TransactionNo' | 'vnp_TransactionDate' | 'vnp_IpAddr'
-> &
-    Pick<BuildPaymentUrl, 'vnp_Amount' | 'vnp_OrderInfo' | 'vnp_TxnRef'> & {
+export type Refund = Partial<Pick<QueryDr, 'vnp_TransactionNo'>> &
+    Pick<QueryDr, 'vnp_RequestId' | 'vnp_TransactionDate' | 'vnp_IpAddr'> &
+    Pick<BuildPaymentUrl, 'vnp_Amount' | 'vnp_OrderInfo' | 'vnp_TxnRef'> &
+    Partial<Pick<BuildPaymentUrl, 'vnp_Locale'>> & {
         /**
          * Loại giao dịch tại hệ thống VNPAY:
          * - `02`: Giao dịch hoàn trả toàn phần
@@ -35,7 +36,7 @@ export type Refund = Pick<
         vnp_CreateDate: number;
     };
 
-export type RefundResponse = Pick<
+export type RefundResponseFromVNPay = Pick<
     QueryDrResponseFromVNPay,
     | 'vnp_TxnRef'
     | 'vnp_Amount'
@@ -78,3 +79,16 @@ export type RefundResponse = Pick<
      */
     vnp_OrderInfo: string;
 };
+
+export type RefundResponse = ResultVerified & RefundResponseFromVNPay;
+
+export type RefundResponseLogger = LoggerData<
+    {
+        createdAt: Date;
+    } & RefundResponse
+>;
+
+export type RefundOptions<Fields extends keyof RefundResponseLogger> = LoggerOptions<
+    RefundResponseLogger,
+    Fields
+>;

@@ -40,7 +40,13 @@ import {
     QueryDrResponseLogger,
     QueryDrResponseOptions,
 } from './types/query-dr.type';
-import { Refund, RefundResponse } from './types/refund.type';
+import {
+    Refund,
+    RefundOptions,
+    RefundResponse,
+    RefundResponseFromVNPay,
+    RefundResponseLogger,
+} from './types/refund.type';
 import { Bank } from './types/bank.type';
 import { DefaultConfig, GlobalConfig } from './types/common.type';
 import { consoleLogger, ignoreLogger } from './utils';
@@ -462,15 +468,31 @@ export class VNPay {
      * @returns The data return from VNPay
      * @see https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#hoan-tien-thanh-toan-PAY
      */
-    public async refund(data: Refund) {
+    public async refund<LoggerFields extends keyof RefundResponseLogger>(
+        data: Refund,
+        options?: RefundOptions<LoggerFields>,
+    ): Promise<RefundResponse> {
         const vnp_Command = 'refund';
-
         const dataQuery = {
             ...data,
             vnp_Command,
             vnp_Version: this.globalDefaultConfig.vnp_Version,
             vnp_TmnCode: this.globalDefaultConfig.tmnCode,
+            vnp_Amount: data.vnp_Amount * 100,
         };
+        const {
+            vnp_Version,
+            vnp_TmnCode,
+            vnp_RequestId,
+            vnp_TransactionType,
+            vnp_TxnRef,
+            vnp_TransactionNo = '0',
+            vnp_TransactionDate,
+            vnp_CreateBy,
+            vnp_CreateDate,
+            vnp_IpAddr,
+            vnp_OrderInfo,
+        } = dataQuery;
 
         const url = new URL(
             resolveUrlString(
@@ -478,21 +500,35 @@ export class VNPay {
                 QUERY_DR_REFUND_ENDPOINT,
             ),
         );
-        const stringToSigned =
-            `${dataQuery.vnp_RequestId}|${dataQuery.vnp_Version}|${vnp_Command}|${dataQuery.vnp_TmnCode}|` +
-            `${dataQuery.vnp_TransactionType}|${dataQuery.vnp_TxnRef}|${dataQuery.vnp_Amount}|` +
-            `${dataQuery.vnp_TransactionNo}|${dataQuery.vnp_TransactionDate}|${dataQuery.vnp_CreateBy}|` +
-            `${dataQuery.vnp_CreateDate}|${dataQuery.vnp_IpAddr}|${dataQuery.vnp_OrderInfo}`;
 
-        const signed = hash(
+        let stringToHashOfRequest = [
+            vnp_RequestId,
+            vnp_Version,
+            vnp_Command,
+            vnp_TmnCode,
+            vnp_TransactionType,
+            vnp_TxnRef,
+            dataQuery.vnp_Amount,
+            vnp_TransactionNo,
+            vnp_TransactionDate,
+            vnp_CreateBy,
+            vnp_CreateDate,
+            vnp_IpAddr,
+            vnp_OrderInfo,
+        ]
+            .map((a) => a.toString())
+            .join('|');
+        stringToHashOfRequest = stringToHashOfRequest.replace(/undefined/g, '');
+
+        const requestHashed = hash(
             this.globalDefaultConfig.secureSecret,
-            Buffer.from(stringToSigned, this.BUFFER_ENCODE),
+            Buffer.from(stringToHashOfRequest, this.BUFFER_ENCODE),
             this.HASH_ALGORITHM,
         );
 
         const body = {
             ...dataQuery,
-            vnp_SecureHash: signed,
+            vnp_SecureHash: requestHashed,
         };
 
         const response = await fetch(url.toString(), {
@@ -507,47 +543,78 @@ export class VNPay {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const responseData = (await response.json()) as RefundResponse;
+        const responseData = (await response.json()) as RefundResponseFromVNPay;
 
-        if (
-            Number(responseData.vnp_ResponseCode) >= 90 &&
-            Number(responseData.vnp_ResponseCode) <= 99
-        ) {
-            return {
-                ...responseData,
-                vnp_Message: getResponseByStatusCode(
-                    responseData.vnp_ResponseCode?.toString(),
-                    this.globalDefaultConfig.vnp_Locale,
-                    QUERY_DR_RESPONSE_MAP,
-                ),
-            };
+        if (responseData?.vnp_Amount) {
+            responseData.vnp_Amount = responseData.vnp_Amount / 100;
         }
 
-        const stringToChecksumResponse =
-            `${responseData.vnp_ResponseId}|${vnp_Command}|${responseData.vnp_ResponseCode}|` +
-            `${responseData.vnp_Message}|${responseData.vnp_TmnCode}|${responseData.vnp_TxnRef}|` +
-            `${responseData.vnp_Amount}|${responseData.vnp_BankCode}|${responseData.vnp_PayDate}|` +
-            `${responseData.vnp_TransactionNo}|${responseData.vnp_TransactionType}|` +
-            `${responseData.vnp_TransactionStatus}|${responseData.vnp_OrderInfo}`;
-
-        const signedResponse = hash(
-            this.globalDefaultConfig.secureSecret,
-            Buffer.from(stringToChecksumResponse, this.BUFFER_ENCODE),
-            this.HASH_ALGORITHM,
+        const message = getResponseByStatusCode(
+            responseData.vnp_ResponseCode?.toString() ?? '',
+            data?.vnp_Locale ?? this.globalDefaultConfig.vnp_Locale,
+            REFUND_RESPONSE_MAP,
         );
+        const outputResults = {
+            isVerified: true,
+            isSuccess: responseData.vnp_ResponseCode == '00',
+            message,
+            ...responseData,
+            vnp_Message: message,
+        };
 
-        if (signedResponse !== responseData.vnp_SecureHash) {
-            throw new Error('Wrong checksum from VNPay response');
+        // Only check signed hash when request is not error
+        if (
+            Number(responseData.vnp_ResponseCode) <= 90 &&
+            Number(responseData.vnp_ResponseCode) >= 99
+        ) {
+            let stringToCreateHashOfResponse = [
+                responseData.vnp_ResponseId,
+                responseData.vnp_Command,
+                responseData.vnp_ResponseCode,
+                responseData.vnp_Message,
+                responseData.vnp_TmnCode,
+                responseData.vnp_TxnRef,
+                responseData.vnp_Amount,
+                responseData.vnp_BankCode,
+                responseData.vnp_PayDate,
+                responseData.vnp_TransactionNo ?? '0',
+                responseData.vnp_TransactionType,
+                responseData.vnp_TransactionStatus,
+                responseData.vnp_OrderInfo,
+            ]
+                .map(String)
+                .join('|');
+            stringToCreateHashOfResponse = stringToCreateHashOfResponse.replace(/undefined/g, '');
+
+            const responseHashed = hash(
+                this.globalDefaultConfig.secureSecret,
+                Buffer.from(stringToCreateHashOfResponse, this.BUFFER_ENCODE),
+                this.HASH_ALGORITHM,
+            );
+
+            if (responseHashed !== responseData.vnp_SecureHash) {
+                Object.assign(outputResults, {
+                    isVerified: false,
+                    message: getResponseByStatusCode(
+                        WRONG_CHECKSUM_KEY,
+                        this.globalDefaultConfig.vnp_Locale,
+                        REFUND_RESPONSE_MAP,
+                    ),
+                });
+            }
         }
 
-        return {
-            ...responseData,
-            vnp_Message: getResponseByStatusCode(
-                responseData.vnp_ResponseCode?.toString(),
-                this.globalDefaultConfig.vnp_Locale,
-                REFUND_RESPONSE_MAP,
-            ),
-        };
+        if (this.isEnableLog) {
+            const data2Log: RefundResponseLogger = {
+                createdAt: new Date(),
+                method: this.refund.name,
+                ...outputResults,
+            };
+
+            this.logData(data2Log, options);
+        }
+
+        return outputResults;
     }
 
     private logData<T extends object, LoggerFields extends keyof T>(
