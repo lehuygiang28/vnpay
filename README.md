@@ -89,7 +89,7 @@ Trước khi bắt đầu, hãy đảm bảo rằng bạn đã đọc [hướng 
 ### Người đóng góp
 
 <a href="https://github.com/lehuygiang28/vnpay/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=lehuygiang28/vnpay&max=20" />
+  <img src="https://contrib.rocks/image?repo=lehuygiang28/vnpay&max=20" alt="List of Contributors"/>
 </a>
 
 ## Giấy phép

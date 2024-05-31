@@ -90,7 +90,7 @@ Before contributing, please read our [Contribution Guidelines](.github/CONTRIBUT
 ### Contributors
 
 <a href="https://github.com/lehuygiang28/vnpay/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=lehuygiang28/vnpay&max=20" />
+  <img src="https://contrib.rocks/image?repo=lehuygiang28/vnpay&max=20" alt="List of Contributors"/>
 </a>
 
 ## License
