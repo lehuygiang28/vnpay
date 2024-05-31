@@ -17,7 +17,7 @@ $ yarn add vnpay
 ### PNPM
 
 ```bash
-$ pnpm add vnpay
+$ pnpm install vnpay
 ```
 
 ## Sử dụng thư viện
@@ -31,7 +31,7 @@ import { VNPay } from 'vnpay';
 ### Khởi tạo đối tượng {#init-vnpay}
 
 ```typescript
-import { ignoreLogger } from 'vnpay';
+import { VNPay, ignoreLogger } from 'vnpay';
 
 const vnpay = new VNPay({
     tmnCode: 'YOUR_TMNCODE',

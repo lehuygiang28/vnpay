@@ -12,7 +12,7 @@ import { VerifyIpnCall } from 'vnpay';
 const verify: VerifyIpnCall = vnpay.verifyIpnCall(req.query);
 ```
 
-## Các thuộc tính của đối tượng `VerifyIpnCall`
+## Các thuộc tính của đối tượng `VerifyIpnCall` {#properties-of-the-verify-ipn-call}
 
 Thông tin sau khi xác thực và của VNPay trả về
 
@@ -34,7 +34,7 @@ Các tham số mà VNPay trả về cũng nằm trong đối tượng `VerifyIpn
 ### Sử dụng logger
 
 -   Tương tự như khi tạo URL thanh toán, bạn có thể sử dụng logger để ghi log thông tin xác thực IPN
-    [xem tại đây](create-payment-url.md#use-logger).
+    [xem tại đây](/create-payment-url#using-logger).
 
 ### Với Express
 

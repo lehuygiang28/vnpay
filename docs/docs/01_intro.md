@@ -11,7 +11,7 @@ Thư viện [VNPay](https://github.com/lehuygiang28/vnpay) là một dự án m�
 
 ## Tài liệu
 
--   Tìm hiểu cách sử dụng thư viện VNPay tại [đây](installation.md).
+-   Tìm hiểu cách sử dụng thư viện VNPay tại [đây](/installation).
 -   Bạn cũng có thể tìm hiểu cách VNPay hoạt động tại [đây](https://sandbox.vnpayment.vn/apis/).
 
 -   `vnpay` trên [GitHub](https://github.com/lehuygiang28/vnpay)
@@ -31,3 +31,7 @@ _[github.com/lehuygiang28](https://github.com/lehuygiang28)_
 <a href="https://github.com/lehuygiang28/vnpay/graphs/contributors" target="_blank">
   <img src="https://contrib.rocks/image?repo=lehuygiang28/vnpay&max=20" class="contributors_img" />
 </a>
+
+## Giấy phép
+
+**[MIT](https://github.com/lehuygiang28/vnpay/blob/main/LICENSE) © [Lê Huy Giang](https://github.com/lehuygiang28)**

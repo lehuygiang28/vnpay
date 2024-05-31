@@ -11,7 +11,7 @@ The [VNPay](https://github.com/lehuygiang28/vnpay) library is an open source pro
 
 ## Documentation
 
--   Learn how to use the VNPay library [here](installation.md).
+-   Learn how to use the VNPay library [here](/installation).
 -   You can also learn how VNPay works [here](https://sandbox.vnpayment.vn/apis/).
 
 -   `vnpay` on [GitHub](https://github.com/lehuygiang28/vnpay)
@@ -31,3 +31,7 @@ _[github.com/lehuygiang28](https://github.com/lehuygiang28)_
 <a href="https://github.com/lehuygiang28/vnpay/graphs/contributors" target="_blank">
   <img src="https://contrib.rocks/image?repo=lehuygiang28/vnpay&max=20" class="contributors_img" />
 </a>
+
+## License
+
+**[MIT](https://github.com/lehuygiang28/vnpay/blob/main/LICENSE) © [Lê Huy Giang](https://github.com/lehuygiang28)**

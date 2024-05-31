@@ -1,7 +1,3 @@
----
-sidebar_position: 3
----
-
 # Create Payment URL
 
 Create a payment URL for VNPay.
@@ -39,7 +35,59 @@ const paymentUrl = vnpay.buildPaymentUrl({
 
 See more properties at [VNPay](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91).
 
-## Use in Express
+## Usage
+
+### Using logger {#using-logger}
+
+```typescript
+import { ProductCode, VnpLocale, consoleLogger } from 'vnpay';
+
+/* ... */
+
+const paymentUrl = vnpay.buildPaymentUrl(
+    {
+        vnp_Amount: 10000,
+        vnp_IpAddr: '1.1.1.1',
+        vnp_TxnRef: '123456',
+        vnp_OrderInfo: 'Payment for order 123456',
+        vnp_OrderType: ProductCode.Other,
+        vnp_ReturnUrl: `http://localhost:${port}/vnpay-return`,
+    },
+    {
+        logger: {
+            type: 'pick', // The mode to select log fields, can be 'pick', 'omit' or 'all'
+            fields: ['createdAt', 'method', 'paymentUrl'], // Select the fields to log
+            loggerFn: consoleLogger, // Log data to console, can be replaced with another function
+        },
+    },
+);
+```
+
+### Using custom logger
+
+```typescript
+import { ProductCode, VnpLocale } from 'vnpay';
+
+/* ... */
+
+const paymentUrl = vnpay.buildPaymentUrl(
+    {
+        vnp_Amount: 10000,
+        vnp_IpAddr: '1.1.1.1',
+        vnp_TxnRef: '123456',
+        vnp_OrderInfo: 'Payment for order 123456',
+        vnp_OrderType: ProductCode.Other,
+        vnp_ReturnUrl: `http://localhost:${port}/vnpay-return`,
+    },
+    {
+        logger: {
+            type: 'pick', // The mode to select log fields, can be 'pick', 'omit' or 'all'
+            fields: ['createdAt', 'method', 'paymentUrl'], // Select the fields to log
+            loggerFn: (data) => logToDatabase(data), // Function to log data to database, you need to implement it
+        },
+    },
+);
+```
 
 ### With MVC
 

@@ -66,7 +66,7 @@ Các tham số mà [VNPay trả về](https://sandbox.vnpayment.vn/apis/docs/tru
 
 ### Với logger
 
--   Để có thể sử dụng logger, bạn cần phải khởi tạo [`VNPay`](./installation.md#init-vnpay) với `enableLog` là `true`.
+-   Để có thể sử dụng logger, bạn cần phải khởi tạo [`VNPay`](/installation#init-vnpay) với `enableLog` là `true`.
 
 ```typescript
 import { QueryDr, QueryDrResponse, getDateInGMT7, dateFormat } from 'vnpay';
