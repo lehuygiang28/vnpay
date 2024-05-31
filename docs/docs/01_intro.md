@@ -31,3 +31,7 @@ _[github.com/lehuygiang28](https://github.com/lehuygiang28)_
 <a href="https://github.com/lehuygiang28/vnpay/graphs/contributors" target="_blank">
   <img src="https://contrib.rocks/image?repo=lehuygiang28/vnpay&max=20" class="contributors_img" />
 </a>
+
+## Giấy phép
+
+**[MIT](https://github.com/lehuygiang28/vnpay/blob/main/LICENSE) © [Lê Huy Giang](https://github.com/lehuygiang28)**
