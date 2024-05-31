@@ -17,7 +17,7 @@ const verify: VerifyReturnUrl = vnpay.verifyReturnUrl(req.query);
 Thông tin sau khi xác thực và của VNPay trả về
 
 :::info
-Giống với các thuộc tính của đối tượng [`VerifyIpnCall`](./verify-ipn-call.md#các-thuộc-tính-của-đối-tượng-verifyipncall)
+Giống với các thuộc tính của đối tượng [`VerifyIpnCall`](/ipn/verify-ipn-call#properties-of-the-verify-ipn-call)
 :::
 
 ## Sử dụng
@@ -25,7 +25,7 @@ Giống với các thuộc tính của đối tượng [`VerifyIpnCall`](./verif
 ### Sử dụng logger
 
 -   Tương tự như khi tạo URL thanh toán, bạn có thể sử dụng logger để ghi log thông tin xác thực return URL
-    [xem tại đây](./create-payment-url.md#use-logger).
+    [xem tại đây](/create-payment-url#using-logger).
 
 ### Với Express MVC
 

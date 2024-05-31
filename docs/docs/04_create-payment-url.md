@@ -58,7 +58,7 @@ Xem thêm các thuộc tính khác tại [VNPay](https://sandbox.vnpayment.vn/ap
 
 ## Sử dụng
 
-### Sử dụng logger {#use-logger}
+### Sử dụng logger {#using-logger}
 
 ```typescript
 import { ProductCode, VnpLocale, consoleLogger } from 'vnpay';
