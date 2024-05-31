@@ -1,7 +1,3 @@
----
-sidebar_position: 6
----
-
 # Verify Return URL
 
 When the customer successfully makes a payment, VNPay will redirect the customer to the return notification URL (`vnp_ReturnUrl`) that you have provided.
@@ -21,7 +17,7 @@ const verify: VerifyReturnUrl = vnpay.verifyReturnUrl(req.query);
 Information after verification and returned by VNPay
 
 :::info
-Similar to the properties of the [`VerifyIpnCall`](./verify-ipn-call.md#properties-of-the-verifyipncall)
+Similar to the properties of the [`VerifyIpnCall`](/ipn/verify-ipn-call#properties-of-the-verify-ipn-call)
 :::
 
 ## Use in Express

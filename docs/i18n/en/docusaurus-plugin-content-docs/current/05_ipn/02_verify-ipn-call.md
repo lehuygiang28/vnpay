@@ -1,7 +1,3 @@
----
-sidebar_position: 5
----
-
 # Verify IPN Call
 
 When the payment is completed, VNPay will send an IPN (Instant Payment Notification) call to the IPN URL that you have set up. To verify the IPN call, you can use the VNPay library.
@@ -16,7 +12,7 @@ import { VerifyIpnCall } from 'vnpay';
 const verify: VerifyIpnCall = vnpay.verifyIpnCall(req.query);
 ```
 
-## Properties of the `VerifyIpnCall`
+## Properties of the `VerifyIpnCall` {#properties-of-the-verify-ipn-call}
 
 Information after verification and returned by VNPay
 
@@ -33,7 +29,14 @@ See more properties VNPay will return at [VNPay](https://sandbox.vnpayment.vn/ap
 The parameters that VNPay returns are also in the `VerifyIpnCall`.
 :::
 
-## Use in Express
+## Usage
+
+### Using logger
+
+-   Similar to when creating a payment URL, you can use a logger to log IPN verification information
+    [see here](/create-payment-url#using-logger).
+
+### With Express
 
 Steps to verify the return URL in Express:
 
