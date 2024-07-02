@@ -4,6 +4,7 @@ import { BuildPaymentUrl } from './build-payment-url.type';
 export type ReturnQueryFromVNPay = Pick<BuildPaymentUrl, 'vnp_OrderInfo' | 'vnp_TxnRef'> & {
     /**
      * Số tiền thanh toán
+     * @en Payment amount
      */
     vnp_Amount: number | string;
 
