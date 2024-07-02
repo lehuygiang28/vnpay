@@ -23,7 +23,7 @@
 
 ### VNPay documentation: [sandbox.vnpayment.vn/apis](https://sandbox.vnpayment.vn/apis)
 
-## Installation:
+## Installation
 
 Install `vnpay` with `npm`:
 
@@ -43,9 +43,9 @@ Install `vnpay` with `pnpm`:
 $ pnpm install vnpay
 ```
 
-## Usage:
+## Usage
 
-#### Initialize
+### Initialize
 
 ```typescript
 import { VNPay, ignoreLogger } from 'vnpay';
@@ -77,9 +77,11 @@ const vnpay = new VNPay({
 
 ## Support
 
-#### `VNPay` is an open-source and free project. If you find it useful, please consider supporting it by starring ⭐️ the repository on [Github](https://github.com/lehuygiang28/vnpay) and buying me a coffee.
+### `VNPay` is an open-source and free project. If you find it useful, please consider supporting it by starring ⭐️ the repository on [Github](https://github.com/lehuygiang28/vnpay) and buying me a coffee
 
-<a href="https://www.buymeacoffee.com/lehuygiang28" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png" alt="Buy Me A Coffee"></a>
+<a href="https://www.buymeacoffee.com/lehuygiang28" target="_blank">
+    <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=lehuygiang28&button_colour=1a1b27&font_colour=ffffff&font_family=Lato&outline_colour=ffffff&coffee_colour=FFDD00" alt="Buy me a coffee">
+</a>
 
 ## Contribution
 
