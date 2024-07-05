@@ -76,10 +76,14 @@ const vnpay = new VNPay({
 
 ## Hỗ trợ
 
-### Thư viện VNPay là một dự án mã nguồn mở và miễn phí. Nếu bạn thấy nó hữu ích, hãy xem xét hỗ trợ bằng cách tặng một ⭐️ trên [GitHub](https://github.com/lehuygiang28/vnpay) và mua tác giả một cốc cà phê
+### Thư viện VNPay là một dự án mã nguồn mở và miễn phí. Nếu bạn thấy nó hữu ích, hãy xem xét hỗ trợ bằng cách tặng một ⭐️ trên [GitHub](https://github.com/lehuygiang28/vnpay) và mua cho tác giả một cốc cà phê
 
 <a href="https://www.buymeacoffee.com/lehuygiang28" target="_blank">
     <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=lehuygiang28&button_colour=1a1b27&font_colour=ffffff&font_family=Lato&outline_colour=ffffff&coffee_colour=FFDD00" alt="Buy me a coffee">
+</a>
+
+<a href="https://me.momo.vn/lehuygiang28" target="_blank">
+  <img src="https://lehuygiang28.github.io/about-me/public/images/momo-donation.png" height=48 alt="Momo donation" />
 </a>
 
 ## Đóng góp
