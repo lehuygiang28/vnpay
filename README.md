@@ -1,4 +1,4 @@
-# VNPay Lib
+# vnpayjs
 
 <div style="text-align: center;">
     <h5>
@@ -19,7 +19,7 @@
 
 ## Tài liệu
 
-### Tài liệu của thư viện: [vnpay-lib.vercel.app](https://vnpay-lib.vercel.app/)
+### Tài liệu của thư viện: [vnpay.js.org](https://vnpay.js.org/)
 
 ### Tài liệu từ VNPay: [sandbox.vnpayment.vn/apis](https://sandbox.vnpayment.vn/apis)
 

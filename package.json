@@ -4,6 +4,7 @@
         "type": "git",
         "url": "git+https://github.com/lehuygiang28/vnpay.git"
     },
+    "homepage": "https://vnpay.js.org",
     "version": "1.5.1",
     "description": "An open-source nodejs library support to payment with VNPay",
     "main": "lib/index.js",
@@ -25,12 +26,16 @@
     },
     "keywords": [
         "vnpay",
+        "vnpayjs",
         "vnpay.vn",
         "payment",
         "vn-payment",
         "vn-payments"
     ],
     "author": "lehuygiang28 <lehuygiang28@gmail.com>",
+    "maintainers": [
+        "lehuygiang28"
+    ],
     "license": "MIT",
     "dependencies": {
         "moment-timezone": "^0.5.43"

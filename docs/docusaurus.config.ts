@@ -8,7 +8,7 @@ const config: Config = {
     favicon: 'https://github.githubassets.com/favicons/favicon.png',
 
     // Set the production url of your site here
-    url: 'https://vnpay-lib.vercel.app',
+    url: 'https://vnpay.js.org',
     // Set the /<baseUrl>/ pathname under which your site is served
     // For GitHub pages deployment, it is often '/<projectName>/'
     baseUrl: '/',
@@ -60,28 +60,24 @@ const config: Config = {
                 name: 'description',
                 content: 'An open-source nodejs library support to payment with VNPay',
             },
-            { name: 'og:title', content: 'vnpay' },
+            { name: 'og:title', content: 'vnpayjs' },
             {
                 name: 'og:description',
                 content: 'An open-source nodejs library support to payment with VNPay',
             },
-            { name: 'og:url', content: 'https://vnpay-lib.vercel.app' },
-            { name: 'og:site_name', content: 'vnpay' },
+            { name: 'og:url', content: 'https://vnpay.js.org' },
+            { name: 'og:site_name', content: 'vnpayjs' },
             { name: 'og:type', content: 'website' },
             { name: 'og:locale', content: 'vi_VN' },
             { name: 'og:locale:alternate', content: 'en_US' },
             {
                 name: 'keywords',
                 content:
-                    'vnpay, nodejs, payment, library, open-source, vnpay api, vnpay doc, vnpay sandbox, vnpay test, vnpay node, vnpay nodejs',
+                    'vnpay, vnpayjs, nodejs, payment, library, open-source, vnpay api, vnpay doc, vnpay sandbox, vnpay test, vnpay node, vnpay nodejs',
             },
         ],
         navbar: {
-            title: 'lehuygiang28/VNPay',
-            // logo: {
-            //     alt: 'My Site Logo',
-            //     src: 'img/logo.svg',
-            // },
+            title: 'vnpayjs',
             items: [
                 {
                     type: 'localeDropdown',
@@ -106,7 +102,7 @@ const config: Config = {
                     title: 'More',
                     items: [
                         {
-                            label: 'VNPay Docs',
+                            label: 'VNPay Official Docs',
                             href: 'https://sandbox.vnpayment.vn/apis/',
                         },
                         {

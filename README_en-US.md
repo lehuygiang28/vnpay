@@ -1,4 +1,4 @@
-# VNPay Lib
+# vnpayjs
 
 <div style="text-align: center;">
     <h5>
@@ -19,7 +19,7 @@
 
 ## Documentations
 
-### Documentation of the library: [vnpay-lib.vercel.app](https://vnpay-lib.vercel.app/)
+### Documentation of the library: [vnpay.js.org](https://vnpay.js.org/)
 
 ### VNPay documentation: [sandbox.vnpayment.vn/apis](https://sandbox.vnpayment.vn/apis)
 
