@@ -3,6 +3,7 @@ node_modules
 src
 .gitignore
 .prettierrc
+coverage/
 
 *.md
 !README*.md
