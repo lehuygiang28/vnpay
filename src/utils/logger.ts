@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import * as fs from 'node:fs';
 
 /**
  * Truyền vào `loggerFn` để bỏ qua logger
@@ -14,8 +14,10 @@ export function ignoreLogger(): void {}
  * @en Log data to console
  * @param data - Data to be logged
  */
-export function consoleLogger(data: unknown): void {
-    console.log(data);
+export function consoleLogger(data: unknown, symbol: keyof Console = 'log'): void {
+    if (typeof console[symbol] === 'function') {
+        (console[symbol] as (...data: unknown[]) => void)(data);
+    }
 }
 
 /**
