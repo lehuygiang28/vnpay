@@ -51,6 +51,12 @@ import { Bank } from './types/bank.type';
 import { DefaultConfig, GlobalConfig } from './types/common.type';
 import { consoleLogger, ignoreLogger } from './utils';
 import { LoggerOptions } from './types/logger.type';
+import {
+    buildPaymentUrlSearchParams,
+    calculateSecureHash,
+    createPaymentUrl,
+    verifySecureHash,
+} from './utils/payment.util';
 
 /**
  * Lớp hỗ trợ thanh toán qua VNPay
@@ -184,39 +190,25 @@ export class VNPay {
         const dataToBuild = {
             ...this.defaultConfig,
             ...data,
-        };
 
-        /**
-         * Multiply by 100 to follow VNPay standard, see docs for more detail
-         */
-        dataToBuild.vnp_Amount = dataToBuild.vnp_Amount * 100;
+            /**
+             * Multiply by 100 to follow VNPay standard, see docs for more detail
+             */
+            vnp_Amount: data.vnp_Amount * 100,
+        };
 
         if (!isValidVnpayDateFormat(dataToBuild?.vnp_CreateDate ?? 0)) {
             const timeGMT7 = timezone(new Date()).tz('Asia/Ho_Chi_Minh').format();
             dataToBuild.vnp_CreateDate = dateFormat(new Date(timeGMT7), 'yyyyMMddHHmmss');
         }
 
-        const redirectUrl = new URL(
-            resolveUrlString(
-                this.globalDefaultConfig.vnpayHost ?? VNPAY_GATEWAY_SANDBOX_HOST,
-                this.globalDefaultConfig.paymentEndpoint ?? PAYMENT_ENDPOINT,
-            ),
-        );
-        Object.entries(dataToBuild)
-            .sort(([key1], [key2]) => key1.toString().localeCompare(key2.toString()))
-            .forEach(([key, value]) => {
-                // Skip empty value
-                if (!value || value === '' || value === undefined || value === null) {
-                    return;
-                }
+        const redirectUrl = createPaymentUrl(this.globalDefaultConfig, dataToBuild);
 
-                redirectUrl.searchParams.append(key, value.toString());
-            });
-
-        const signed = hash(
+        const signed = calculateSecureHash(
             this.globalDefaultConfig.secureSecret,
-            Buffer.from(redirectUrl.search.slice(1).toString(), this.BUFFER_ENCODE),
+            redirectUrl.search.slice(1).toString(),
             this.HASH_ALGORITHM,
+            this.BUFFER_ENCODE,
         );
         redirectUrl.searchParams.append('vnp_SecureHash', signed);
 
@@ -251,18 +243,26 @@ export class VNPay {
         query: ReturnQueryFromVNPay,
         options?: VerifyReturnUrlOptions<LoggerFields>,
     ): VerifyReturnUrl {
-        const { vnp_SecureHash, vnp_SecureHashType, ...cloneQuery } = query;
+        const { vnp_SecureHash = '', vnp_SecureHashType, ...cloneQuery } = query;
 
         if (typeof cloneQuery?.vnp_Amount !== 'number') {
-            const res = numberRegex.test(cloneQuery?.vnp_Amount ?? '');
-            if (!res) {
+            const isValidAmount = numberRegex.test(cloneQuery?.vnp_Amount ?? '');
+            if (!isValidAmount) {
                 throw new Error('Invalid amount');
             }
             cloneQuery.vnp_Amount = Number(cloneQuery.vnp_Amount);
         }
 
+        const searchParams = buildPaymentUrlSearchParams(cloneQuery);
+        const isVerified = verifySecureHash(
+            this.globalDefaultConfig.secureSecret,
+            searchParams.toString(),
+            this.HASH_ALGORITHM,
+            vnp_SecureHash,
+        );
+
         const outputResults = {
-            isVerified: true,
+            isVerified,
             isSuccess: cloneQuery.vnp_ResponseCode === '00',
             message: getResponseByStatusCode(
                 cloneQuery.vnp_ResponseCode?.toString() ?? '',
@@ -270,30 +270,12 @@ export class VNPay {
             ),
         };
 
-        const searchParams = new URLSearchParams();
-        Object.entries(cloneQuery)
-            .sort(([key1], [key2]) => key1.toString().localeCompare(key2.toString()))
-            .forEach(([key, value]) => {
-                // Skip empty value
-                if (value === '' || value === undefined || value === null) {
-                    return;
-                }
-
-                searchParams.append(key, value.toString());
-            });
-
-        const signed = hash(
-            this.globalDefaultConfig.secureSecret,
-            Buffer.from(searchParams.toString(), this.BUFFER_ENCODE),
-            this.HASH_ALGORITHM,
-        );
-
-        if (vnp_SecureHash !== signed) {
+        if (!isVerified) {
             Object.assign(outputResults, {
-                isVerified: false,
                 message: 'Wrong checksum',
             });
         }
+
         const result = {
             ...cloneQuery,
             ...outputResults,
