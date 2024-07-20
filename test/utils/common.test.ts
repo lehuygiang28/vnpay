@@ -1,3 +1,4 @@
+import { tz } from 'moment-timezone';
 import { HashAlgorithm, VnpLocale } from '../../src/enums';
 import {
     dateFormat,
@@ -13,7 +14,8 @@ import {
 describe('Common utils', () => {
     let utcDate: Date;
     beforeAll(() => {
-        utcDate = new Date(Date.UTC(2023, 11, 21, 10, 30, 0));
+        // utcDate = new Date(Date.UTC(2023, 11, 21, 10, 30, 0));
+        utcDate = tz(new Date(Date.UTC(2023, 11, 21, 10, 30, 0)), 'utc').toDate();
     });
 
     describe('getDateInGMT7', () => {
