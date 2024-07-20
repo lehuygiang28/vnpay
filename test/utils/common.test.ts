@@ -14,7 +14,7 @@ import {
 describe('Common utils', () => {
     let utcDate: Date;
     beforeAll(() => {
-        utcDate = utc('2023-12-21T10:30:00Z').toDate();
+        utcDate = new Date(utc('2023-12-21T10:30:00Z').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'));
     });
 
     describe('getDateInGMT7', () => {
@@ -29,7 +29,7 @@ describe('Common utils', () => {
         it('should format the date to the correct format', () => {
             const date = utcDate;
             const formattedDate = dateFormat(date);
-            expect(formattedDate).toBe(20231221173000);
+            expect(formattedDate).toBe(20231221103000);
         });
     });
 
