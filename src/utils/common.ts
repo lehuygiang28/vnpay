@@ -1,10 +1,12 @@
-import timezone from 'moment-timezone';
+import crypto, { BinaryLike } from 'node:crypto';
+import { tz, utc } from 'moment-timezone';
 import { RESPONSE_MAP } from '../constants/response-map.constant';
 import { HashAlgorithm, VnpLocale } from '../enums';
-import crypto, { BinaryLike } from 'crypto';
 
-export function getDateInGMT7(date: Date): Date {
-    return timezone(new Date()).tz('Asia/Ho_Chi_Minh').toDate();
+export function getDateInGMT7(date?: Date): Date {
+    return new Date(
+        tz(date ?? new Date(), 'Asia/Ho_Chi_Minh').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+    );
 }
 
 /**
@@ -40,7 +42,10 @@ export function dateFormat(date: Date, format = 'yyyyMMddHHmmss'): number {
  * @param dateNumber An vnpay date format number
  * @returns Date
  */
-export function parseDate(dateNumber: number | string): Date {
+export function parseDate(
+    dateNumber: number | string,
+    tz: 'utc' | 'local' | 'gmt7' = 'local',
+): Date {
     const dateString = dateNumber.toString();
 
     const year = parseInt(dateString.slice(0, 4));
@@ -50,7 +55,19 @@ export function parseDate(dateNumber: number | string): Date {
     const minute = parseInt(dateString.slice(10, 12));
     const second = parseInt(dateString.slice(12, 14));
 
-    return new Date(year, month, day, hour, minute, second);
+    switch (tz) {
+        case 'utc':
+            return new Date(
+                utc([year, month, day, hour, minute, second], true).format(
+                    'YYYY-MM-DDTHH:mm:ss.SSS[Z]',
+                ),
+            );
+        case 'gmt7':
+            return getDateInGMT7(new Date(year, month, day, hour, minute, second));
+        case 'local':
+        default:
+            return new Date(year, month, day, hour, minute, second);
+    }
 }
 
 /**
