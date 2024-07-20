@@ -1,7 +1,7 @@
 import { VNPay } from '../src/vnpay';
 import { VnpLocale, ProductCode, VnpCurrCode } from '../src/enums';
 import { BuildPaymentUrl } from '../src/types';
-import { consoleLogger, dateFormat, ignoreLogger } from '../src/utils';
+import { consoleLogger, dateFormat, getDateInGMT7, ignoreLogger } from '../src/utils';
 
 describe('buildPaymentUrl', () => {
     let vnpay: VNPay;
@@ -147,7 +147,7 @@ describe('buildPaymentUrl', () => {
             ...baseInput,
         };
         delete input.vnp_CreateDate;
-        const currentTime = dateFormat(new Date());
+        const currentTime = dateFormat(getDateInGMT7());
 
         const result = vnpay.buildPaymentUrl(input);
 
