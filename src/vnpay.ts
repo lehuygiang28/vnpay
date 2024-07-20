@@ -1,4 +1,3 @@
-import timezone from 'moment-timezone';
 import {
     VNPAY_GATEWAY_SANDBOX_HOST,
     PAYMENT_ENDPOINT,
@@ -14,6 +13,7 @@ import {
 import { HashAlgorithm, VnpCurrCode, VnpLocale, ProductCode } from './enums';
 import {
     dateFormat,
+    getDateInGMT7,
     getResponseByStatusCode,
     hash,
     isValidVnpayDateFormat,
@@ -198,8 +198,8 @@ export class VNPay {
         };
 
         if (!isValidVnpayDateFormat(dataToBuild?.vnp_CreateDate ?? 0)) {
-            const timeGMT7 = timezone(new Date()).tz('Asia/Ho_Chi_Minh').format();
-            dataToBuild.vnp_CreateDate = dateFormat(new Date(timeGMT7), 'yyyyMMddHHmmss');
+            const timeGMT7 = getDateInGMT7();
+            dataToBuild.vnp_CreateDate = dateFormat(timeGMT7, 'yyyyMMddHHmmss');
         }
 
         const redirectUrl = createPaymentUrl(this.globalDefaultConfig, dataToBuild);
