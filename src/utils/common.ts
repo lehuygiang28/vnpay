@@ -1,12 +1,10 @@
-import timezone from 'moment-timezone';
+import { tz } from 'moment-timezone';
 import crypto, { BinaryLike } from 'node:crypto';
 import { RESPONSE_MAP } from '../constants/response-map.constant';
 import { HashAlgorithm, VnpLocale } from '../enums';
 
 export function getDateInGMT7(date?: Date): Date {
-    return timezone(date ?? new Date())
-        .tz('Asia/Ho_Chi_Minh')
-        .toDate();
+    return tz(date ?? new Date(), 'Asia/Ho_Chi_Minh').toDate();
 }
 
 /**
