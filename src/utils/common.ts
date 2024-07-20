@@ -1,4 +1,4 @@
-import { tz } from 'moment-timezone';
+import { tz, utc } from 'moment-timezone';
 import crypto, { BinaryLike } from 'node:crypto';
 import { RESPONSE_MAP } from '../constants/response-map.constant';
 import { HashAlgorithm, VnpLocale } from '../enums';
@@ -40,7 +40,10 @@ export function dateFormat(date: Date, format = 'yyyyMMddHHmmss'): number {
  * @param dateNumber An vnpay date format number
  * @returns Date
  */
-export function parseDate(dateNumber: number | string, tz: 'utc' | 'local' = 'local'): Date {
+export function parseDate(
+    dateNumber: number | string,
+    tz: 'utc' | 'local' | 'gmt7' = 'local',
+): Date {
     const dateString = dateNumber.toString();
 
     const year = parseInt(dateString.slice(0, 4));
@@ -50,9 +53,15 @@ export function parseDate(dateNumber: number | string, tz: 'utc' | 'local' = 'lo
     const minute = parseInt(dateString.slice(10, 12));
     const second = parseInt(dateString.slice(12, 14));
 
-    return tz === 'local'
-        ? new Date(year, month, day, hour, minute, second)
-        : new Date(Date.UTC(year, month, day, hour, minute, second));
+    switch (tz) {
+        case 'utc':
+            return utc([year, month, day, hour, minute, second]).toDate();
+        case 'gmt7':
+            return getDateInGMT7(new Date(year, month, day, hour, minute, second));
+        case 'local':
+        default:
+            return new Date(year, month, day, hour, minute, second);
+    }
 }
 
 /**
