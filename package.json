@@ -9,9 +9,7 @@
     "description": "An open-source nodejs library support to payment with VNPay",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
-    "files": [
-        "lib"
-    ],
+    "files": ["lib"],
     "scripts": {
         "build": "rimraf ./lib && tsc",
         "prepare": "npm run build",
@@ -24,18 +22,9 @@
         "format": "npx @biomejs/biome format .",
         "format:fix": "npx @biomejs/biome format --write ."
     },
-    "keywords": [
-        "vnpay",
-        "vnpayjs",
-        "vnpay.vn",
-        "payment",
-        "vn-payment",
-        "vn-payments"
-    ],
+    "keywords": ["vnpay", "vnpayjs", "vnpay.vn", "payment", "vn-payment", "vn-payments"],
     "author": "lehuygiang28 <lehuygiang28@gmail.com>",
-    "maintainers": [
-        "lehuygiang28"
-    ],
+    "maintainers": ["lehuygiang28"],
     "license": "MIT",
     "dependencies": {
         "moment-timezone": "^0.5.43"
