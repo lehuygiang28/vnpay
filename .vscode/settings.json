@@ -1,0 +1,64 @@
+{
+    "files.autoSave": "afterDelay",
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "modificationsIfAvailable",
+    "editor.defaultFormatter": "biomejs.biome",
+    "eslint.enable": false,
+    "prettier.enable": false,
+    "biome.enabled": true,
+    "editor.codeActionsOnSave": {
+        "quickfix.biome": "explicit",
+        "source.organizeImports.biome": "explicit"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "biomejs.biome"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "biomejs.biome"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "biomejs.biome"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "biomejs.biome"
+    },
+    "cSpell.words": [
+        "clsx",
+        "Fdifferent",
+        "hihihi",
+        "HMACSHA",
+        "lehuygiang",
+        "pageview",
+        "Parens",
+        "paymentv",
+        "portfinder",
+        "QRCODE",
+        "qrpayauth",
+        "querydr",
+        "QXUI",
+        "SERCRET",
+        "TMNCODE",
+        "Vnpay",
+        "vpcpay",
+        "webapi"
+    ],
+    "conventionalCommits.scopes": [
+        "example",
+        "docs",
+        "actions",
+        "version",
+        "vnpay",
+        "refund",
+        "styles",
+        "buildPaymentUrl",
+        "test",
+        "typos",
+        "types",
+        "logger",
+        "ipn",
+        "queryDr",
+        "readme",
+        "verifyHash",
+        "utils"
+    ]
+}

@@ -17,13 +17,12 @@
         "prepare": "npm run build",
         "test": "jest",
         "test:cov": "jest --coverage",
-        "release": "npm version patch && git push --follow-tags",
-        "lint": "eslint .",
-        "lint:fix": "eslint . --fix",
-        "prettier": "prettier --check .",
-        "prettier:fix": "prettier --write .",
         "example": "ts-node ./example/index.ts",
-        "example:server": "ts-node ./example/express.ts"
+        "example:server": "ts-node ./example/express.ts",
+        "lint": "npx @biomejs/biome lint .",
+        "lint:fix": "npx @biomejs/biome lint . --write",
+        "format": "npx @biomejs/biome format .",
+        "format:fix": "npx @biomejs/biome format --write ."
     },
     "keywords": [
         "vnpay",
@@ -42,16 +41,12 @@
         "moment-timezone": "^0.5.43"
     },
     "devDependencies": {
+        "@biomejs/biome": "^1.8.3",
+        "@tsconfig/recommended": "^1.0.7",
         "@types/express": "^4.17.21",
         "@types/jest": "^29.5.5",
         "@types/node": "^20.8.4",
-        "@typescript-eslint/eslint-plugin": "^7.10.0",
-        "@typescript-eslint/parser": "^7.10.0",
-        "eslint": "^8.57.0",
-        "eslint-config-prettier": "^9.1.0",
-        "eslint-plugin-prettier": "^5.1.3",
         "express": "^4.18.3",
-        "prettier": "^3.2.5",
         "rimraf": "^5.0.5",
         "ts-jest": "^29.1.1",
         "ts-node": "^10.9.2",
