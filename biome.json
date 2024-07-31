@@ -9,14 +9,32 @@
         "lineEnding": "lf",
         "lineWidth": 100,
         "attributePosition": "auto",
-        "ignore": [".git/**", "node_modules/**", "dist/**", "lib/**", "coverage/**", ".DS_Store"]
+        "ignore": [
+            ".git/**",
+            ".docusaurus/**",
+            "node_modules/**",
+            "dist/**",
+            "lib/**",
+            "coverage/**",
+            "build/**",
+            ".DS_Store"
+        ]
     },
     "linter": {
         "enabled": true,
         "rules": {
             "recommended": true
         },
-        "ignore": [".git/**", "node_modules/**", "dist/**", "lib/**", "coverage/**", ".DS_Store"]
+        "ignore": [
+            ".git/**",
+            "docusaurus/**",
+            "node_modules/**",
+            "dist/**",
+            "lib/**",
+            "coverage/**",
+            "build/**",
+            ".DS_Store"
+        ]
     },
     "javascript": {
         "formatter": {

@@ -1,9 +1,11 @@
 if (!window.va) {
     window.va =
         window.va ||
-        function () {
+        (() => {
+            // biome-ignore lint/suspicious/noAssignInExpressions: follow vercel analytics's docs
+            // biome-ignore lint/style/noArguments: follow vercel analytics's docs
             (window.vaq = window.vaq || []).push(arguments);
-        };
+        });
 }
 
 // page view one time when page loaded
@@ -16,8 +18,10 @@ va('event', {
 });
 
 // page view on every page if changed
+// biome-ignore lint/style/noVar: follow vercel analytics's docs
 var pushState = history.pushState;
-history.pushState = function () {
+history.pushState = () => {
+    // biome-ignore lint/style/noArguments: follow vercel analytics's docs
     pushState.apply(history, arguments);
     va('event', {
         name: window.location.pathname,
