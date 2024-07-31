@@ -1,5 +1,5 @@
 import { VNPay } from '../src/vnpay';
-import { ReturnQueryFromVNPay, VerifyReturnUrl } from '../src/types';
+import type { ReturnQueryFromVNPay, VerifyReturnUrl } from '../src/types';
 import { consoleLogger, ignoreLogger } from '../src/utils';
 
 describe('verifyReturnUrl', () => {

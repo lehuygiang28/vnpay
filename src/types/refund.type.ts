@@ -1,8 +1,8 @@
-import { RefundTransactionType } from '../enums';
-import { BuildPaymentUrl } from './build-payment-url.type';
-import { ResultVerified } from './common.type';
-import { LoggerData, LoggerOptions } from './logger.type';
-import { QueryDr, QueryDrResponseFromVNPay } from './query-dr.type';
+import type { RefundTransactionType } from '../enums';
+import type { BuildPaymentUrl } from './build-payment-url.type';
+import type { ResultVerified } from './common.type';
+import type { LoggerData, LoggerOptions } from './logger.type';
+import type { QueryDr, QueryDrResponseFromVNPay } from './query-dr.type';
 
 export type Refund = Partial<Pick<QueryDr, 'vnp_TransactionNo'>> &
     Pick<QueryDr, 'vnp_RequestId' | 'vnp_TransactionDate' | 'vnp_IpAddr'> &

@@ -1,5 +1,5 @@
-import { DefaultConfig, GlobalConfig } from './common.type';
-import { LoggerData, LoggerOptions } from './logger.type';
+import type { DefaultConfig, GlobalConfig } from './common.type';
+import type { LoggerData, LoggerOptions } from './logger.type';
 
 export type BuildPaymentUrl = {
     /**

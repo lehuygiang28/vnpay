@@ -1,6 +1,6 @@
 import { PAYMENT_ENDPOINT, VNPAY_GATEWAY_SANDBOX_HOST } from '../constants';
-import { HashAlgorithm } from '../enums';
-import { BuildPaymentUrl, DefaultConfig, GlobalConfig } from '../types';
+import type { HashAlgorithm } from '../enums';
+import type { BuildPaymentUrl, DefaultConfig, GlobalConfig } from '../types';
 import { hash, resolveUrlString } from './common';
 
 export function buildPaymentUrlSearchParams(data: Record<string, any>): URLSearchParams {

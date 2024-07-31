@@ -1,6 +1,6 @@
 import { VNPay } from '../src/vnpay';
 import { VnpCardType } from '../src/enums';
-import { ReturnQueryFromVNPay, VerifyIpnCall } from '../src/types';
+import type { ReturnQueryFromVNPay, VerifyIpnCall } from '../src/types';
 import { consoleLogger, ignoreLogger } from '../src/utils';
 
 describe('verifyIpnCall', () => {

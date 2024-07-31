@@ -5,7 +5,7 @@ import {
     verifySecureHash,
 } from '../../src/utils/payment.util';
 import { HashAlgorithm } from '../../src/enums';
-import { GlobalConfig } from '../../src/types';
+import type { GlobalConfig } from '../../src/types';
 
 describe('VNPay Payment Utility Functions', () => {
     describe('buildPaymentUrlSearchParams', () => {

@@ -1,4 +1,4 @@
-import { HashAlgorithm, VnpCurrCode, VnpLocale } from '../enums';
+import type { HashAlgorithm, VnpCurrCode, VnpLocale } from '../enums';
 
 export type VNPayConfig = {
     /**

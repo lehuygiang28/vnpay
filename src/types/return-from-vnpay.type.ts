@@ -1,5 +1,5 @@
-import { VnpCardType } from '../enums';
-import { BuildPaymentUrl } from './build-payment-url.type';
+import type { VnpCardType } from '../enums';
+import type { BuildPaymentUrl } from './build-payment-url.type';
 
 export type ReturnQueryFromVNPay = Pick<BuildPaymentUrl, 'vnp_OrderInfo' | 'vnp_TxnRef'> & {
     /**

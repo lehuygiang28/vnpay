@@ -1,5 +1,5 @@
-import { LoggerData, LoggerOptions } from './logger.type';
-import { ReturnQueryFromVNPay } from './return-from-vnpay.type';
+import type { LoggerData, LoggerOptions } from './logger.type';
+import type { ReturnQueryFromVNPay } from './return-from-vnpay.type';
 
 export type VerifyReturnUrl = {
     /**

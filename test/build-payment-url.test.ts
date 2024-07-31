@@ -1,6 +1,6 @@
 import { VNPay } from '../src/vnpay';
 import { VnpLocale, ProductCode, VnpCurrCode } from '../src/enums';
-import { BuildPaymentUrl } from '../src/types';
+import type { BuildPaymentUrl } from '../src/types';
 import { consoleLogger, dateFormat, getDateInGMT7, ignoreLogger } from '../src/utils';
 
 describe('buildPaymentUrl', () => {

@@ -1,5 +1,5 @@
-import { LoggerData, LoggerOptions } from './logger.type';
-import { VerifyReturnUrl } from './verify-return-url.type';
+import type { LoggerData, LoggerOptions } from './logger.type';
+import type { VerifyReturnUrl } from './verify-return-url.type';
 
 export type VerifyIpnCall = VerifyReturnUrl;
 

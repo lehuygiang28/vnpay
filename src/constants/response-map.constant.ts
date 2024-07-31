@@ -1,4 +1,4 @@
-import { VnpLocale } from '../enums';
+import type { VnpLocale } from '../enums';
 
 export const WRONG_CHECKSUM_KEY = 'WRONG_CHECKSUM_KEY';
 

@@ -1,8 +1,8 @@
-import { VnpTransactionType } from '../enums';
-import { BuildPaymentUrl } from './build-payment-url.type';
-import { ResultVerified } from './common.type';
-import { LoggerData, LoggerOptions } from './logger.type';
-import { ReturnQueryFromVNPay } from './return-from-vnpay.type';
+import type { VnpTransactionType } from '../enums';
+import type { BuildPaymentUrl } from './build-payment-url.type';
+import type { ResultVerified } from './common.type';
+import type { LoggerData, LoggerOptions } from './logger.type';
+import type { ReturnQueryFromVNPay } from './return-from-vnpay.type';
 
 export type QueryDr = Required<
     Pick<BuildPaymentUrl, 'vnp_TxnRef' | 'vnp_OrderInfo' | 'vnp_CreateDate'> &

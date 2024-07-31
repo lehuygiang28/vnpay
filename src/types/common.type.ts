@@ -1,5 +1,5 @@
-import { ProductCode, VnpCurrCode, VnpLocale } from '../enums';
-import { VNPayConfig } from './vnpay-config.type';
+import type { ProductCode, VnpCurrCode, VnpLocale } from '../enums';
+import type { VNPayConfig } from './vnpay-config.type';
 
 export type GlobalConfig = Omit<VNPayConfig, 'testMode' | 'enableLog' | 'loggerFn'> & {
     vnpayHost: string;
