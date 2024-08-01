@@ -3,23 +3,26 @@ import type { HashAlgorithm } from '../enums';
 import type { BuildPaymentUrl, DefaultConfig, GlobalConfig } from '../types';
 import { hash, resolveUrlString } from './common';
 
-export function buildPaymentUrlSearchParams(data: Record<string, any>): URLSearchParams {
+export function buildPaymentUrlSearchParams(data: Record<string, unknown>): URLSearchParams {
     const searchParams = new URLSearchParams();
-    Object.entries(data)
-        .sort(([key1], [key2]) => key1.toString().localeCompare(key2.toString()))
-        .forEach(([key, value]) => {
-            // Skip empty value
-            if (value === '' || value === undefined || value === null) {
-                return;
-            }
-            searchParams.set(key, value.toString());
-        });
+    const sortedEntries = Object.entries(data).sort(([key1], [key2]) =>
+        key1.toString().localeCompare(key2.toString()),
+    );
+
+    for (const [key, value] of sortedEntries) {
+        // Skip empty value
+        if (value === '' || value === undefined || value === null) {
+            continue;
+        }
+
+        searchParams.append(key, value.toString());
+    }
     return searchParams;
 }
 
 export function createPaymentUrl(
     config: Pick<GlobalConfig, 'vnpayHost' | 'paymentEndpoint'>,
-    data: (BuildPaymentUrl & DefaultConfig) | Record<string, any>,
+    data: (BuildPaymentUrl & DefaultConfig) | Record<string, unknown>,
 ): URL {
     const redirectUrl = new URL(
         resolveUrlString(
