@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import crypto from 'node:crypto';
 import { ProductCode, RefundTransactionType, VnpLocale } from '../src/enums';
 import type { ReturnQueryFromVNPay, VerifyReturnUrl } from '../src/types';
@@ -29,12 +30,13 @@ function getSampleSecureHash(queryResponseFromVNPay: ReturnQueryFromVNPay, secre
 }
 
 async function main() {
-    const secret = 'secret';
+    const secret = process.env.VNPAY_SECURE_SECRET ?? 'secret';
     const vnpay = new VNPay({
-        tmnCode: 'K8C1PIGA',
+        tmnCode: process.env.VNPAY_TMN_CODE ?? '2QXUI4B4',
         secureSecret: secret,
         vnpayHost: 'https://sandbox.vnpayment.vn',
     });
+    console.log(vnpay.defaultConfig);
 
     const bankList = await vnpay.getBankList();
     console.log(bankList);

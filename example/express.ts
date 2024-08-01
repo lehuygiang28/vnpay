@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express, { type Request, type Response } from 'express';
 import {
     InpOrderAlreadyConfirmed,
@@ -17,8 +18,8 @@ const app = express();
 const port = 3000;
 
 const vnpay = new VNPay({
-    tmnCode: '2QXUI4B4',
-    secureSecret: 'secret',
+    tmnCode: process.env.VNPAY_TMN_CODE ?? '2QXUI4B4',
+    secureSecret: process.env.VNPAY_SECURE_SECRET ?? 'secret',
     vnpayHost: 'https://sandbox.vnpayment.vn',
     testMode: true, // optional
     hashAlgorithm: HashAlgorithm.SHA512, // optional
