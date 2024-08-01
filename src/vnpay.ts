@@ -1,16 +1,48 @@
 import {
-    VNPAY_GATEWAY_SANDBOX_HOST,
+    GET_BANK_LIST_ENDPOINT,
     PAYMENT_ENDPOINT,
-    VNP_DEFAULT_COMMAND,
-    VNP_VERSION,
     QUERY_DR_REFUND_ENDPOINT,
     QUERY_DR_RESPONSE_MAP,
     REFUND_RESPONSE_MAP,
-    GET_BANK_LIST_ENDPOINT,
-    numberRegex,
+    VNPAY_GATEWAY_SANDBOX_HOST,
+    VNP_DEFAULT_COMMAND,
+    VNP_VERSION,
     WRONG_CHECKSUM_KEY,
+    numberRegex,
 } from './constants';
-import { HashAlgorithm, VnpCurrCode, VnpLocale, ProductCode } from './enums';
+import { HashAlgorithm, ProductCode, VnpCurrCode, VnpLocale } from './enums';
+import type {
+    BuildPaymentUrl,
+    BuildPaymentUrlLogger,
+    BuildPaymentUrlOptions,
+    ReturnQueryFromVNPay,
+    VNPayConfig,
+    VerifyIpnCall,
+    VerifyIpnCallLogger,
+    VerifyIpnCallOptions,
+    VerifyReturnUrl,
+    VerifyReturnUrlLogger,
+    VerifyReturnUrlOptions,
+} from './types';
+import type { Bank } from './types/bank.type';
+import type { DefaultConfig, GlobalConfig } from './types/common.type';
+import type { LoggerOptions } from './types/logger.type';
+import type {
+    BodyRequestQueryDr,
+    QueryDr,
+    QueryDrResponse,
+    QueryDrResponseFromVNPay,
+    QueryDrResponseLogger,
+    QueryDrResponseOptions,
+} from './types/query-dr.type';
+import type {
+    Refund,
+    RefundOptions,
+    RefundResponse,
+    RefundResponseFromVNPay,
+    RefundResponseLogger,
+} from './types/refund.type';
+import { consoleLogger, ignoreLogger } from './utils';
 import {
     dateFormat,
     getDateInGMT7,
@@ -19,38 +51,6 @@ import {
     isValidVnpayDateFormat,
     resolveUrlString,
 } from './utils/common';
-import {
-    VNPayConfig,
-    BuildPaymentUrl,
-    BuildPaymentUrlOptions,
-    BuildPaymentUrlLogger,
-    ReturnQueryFromVNPay,
-    VerifyReturnUrl,
-    VerifyIpnCall,
-    VerifyReturnUrlLogger,
-    VerifyReturnUrlOptions,
-    VerifyIpnCallLogger,
-    VerifyIpnCallOptions,
-} from './types';
-import {
-    QueryDr,
-    BodyRequestQueryDr,
-    QueryDrResponseFromVNPay,
-    QueryDrResponse,
-    QueryDrResponseLogger,
-    QueryDrResponseOptions,
-} from './types/query-dr.type';
-import {
-    Refund,
-    RefundOptions,
-    RefundResponse,
-    RefundResponseFromVNPay,
-    RefundResponseLogger,
-} from './types/refund.type';
-import { Bank } from './types/bank.type';
-import { DefaultConfig, GlobalConfig } from './types/common.type';
-import { consoleLogger, ignoreLogger } from './utils';
-import { LoggerOptions } from './types/logger.type';
 import {
     buildPaymentUrlSearchParams,
     calculateSecureHash,
@@ -402,7 +402,8 @@ export class VNPay {
         );
         const outputResults = {
             isVerified: true,
-            isSuccess: responseData.vnp_ResponseCode == '00',
+            isSuccess:
+                responseData.vnp_ResponseCode === '00' || responseData.vnp_ResponseCode === 0,
             message,
             ...responseData,
             vnp_Message: message,
@@ -542,7 +543,8 @@ export class VNPay {
         );
         const outputResults = {
             isVerified: true,
-            isSuccess: responseData.vnp_ResponseCode == '00',
+            isSuccess:
+                responseData.vnp_ResponseCode === '00' || responseData.vnp_ResponseCode === 0,
             message,
             ...responseData,
             vnp_Message: message,
