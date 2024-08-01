@@ -1,24 +1,26 @@
-import crypto from 'crypto';
-import { VNPay } from '../src/vnpay';
+import crypto from 'node:crypto';
+import { ProductCode, RefundTransactionType, VnpLocale } from '../src/enums';
+import type { ReturnQueryFromVNPay, VerifyReturnUrl } from '../src/types';
 import { dateFormat } from '../src/utils';
-import { ReturnQueryFromVNPay, VerifyReturnUrl } from '../src/types';
-import { RefundTransactionType, VnpLocale, ProductCode } from '../src/enums';
+import { VNPay } from '../src/vnpay';
 
 /**
  * This function is used to generate secure hash for testing purpose only
  */
 function getSampleSecureHash(queryResponseFromVNPay: ReturnQueryFromVNPay, secret: string) {
     const searchParams = new URLSearchParams();
-    Object.entries(queryResponseFromVNPay)
-        .sort(([key1], [key2]) => key1.toString().localeCompare(key2.toString()))
-        .forEach(([key, value]) => {
-            // Skip empty value
-            if (value === '' || value === undefined || value === null) {
-                return;
-            }
+    const sortedEntries = Object.entries(queryResponseFromVNPay).sort(([key1], [key2]) =>
+        key1.toString().localeCompare(key2.toString()),
+    );
 
-            searchParams.append(key, value.toString());
-        });
+    for (const [key, value] of sortedEntries) {
+        // Skip empty value
+        if (value === '' || value === undefined || value === null) {
+            continue;
+        }
+
+        searchParams.append(key, value.toString());
+    }
 
     return crypto
         .createHmac('sha512', secret)
