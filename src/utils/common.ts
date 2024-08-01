@@ -124,15 +124,16 @@ export function getResponseByStatusCode(
 }
 
 export function resolveUrlString(host: string, path: string): string {
-    host = host.trim();
-    path = path.trim();
-    while (host.endsWith('/') || host.endsWith('\\')) {
-        host = host.slice(0, -1);
+    let trimmedHost = host.trim();
+    let trimmedPath = path.trim();
+
+    while (trimmedHost.endsWith('/') || trimmedHost.endsWith('\\')) {
+        trimmedHost = trimmedHost.slice(0, -1);
     }
-    while (path.startsWith('/') || path.startsWith('\\')) {
-        path = path.slice(1);
+    while (trimmedPath.startsWith('/') || trimmedPath.startsWith('\\')) {
+        trimmedPath = trimmedPath.slice(1);
     }
-    return `${host}/${path}`;
+    return `${trimmedHost}/${trimmedPath}`;
 }
 
 export function hash(secret: string, data: BinaryLike, algorithm: HashAlgorithm): string {
