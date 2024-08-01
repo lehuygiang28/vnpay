@@ -1,7 +1,7 @@
-import crypto, { BinaryLike } from 'node:crypto';
+import crypto, { type BinaryLike } from 'node:crypto';
 import { tz, utc } from 'moment-timezone';
 import { RESPONSE_MAP } from '../constants/response-map.constant';
-import { HashAlgorithm, VnpLocale } from '../enums';
+import { type HashAlgorithm, VnpLocale } from '../enums';
 
 export function getDateInGMT7(date?: Date): Date {
     return new Date(
@@ -48,12 +48,14 @@ export function parseDate(
 ): Date {
     const dateString = dateNumber.toString();
 
-    const year = parseInt(dateString.slice(0, 4));
-    const month = parseInt(dateString.slice(4, 6)) - 1; // months are 0-indexed in JavaScript
-    const day = parseInt(dateString.slice(6, 8));
-    const hour = parseInt(dateString.slice(8, 10));
-    const minute = parseInt(dateString.slice(10, 12));
-    const second = parseInt(dateString.slice(12, 14));
+    const _parseInt = Number.parseInt;
+
+    const year = _parseInt(dateString.slice(0, 4));
+    const month = _parseInt(dateString.slice(4, 6)) - 1; // months are 0-indexed in JavaScript
+    const day = _parseInt(dateString.slice(6, 8));
+    const hour = _parseInt(dateString.slice(8, 10));
+    const minute = _parseInt(dateString.slice(10, 12));
+    const second = _parseInt(dateString.slice(12, 14));
 
     switch (tz) {
         case 'utc':
@@ -64,6 +66,7 @@ export function parseDate(
             );
         case 'gmt7':
             return getDateInGMT7(new Date(year, month, day, hour, minute, second));
+        // biome-ignore lint/complexity/noUselessSwitchCase: still good to readable
         case 'local':
         default:
             return new Date(year, month, day, hour, minute, second);
@@ -110,7 +113,7 @@ export function generateRandomString(
  * @returns message of response code
  */
 export function getResponseByStatusCode(
-    responseCode: string = '',
+    responseCode = '',
     locale: VnpLocale = VnpLocale.VN,
     responseMap = RESPONSE_MAP,
 ): string {
