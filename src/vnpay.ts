@@ -165,13 +165,12 @@ export class VNPay {
             },
         );
         const bankList = (await response.json()) as Bank[];
-        bankList.forEach(
-            (b) =>
-                (b.logo_link = resolveUrlString(
-                    this.globalDefaultConfig.vnpayHost ?? VNPAY_GATEWAY_SANDBOX_HOST,
-                    b.logo_link.slice(1),
-                )),
-        );
+        for (const bank of bankList) {
+            bank.logo_link = resolveUrlString(
+                this.globalDefaultConfig.vnpayHost ?? VNPAY_GATEWAY_SANDBOX_HOST,
+                bank.logo_link.slice(1),
+            );
+        }
         return bankList;
     }
 
@@ -612,7 +611,7 @@ export class VNPay {
         if (options?.logger && 'fields' in options.logger) {
             const { type, fields } = options.logger;
 
-            Object.keys(data).forEach((key) => {
+            for (const key of Object.keys(data)) {
                 const keyAssert = key as unknown as LoggerFields;
                 if (
                     (type === 'omit' && fields.includes(keyAssert)) ||
@@ -620,7 +619,7 @@ export class VNPay {
                 ) {
                     delete data[keyAssert];
                 }
-            });
+            }
         }
 
         // Exec logger function, or default global logger
