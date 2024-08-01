@@ -1,17 +1,17 @@
-import express, { Request, Response } from 'express';
-import { VNPay } from '../src/vnpay';
-import { ReturnQueryFromVNPay, VerifyReturnUrl } from '../src/types';
+import express, { type Request, type Response } from 'express';
 import {
-    IpnResponse,
+    InpOrderAlreadyConfirmed,
+    IpnFailChecksum,
+    IpnInvalidAmount,
+    IpnOrderNotFound,
+    type IpnResponse,
     IpnSuccess,
     IpnUnknownError,
-    IpnFailChecksum,
-    IpnOrderNotFound,
-    IpnInvalidAmount,
-    InpOrderAlreadyConfirmed,
 } from '../src/constants';
 import { HashAlgorithm, ProductCode } from '../src/enums';
+import type { ReturnQueryFromVNPay, VerifyReturnUrl } from '../src/types';
 import { consoleLogger, ignoreLogger } from '../src/utils';
+import { VNPay } from '../src/vnpay';
 
 const app = express();
 const port = 3000;
@@ -78,7 +78,7 @@ app.get('/payment-url', (req: Request, res: Response) => {
  */
 app.get(
     '/vnpay-ipn',
-    (req: Request<any, any, any, ReturnQueryFromVNPay>, res: Response<IpnResponse>) => {
+    (req: Request<unknown, unknown, unknown, ReturnQueryFromVNPay>, res: Response<IpnResponse>) => {
         try {
             const verify: VerifyReturnUrl = vnpay.verifyIpnCall(
                 { ...req.query },
@@ -134,35 +134,38 @@ app.get(
  * WARNING: Do not use this endpoint to handle the result of the payment, this should be used to handle redirect user from VNPay to your website
  * After the payment process is done, VNPay will redirect use page to the return url that you provided in the payment url
  */
-app.get('/vnpay-return', (req: Request<any, any, any, ReturnQueryFromVNPay>, res: Response) => {
-    let verify: VerifyReturnUrl;
-    try {
-        verify = vnpay.verifyReturnUrl(
-            { ...req.query },
-            {
-                logger: {
-                    type: 'pick',
-                    fields: ['createdAt', 'method', 'isVerified', 'message'], // Select fields want to log
-                    loggerFn: (data) => console.log(data), // Log to console, or use your custom logger
+app.get(
+    '/vnpay-return',
+    (req: Request<unknown, unknown, unknown, ReturnQueryFromVNPay>, res: Response) => {
+        let verify: VerifyReturnUrl;
+        try {
+            verify = vnpay.verifyReturnUrl(
+                { ...req.query },
+                {
+                    logger: {
+                        type: 'pick',
+                        fields: ['createdAt', 'method', 'isVerified', 'message'], // Select fields want to log
+                        loggerFn: (data) => console.log(data), // Log to console, or use your custom logger
+                    },
                 },
-            },
-        );
-        if (!verify.isVerified) {
-            return res.status(200).json({
-                message: verify?.message ?? 'Payment failed!',
-                status: verify.isSuccess,
-            });
+            );
+            if (!verify.isVerified) {
+                return res.status(200).json({
+                    message: verify?.message ?? 'Payment failed!',
+                    status: verify.isSuccess,
+                });
+            }
+        } catch (error) {
+            console.log(`verify error: ${error}`);
+            return res.status(400).json({ message: 'verify error', status: false });
         }
-    } catch (error) {
-        console.log(`verify error: ${error}`);
-        return res.status(400).json({ message: 'verify error', status: false });
-    }
 
-    return res.status(200).json({
-        message: verify?.message ?? 'Payment successful!',
-        status: verify.isSuccess,
-    });
-});
+        return res.status(200).json({
+            message: verify?.message ?? 'Payment successful!',
+            status: verify.isSuccess,
+        });
+    },
+);
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}!`);
