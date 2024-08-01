@@ -1,0 +1,18 @@
+{
+    "$schema": "https://unpkg.com/release-it@17/schema/release-it.json",
+    "git": {
+        "commitMessage": "chore: :bookmark: release v${version}"
+    },
+    "github": {
+        "release": true,
+        "push": true,
+        "commit": true,
+        "tag": true
+    },
+    "npm": {
+        "publish": false
+    },
+    "hooks": {
+        "after:bump": ["npm run format:fix"]
+    }
+}

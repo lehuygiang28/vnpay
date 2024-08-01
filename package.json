@@ -20,7 +20,8 @@
         "lint": "npx @biomejs/biome lint .",
         "lint:fix": "npx @biomejs/biome lint . --write",
         "format": "npx @biomejs/biome format .",
-        "format:fix": "npx @biomejs/biome format --write ."
+        "format:fix": "npx @biomejs/biome format --write .",
+        "release": "release-it"
     },
     "keywords": ["vnpay", "vnpayjs", "vnpay.vn", "payment", "vn-payment", "vn-payments"],
     "author": "lehuygiang28 <lehuygiang28@gmail.com>",
@@ -37,6 +38,7 @@
         "@types/node": "^20.8.4",
         "dotenv": "^16.4.5",
         "express": "^4.18.3",
+        "release-it": "^17.6.0",
         "rimraf": "^5.0.5",
         "ts-jest": "^29.1.1",
         "ts-node": "^10.9.2",
