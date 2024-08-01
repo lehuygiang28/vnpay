@@ -30,7 +30,7 @@ export function consoleLogger(data: unknown, symbol: keyof Console = 'log'): voi
  */
 export function fileLogger(data: unknown, filePath: string, errorCallback?: unknown): void {
     const dataString = typeof data === 'object' ? JSON.stringify(data) : String(data);
-    fs.appendFile(filePath, dataString + '\n', (err) => {
+    fs.appendFile(filePath, `${dataString}\n`, (err) => {
         if (err && typeof errorCallback === 'function') {
             return errorCallback(err);
         }

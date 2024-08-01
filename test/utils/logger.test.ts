@@ -35,7 +35,7 @@ describe('Logger', () => {
         fileLogger(data, filePath);
         expect(appendFileMock).toHaveBeenCalledWith(
             filePath,
-            JSON.stringify(data) + '\n',
+            `${JSON.stringify(data)}\n`,
             expect.any(Function),
         );
     });
@@ -49,7 +49,7 @@ describe('Logger', () => {
         const data = 'test data';
         const filePath = 'test.log';
         fileLogger(data, filePath, errorCallback);
-        expect(appendFileMock).toHaveBeenCalledWith(filePath, data + '\n', expect.any(Function));
+        expect(appendFileMock).toHaveBeenCalledWith(filePath, `${data}\n`, expect.any(Function));
         expect(errorCallback).toHaveBeenCalledWith(error);
     });
 
@@ -61,6 +61,6 @@ describe('Logger', () => {
         const data = 'test data';
         const filePath = 'test.log';
         expect(() => fileLogger(data, filePath)).toThrowError(error);
-        expect(appendFileMock).toHaveBeenCalledWith(filePath, data + '\n', expect.any(Function));
+        expect(appendFileMock).toHaveBeenCalledWith(filePath, `${data}\n`, expect.any(Function));
     });
 });
