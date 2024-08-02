@@ -1,7 +1,6 @@
 {
     "files.autoSave": "afterDelay",
     "editor.formatOnSave": true,
-    "editor.formatOnSaveMode": "modificationsIfAvailable",
     "editor.defaultFormatter": "biomejs.biome",
     "eslint.enable": false,
     "prettier.enable": false,
