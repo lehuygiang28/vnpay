@@ -445,7 +445,7 @@ export class VNPay {
             this.HASH_ALGORITHM,
         );
 
-        if (responseHashed !== responseData.vnp_SecureHash) {
+        if (responseData?.vnp_SecureHash && responseHashed !== responseData.vnp_SecureHash) {
             Object.assign(outputResults, {
                 isVerified: false,
                 message: getResponseByStatusCode(
@@ -603,7 +603,7 @@ export class VNPay {
                 this.HASH_ALGORITHM,
             );
 
-            if (responseHashed !== responseData.vnp_SecureHash) {
+            if (responseData?.vnp_SecureHash && responseHashed !== responseData.vnp_SecureHash) {
                 Object.assign(outputResults, {
                     isVerified: false,
                     message: getResponseByStatusCode(
