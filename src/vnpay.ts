@@ -362,10 +362,20 @@ export class VNPay {
             ),
         );
 
-        const stringToCreateHash =
-            `${dataQuery.vnp_RequestId}|${dataQuery.vnp_Version}|${command}` +
-            `|${this.globalDefaultConfig.tmnCode}|${dataQuery.vnp_TxnRef}|${dataQuery.vnp_TransactionDate}` +
-            `|${dataQuery.vnp_CreateDate}|${dataQuery.vnp_IpAddr}|${dataQuery.vnp_OrderInfo}`;
+        const stringToCreateHash = [
+            dataQuery.vnp_RequestId,
+            dataQuery.vnp_Version,
+            command,
+            this.globalDefaultConfig.tmnCode,
+            dataQuery.vnp_TxnRef,
+            dataQuery.vnp_TransactionDate,
+            dataQuery.vnp_CreateDate,
+            dataQuery.vnp_IpAddr,
+            dataQuery.vnp_OrderInfo,
+        ]
+            .map(String)
+            .join('|')
+            .replace(/undefined/g, '');
 
         const requestHashed = hash(
             this.globalDefaultConfig.secureSecret,
@@ -408,13 +418,26 @@ export class VNPay {
             vnp_Message: message,
         };
 
-        let stringToCreateHashOfResponse =
-            `${responseData.vnp_ResponseId}|${responseData.vnp_Command}|${responseData.vnp_ResponseCode}` +
-            `|${responseData.vnp_Message}|${this.defaultConfig.vnp_TmnCode}|${responseData.vnp_TxnRef}` +
-            `|${responseData.vnp_Amount}|${responseData.vnp_BankCode}|${responseData.vnp_PayDate}` +
-            `|${responseData.vnp_TransactionNo}|${responseData.vnp_TransactionType}|${responseData.vnp_TransactionStatus}` +
-            `|${responseData.vnp_OrderInfo}|${responseData.vnp_PromotionCode}|${responseData.vnp_PromotionAmount}`;
-        stringToCreateHashOfResponse = stringToCreateHashOfResponse.replace(/undefined/g, '');
+        const stringToCreateHashOfResponse = [
+            responseData.vnp_ResponseId,
+            responseData.vnp_Command,
+            responseData.vnp_ResponseCode,
+            responseData.vnp_Message,
+            this.defaultConfig.vnp_TmnCode,
+            responseData.vnp_TxnRef,
+            responseData.vnp_Amount,
+            responseData.vnp_BankCode,
+            responseData.vnp_PayDate,
+            responseData.vnp_TransactionNo,
+            responseData.vnp_TransactionType,
+            responseData.vnp_TransactionStatus,
+            responseData.vnp_OrderInfo,
+            responseData.vnp_PromotionCode,
+            responseData.vnp_PromotionAmount,
+        ]
+            .map(String)
+            .join('|')
+            .replace(/undefined/g, '');
 
         const responseHashed = hash(
             this.globalDefaultConfig.secureSecret,
@@ -459,6 +482,7 @@ export class VNPay {
         options?: RefundOptions<LoggerFields>,
     ): Promise<RefundResponse> {
         const vnp_Command = 'refund';
+        const DEFAULT_TRANSACTION_NO_IF_NOT_EXIST = '0';
         const dataQuery = {
             ...data,
             vnp_Command,
@@ -487,7 +511,7 @@ export class VNPay {
             ),
         );
 
-        let stringToHashOfRequest = [
+        const stringToHashOfRequest = [
             vnp_RequestId,
             vnp_Version,
             vnp_Command,
@@ -502,9 +526,9 @@ export class VNPay {
             vnp_IpAddr,
             vnp_OrderInfo,
         ]
-            .map((a) => a.toString())
-            .join('|');
-        stringToHashOfRequest = stringToHashOfRequest.replace(/undefined/g, '');
+            .map(String)
+            .join('|')
+            .replace(/undefined/g, '');
 
         const requestHashed = hash(
             this.globalDefaultConfig.secureSecret,
@@ -554,7 +578,7 @@ export class VNPay {
             Number(responseData.vnp_ResponseCode) <= 90 &&
             Number(responseData.vnp_ResponseCode) >= 99
         ) {
-            let stringToCreateHashOfResponse = [
+            const stringToCreateHashOfResponse = [
                 responseData.vnp_ResponseId,
                 responseData.vnp_Command,
                 responseData.vnp_ResponseCode,
@@ -564,14 +588,14 @@ export class VNPay {
                 responseData.vnp_Amount,
                 responseData.vnp_BankCode,
                 responseData.vnp_PayDate,
-                responseData.vnp_TransactionNo ?? '0',
+                responseData.vnp_TransactionNo ?? DEFAULT_TRANSACTION_NO_IF_NOT_EXIST,
                 responseData.vnp_TransactionType,
                 responseData.vnp_TransactionStatus,
                 responseData.vnp_OrderInfo,
             ]
                 .map(String)
-                .join('|');
-            stringToCreateHashOfResponse = stringToCreateHashOfResponse.replace(/undefined/g, '');
+                .join('|')
+                .replace(/undefined/g, '');
 
             const responseHashed = hash(
                 this.globalDefaultConfig.secureSecret,
