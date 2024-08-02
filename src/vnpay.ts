@@ -260,7 +260,7 @@ export class VNPay {
             vnp_SecureHash,
         );
 
-        const outputResults = {
+        let outputResults = {
             isVerified,
             isSuccess: cloneQuery.vnp_ResponseCode === '00',
             message: getResponseByStatusCode(
@@ -270,9 +270,10 @@ export class VNPay {
         };
 
         if (!isVerified) {
-            Object.assign(outputResults, {
+            outputResults = {
+                ...outputResults,
                 message: 'Wrong checksum',
-            });
+            };
         }
 
         const result = {
@@ -320,14 +321,17 @@ export class VNPay {
         const result = this.verifyReturnUrl(query, { logger: { loggerFn: ignoreLogger } });
 
         if (this.isEnableLog) {
-            const data2Log: VerifyIpnCallLogger = {
+            let data2Log: VerifyIpnCallLogger = {
                 createdAt: new Date(),
                 method: this.verifyIpnCall.name,
                 ...result,
             };
 
             if (options?.withHash) {
-                Object.assign(data2Log, { vnp_SecureHash: hash });
+                data2Log = {
+                    ...data2Log,
+                    vnp_SecureHash: hash,
+                };
             }
 
             this.logData(data2Log, options);
@@ -409,7 +413,7 @@ export class VNPay {
             this.globalDefaultConfig.vnp_Locale,
             QUERY_DR_RESPONSE_MAP,
         );
-        const outputResults = {
+        let outputResults = {
             isVerified: true,
             isSuccess:
                 responseData.vnp_ResponseCode === '00' || responseData.vnp_ResponseCode === 0,
@@ -446,14 +450,15 @@ export class VNPay {
         );
 
         if (responseData?.vnp_SecureHash && responseHashed !== responseData.vnp_SecureHash) {
-            Object.assign(outputResults, {
+            outputResults = {
+                ...outputResults,
                 isVerified: false,
                 message: getResponseByStatusCode(
                     WRONG_CHECKSUM_KEY,
                     this.globalDefaultConfig.vnp_Locale,
                     QUERY_DR_RESPONSE_MAP,
                 ),
-            });
+            };
         }
 
         if (this.isEnableLog) {
@@ -564,7 +569,7 @@ export class VNPay {
             data?.vnp_Locale ?? this.globalDefaultConfig.vnp_Locale,
             REFUND_RESPONSE_MAP,
         );
-        const outputResults = {
+        let outputResults = {
             isVerified: true,
             isSuccess:
                 responseData.vnp_ResponseCode === '00' || responseData.vnp_ResponseCode === 0,
@@ -604,14 +609,15 @@ export class VNPay {
             );
 
             if (responseData?.vnp_SecureHash && responseHashed !== responseData.vnp_SecureHash) {
-                Object.assign(outputResults, {
+                outputResults = {
+                    ...outputResults,
                     isVerified: false,
                     message: getResponseByStatusCode(
                         WRONG_CHECKSUM_KEY,
                         this.globalDefaultConfig.vnp_Locale,
                         REFUND_RESPONSE_MAP,
                     ),
-                });
+                };
             }
         }
 
