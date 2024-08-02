@@ -56,7 +56,7 @@ async function main() {
         vnp_Amount: 10000,
         vnp_IpAddr: '1.1.1.1',
         vnp_TxnRef: orderId,
-        vnp_OrderInfo: '123456',
+        vnp_OrderInfo: `order information of ${orderId}`,
         vnp_OrderType: ProductCode.Other,
         vnp_ReturnUrl: 'http://localhost:3000/return',
         vnp_Locale: VnpLocale.VN,
