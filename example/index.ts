@@ -1,32 +1,39 @@
 import 'dotenv/config';
 import crypto from 'node:crypto';
+import chalk from 'chalk';
 import { ProductCode, RefundTransactionType, VnpLocale } from '../src/enums';
 import type { ReturnQueryFromVNPay, VerifyReturnUrl } from '../src/types';
-import { dateFormat } from '../src/utils';
+import { buildPaymentUrlSearchParams, dateFormat } from '../src/utils';
 import { VNPay } from '../src/vnpay';
 
 /**
  * This function is used to generate secure hash for testing purpose only
  */
 function getSampleSecureHash(queryResponseFromVNPay: ReturnQueryFromVNPay, secret: string) {
-    const searchParams = new URLSearchParams();
-    const sortedEntries = Object.entries(queryResponseFromVNPay).sort(([key1], [key2]) =>
-        key1.toString().localeCompare(key2.toString()),
-    );
-
-    for (const [key, value] of sortedEntries) {
-        // Skip empty value
-        if (value === '' || value === undefined || value === null) {
-            continue;
-        }
-
-        searchParams.append(key, value.toString());
-    }
-
+    const searchParams = buildPaymentUrlSearchParams(queryResponseFromVNPay);
     return crypto
         .createHmac('sha512', secret)
         .update(Buffer.from(searchParams.toString(), 'utf-8'))
         .digest('hex');
+}
+
+/**
+ * Used to log data more pretty than console.log
+ * @param name The name of log
+ * @param data Data to be logged
+ * @param isErr True if it's an error
+ */
+function log(name: string, data: unknown, isErr = false) {
+    const timestamp = chalk.gray(`[${new Date().toLocaleTimeString()}]`);
+    const logName = chalk.blue(name);
+
+    console.log(timestamp, logName);
+    if (isErr) {
+        console.error(data);
+    } else {
+        console.log(data);
+    }
+    console.log(chalk.yellow('==============\n'));
 }
 
 async function main() {
@@ -36,10 +43,10 @@ async function main() {
         secureSecret: secret,
         vnpayHost: 'https://sandbox.vnpayment.vn',
     });
-    console.log(vnpay.defaultConfig);
+    log('default config', vnpay.defaultConfig);
 
     const bankList = await vnpay.getBankList();
-    console.log(bankList);
+    log('get bank list', bankList);
 
     const createDate = new Date();
     const orderId = `123456-${createDate.getTime()}`;
@@ -54,7 +61,7 @@ async function main() {
         vnp_ReturnUrl: 'http://localhost:3000/return',
         vnp_Locale: VnpLocale.VN,
     });
-    console.log(urlString);
+    log('create payment url', urlString);
 
     // Verify return url, ipn call
     const queryResponseFromVNPay: ReturnQueryFromVNPay = {
@@ -76,9 +83,9 @@ async function main() {
             ...queryResponseFromVNPay,
             vnp_SecureHash: getSampleSecureHash(queryResponseFromVNPay, secret),
         });
-        console.log(verify);
+        log('verify return url', verify);
     } catch (error) {
-        console.log(`verify error: ${error}`);
+        log('verify error', error, true);
     }
 
     // Query dr
@@ -91,7 +98,7 @@ async function main() {
         vnp_TransactionNo: 121212,
         vnp_TxnRef: orderId,
     });
-    console.log(queryDrResult);
+    log('query dr result', queryDrResult);
 
     // Refund request
     try {
@@ -107,9 +114,9 @@ async function main() {
             vnp_TxnRef: '123456',
             vnp_CreateDate: new Date().getTime(),
         });
-        console.log(refundResult);
+        log('refund result', refundResult);
     } catch (error) {
-        console.error(`Refund error: ${error}`);
+        log('refund error', error, true);
     }
 }
 
