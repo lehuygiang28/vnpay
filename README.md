@@ -25,6 +25,9 @@
 
 ## Cài đặt
 
+> [!TIP]
+> Nếu bạn đang sử dụng [`Nestjs`](https://docs.nestjs.com) hãy cài đặt [`nestjs-vnpay`](https://github.com/lehuygiang28/nestjs-vnpay) cùng với thư viện này.
+
 Cài đặt `vnpay` với `npm`:
 
 ```bash

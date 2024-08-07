@@ -1,5 +1,9 @@
 # Installation
 
+:::tip
+If you are using [`Nestjs`](https://docs.nestjs.com) you should install [`nestjs-vnpay`](https://github.com/lehuygiang28/nestjs-vnpay) along with this library.
+:::
+
 ## Installation with package managers
 
 ### NPM

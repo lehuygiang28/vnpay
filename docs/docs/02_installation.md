@@ -1,5 +1,9 @@
 # Hướng dẫn cài đặt
 
+:::tip
+Nếu bạn đang sử dụng [`Nestjs`](https://docs.nestjs.com) hãy cài đặt [`nestjs-vnpay`](https://github.com/lehuygiang28/nestjs-vnpay) cùng với thư viện này.
+:::
+
 ## Cài đặt với các trình quản lý thư viện
 
 ### NPM
