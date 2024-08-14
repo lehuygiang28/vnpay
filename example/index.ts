@@ -51,6 +51,9 @@ async function main() {
     const createDate = new Date();
     const orderId = `123456-${createDate.getTime()}`;
 
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
     // Create payment url
     const urlString = vnpay.buildPaymentUrl({
         vnp_Amount: 10000,
@@ -60,6 +63,8 @@ async function main() {
         vnp_OrderType: ProductCode.Other,
         vnp_ReturnUrl: 'http://localhost:3000/return',
         vnp_Locale: VnpLocale.VN,
+        vnp_CreateDate: dateFormat(new Date()),
+        vnp_ExpireDate: dateFormat(tomorrow),
     });
     log('create payment url', urlString);
 
