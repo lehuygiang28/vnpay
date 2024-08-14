@@ -1,13 +1,23 @@
 # Tạo URL thanh toán
 
-Tạo đường dẫn thanh toán cho VNPay.
+- Tạo đường dẫn thanh toán cho VNPay.
+- URL Thanh toán là địa chỉ URL mang thông tin thanh toán.
+- Website TMĐT gửi sang Cổng thanh toán VNPAY các thông tin này khi xử lý giao dịch thanh toán trực tuyến cho Khách mua hàng.
+- Một URL hợp lệ sẽ có dạng:
 
-## Tạo URL thanh toán
+```url
+https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=1000000&vnp_Command=pay&vnp_CreateDate=20240814214148&vnp_CurrCode=VND&vnp_ExpireDate=20240815214148&vnp_IpAddr=1.1.1.1&vnp_Locale=vn&vnp_OrderInfo=order+information+of+123456-1723671708762&vnp_OrderType=other&vnp_ReturnUrl=http%3A%2F%2Flocalhost%3A3000%2Freturn&vnp_TmnCode=TEST12345&vnp_TxnRef=123456-1723671708762&vnp_Version=2.1.0&vnp_SecureHash=a4dc1ed51f7b9f5e4fe835b9cc85a12aa585d19b4b6f78fdb1cbb2a157deceba39d1517d1976fea8177b2db6b4de983ec6f8e4e439207fc6060491675be11111
+```
+
+## Cách tạo URL thanh toán
 
 ```typescript
-import { ProductCode, VnpLocale } from 'vnpay';
+import { ProductCode, VnpLocale, dateFormat } from 'vnpay';
 
 /* ... */
+
+const tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1);
 
 const paymentUrl = vnpay.buildPaymentUrl({
     vnp_Amount: 10000,
@@ -17,6 +27,8 @@ const paymentUrl = vnpay.buildPaymentUrl({
     vnp_OrderType: ProductCode.Other,
     vnp_ReturnUrl: 'http://localhost:3000/vnpay-return',
     vnp_Locale: VnpLocale.VN, // 'vn' hoặc 'en'
+    vnp_CreateDate: dateFormat(new Date()), // tùy chọn, mặc định là hiện tại
+    vnp_ExpireDate: dateFormat(tomorrow), // tùy chọn
 });
 ```
 
