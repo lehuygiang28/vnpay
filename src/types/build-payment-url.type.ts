@@ -39,7 +39,7 @@ export type BuildPaymentUrl = {
     vnp_ReturnUrl: string;
 
     /**
-     * Là thời gian phát sinh giao dịch định dạng yyyyMMddHHmmss(Time zone GMT+7)
+     * Là thời gian phát sinh giao dịch, định dạng yyyyMMddHHmmss(Time zone GMT+7)
      *
      * Nếu `vnp_CreateDate` truyền vào không đúng định dạng, sẽ tự động lấy thời gian hiện tại
      *
@@ -47,8 +47,33 @@ export type BuildPaymentUrl = {
      *
      * If `vnp_CreateDate` is not in the correct format, it will be the current time
      * @example 20170829103111
+     * @example
+     * ```ts
+     *  import { dateFormat } from 'vnpay';
+     *
+     *  // then
+     *  vnp_CreateDate: dateFormat(new Date()),
+     * ```
      */
     vnp_CreateDate?: number;
+
+    /**
+     * Thời gian hết hạn thanh toán, định dạng yyyyMMddHHmmss(Time zone GMT+7)
+     *
+     * @en Time of expiration of payment, format yyyyMMddHHmmss(Time zone GMT+7)
+     * @example 20170829103111
+     * @example
+     * ```ts
+     *  import { dateFormat } from 'vnpay';
+     *
+     *  const tomorrow = new Date();
+     *  tomorrow.setDate(tomorrow.getDate() + 1);
+     *
+     *  // then
+     *  vnp_CreateDate: dateFormat(tomorrow),
+     * ```
+     */
+    vnp_ExpireDate?: number;
 
     /**
      * Đơn vị tiền tệ sử dụng thanh toán. Hiện tại chỉ hỗ trợ VND

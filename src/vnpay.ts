@@ -196,6 +196,14 @@ export class VNPay {
             vnp_Amount: data.vnp_Amount * 100,
         };
 
+        if (dataToBuild?.vnp_ExpireDate && !isValidVnpayDateFormat(dataToBuild.vnp_ExpireDate)) {
+            // Because the URL still works without vnp_ExpireDate, we keep it optional here.
+            // TODO: make it required when VNPAY's `vnp_ExpireDate` is required
+            throw new Error(
+                'Invalid vnp_ExpireDate format. use `formatDate` utility function to format it',
+            );
+        }
+
         if (!isValidVnpayDateFormat(dataToBuild?.vnp_CreateDate ?? 0)) {
             const timeGMT7 = getDateInGMT7();
             dataToBuild.vnp_CreateDate = dateFormat(timeGMT7, 'yyyyMMddHHmmss');
