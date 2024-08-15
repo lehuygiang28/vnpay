@@ -209,14 +209,17 @@ export class VNPay {
             dataToBuild.vnp_CreateDate = dateFormat(timeGMT7, 'yyyyMMddHHmmss');
         }
 
-        const redirectUrl = createPaymentUrl(this.globalDefaultConfig, dataToBuild);
+        const redirectUrl = createPaymentUrl({
+            config: this.globalDefaultConfig,
+            data: dataToBuild,
+        });
 
-        const signed = calculateSecureHash(
-            this.globalDefaultConfig.secureSecret,
-            redirectUrl.search.slice(1).toString(),
-            this.HASH_ALGORITHM,
-            this.BUFFER_ENCODE,
-        );
+        const signed = calculateSecureHash({
+            secureSecret: this.globalDefaultConfig.secureSecret,
+            data: redirectUrl.search.slice(1).toString(),
+            hashAlgorithm: this.HASH_ALGORITHM,
+            bufferEncode: this.BUFFER_ENCODE,
+        });
         redirectUrl.searchParams.append('vnp_SecureHash', signed);
 
         if (this.isEnableLog) {
@@ -261,12 +264,12 @@ export class VNPay {
         }
 
         const searchParams = buildPaymentUrlSearchParams(cloneQuery);
-        const isVerified = verifySecureHash(
-            this.globalDefaultConfig.secureSecret,
-            searchParams.toString(),
-            this.HASH_ALGORITHM,
-            vnp_SecureHash,
-        );
+        const isVerified = verifySecureHash({
+            secureSecret: this.globalDefaultConfig.secureSecret,
+            data: searchParams.toString(),
+            hashAlgorithm: this.HASH_ALGORITHM,
+            receivedHash: vnp_SecureHash,
+        });
 
         let outputResults = {
             isVerified,

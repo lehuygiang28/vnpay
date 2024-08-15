@@ -20,10 +20,13 @@ export function buildPaymentUrlSearchParams(data: Record<string, unknown>): URLS
     return searchParams;
 }
 
-export function createPaymentUrl(
-    config: Pick<GlobalConfig, 'vnpayHost' | 'paymentEndpoint'>,
-    data: (BuildPaymentUrl & DefaultConfig) | Record<string, unknown>,
-): URL {
+export function createPaymentUrl({
+    config,
+    data,
+}: {
+    config: Pick<GlobalConfig, 'vnpayHost' | 'paymentEndpoint'>;
+    data: (BuildPaymentUrl & DefaultConfig) | Record<string, unknown>;
+}): URL {
     const redirectUrl = new URL(
         resolveUrlString(
             config.vnpayHost ?? VNPAY_GATEWAY_SANDBOX_HOST,
@@ -36,21 +39,31 @@ export function createPaymentUrl(
     return redirectUrl;
 }
 
-export function calculateSecureHash(
-    secureSecret: string,
-    data: string,
-    hashAlgorithm: HashAlgorithm,
-    bufferEncode: BufferEncoding = 'utf-8',
-): string {
+export function calculateSecureHash({
+    bufferEncode = 'utf-8',
+    data,
+    hashAlgorithm,
+    secureSecret,
+}: {
+    secureSecret: string;
+    data: string;
+    hashAlgorithm: HashAlgorithm;
+    bufferEncode?: BufferEncoding;
+}): string {
     return hash(secureSecret, Buffer.from(data, bufferEncode), hashAlgorithm);
 }
 
-export function verifySecureHash(
-    secureSecret: string,
-    data: string,
-    hashAlgorithm: HashAlgorithm,
-    receivedHash: string,
-): boolean {
-    const calculatedHash = calculateSecureHash(secureSecret, data, hashAlgorithm);
+export function verifySecureHash({
+    data,
+    hashAlgorithm,
+    receivedHash,
+    secureSecret,
+}: {
+    secureSecret: string;
+    data: string;
+    hashAlgorithm: HashAlgorithm;
+    receivedHash: string;
+}): boolean {
+    const calculatedHash = calculateSecureHash({ secureSecret, data, hashAlgorithm });
     return calculatedHash === receivedHash;
 }
