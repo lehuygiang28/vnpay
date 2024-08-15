@@ -45,6 +45,23 @@ describe('Common utils', () => {
             const parsedDate = parseDate(dateString, 'utc');
             expect(parsedDate).toEqual(utcDate);
         });
+
+        it('should parse the date string to the correct date with gmt7', () => {
+            // Because this test runs in the UTC timezone,
+            // the expected date must add 7 hours when parsing the date with the 'gmt7' option.
+            const utcClone = new Date(utcDate);
+            const expected = new Date(utcClone.setHours(utcClone.getHours() + 7));
+
+            const dateString = '20231221103000';
+            const parsedDate = parseDate(dateString, 'gmt7');
+            expect(parsedDate).toEqual(expected);
+        });
+
+        it('should parse the date string to the correct date without timezone', () => {
+            const dateString = '20231221103000';
+            const parsedDate = parseDate(dateString);
+            expect(parsedDate).toEqual(utcDate);
+        });
     });
 
     describe('isValidVnpayDateFormat', () => {
