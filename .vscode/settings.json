@@ -2,8 +2,6 @@
     "files.autoSave": "afterDelay",
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "biomejs.biome",
-    "eslint.enable": false,
-    "prettier.enable": false,
     "biome.enabled": true,
     "editor.codeActionsOnSave": {
         "quickfix.biome": "explicit",
