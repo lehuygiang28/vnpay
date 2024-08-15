@@ -61,7 +61,7 @@ app.get('/payment-url', (req: Request, res: Response) => {
             logger: {
                 type: 'pick',
                 fields: ['createdAt', 'method', 'paymentUrl'], // Select fields want to log
-                loggerFn: consoleLogger, // Log to console, or use your custom logger
+                loggerFn: (data) => consoleLogger(data), // Log to console, or use your custom logger
             },
         },
     );
