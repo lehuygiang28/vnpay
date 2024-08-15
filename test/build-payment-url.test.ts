@@ -131,7 +131,7 @@ describe('buildPaymentUrl', () => {
         expect(result).toContain('vnp_BankCode=HSBC');
     });
 
-    it('should handle current date correctly', () => {
+    it('should handle current create date correctly', () => {
         const input: BuildPaymentUrl = {
             ...baseInput,
             vnp_CreateDate: 20210101070000,
@@ -142,13 +142,33 @@ describe('buildPaymentUrl', () => {
         expect(result).toContain('vnp_CreateDate=20210101070000');
     });
 
-    it('should handle current date correctly when not provided', () => {
+    it('should handle current create date correctly when not provided', () => {
         const { vnp_CreateDate, ...input } = baseInput;
         const currentTime = dateFormat(getDateInGMT7());
 
         const result = vnpay.buildPaymentUrl(input);
 
         expect(result).toContain(`vnp_CreateDate=${currentTime}`);
+    });
+
+    it('should handle expired date correctly', () => {
+        const input: BuildPaymentUrl = {
+            ...baseInput,
+            vnp_ExpireDate: 20210101070000,
+        };
+
+        const result = vnpay.buildPaymentUrl(input);
+
+        expect(result).toContain('vnp_ExpireDate=20210101070000');
+    });
+
+    it('should throw error when `vnp_ExpireDate` is not a valid date', () => {
+        const input: BuildPaymentUrl = {
+            ...baseInput,
+            vnp_ExpireDate: 1234567,
+        };
+
+        expect(() => vnpay.buildPaymentUrl(input)).toThrow(Error);
     });
 
     it('should log the object to the console', () => {
