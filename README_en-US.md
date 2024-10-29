@@ -87,7 +87,7 @@ const vnpay = new VNPay({
 </a>
 
 <a href="https://me.momo.vn/lehuygiang28" target="_blank">
-  <img src="https://lehuygiang28.github.io/about-me/public/images/momo-donation.png" height=48 />
+  <img src="https://raw.githubusercontent.com/lehuygiang28/about-me/refs/heads/main/public/images/momo-donation.png" height=48 alt="Momo donation" />
 </a>
 
 ## Contribution
