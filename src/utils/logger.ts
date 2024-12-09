@@ -1,4 +1,4 @@
-import * as fs from 'node:fs';
+import * as fs from 'fs';
 
 /**
  * Truyền vào `loggerFn` để bỏ qua logger

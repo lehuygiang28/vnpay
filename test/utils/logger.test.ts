@@ -1,7 +1,7 @@
-import * as fs from 'node:fs';
+import * as fs from 'fs';
 import { consoleLogger, fileLogger, ignoreLogger } from '../../src/utils/logger';
 
-jest.mock('node:fs');
+jest.mock('fs');
 
 describe('Logger', () => {
     beforeEach(() => {

@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import crypto from 'node:crypto';
+import crypto from 'crypto';
 import chalk from 'chalk';
 import { ProductCode, RefundTransactionType, VnpLocale } from '../src/enums';
 import type { ReturnQueryFromVNPay, VerifyReturnUrl } from '../src/types';

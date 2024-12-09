@@ -1,4 +1,4 @@
-import crypto, { type BinaryLike } from 'node:crypto';
+import crypto, { type BinaryLike } from 'crypto';
 import { tz, utc } from 'moment-timezone';
 import { RESPONSE_MAP } from '../constants/response-map.constant';
 import { type HashAlgorithm, VnpLocale } from '../enums';
