@@ -1,106 +1,92 @@
-# vnpayjs
+<div align="center">
 
-<div style="text-align: center;">
-    <h5>
-        <a href="./README.md">VI</a>
-        |
-        <a href="./README_en-US.md">EN</a>
-    </h5>
+# 📦 vnpayjs
+
+[🇻🇳 Tiếng Việt](./README.md) | [🇺🇸 English](./README_en-US.md)
+
+[![NPM Version](https://img.shields.io/npm/v/vnpay)](https://www.npmjs.com/package/vnpay)
+[![Package License](https://img.shields.io/npm/l/vnpay)](https://www.npmjs.com/package/vnpay)
+[![NPM Downloads](https://img.shields.io/npm/d18m/vnpay)](https://www.npmjs.com/package/vnpay)
+
+**Thư viện Node.js tích hợp cổng thanh toán [VNPay](https://vnpay.vn) vào ứng dụng của bạn.**
+
 </div>
-<br/>
 
-<p align="center">
-    <a href="https://www.npmjs.com/package/vnpay" target="_blank"><img src="https://img.shields.io/npm/v/vnpay" alt="NPM Version" /></a>
-    <a href="https://www.npmjs.com/package/vnpay" target="_blank"><img src="https://img.shields.io/npm/l/vnpay" alt="Package License"><a>
-    <a href="https://www.npmjs.com/package/vnpay" target="_blank"><img src="https://img.shields.io/npm/d18m/vnpay" alt="NPM Downloads"></a>
-</p>
+## 📚 Tài liệu
 
-<strong>Thư viện mã nguồn mở hỗ trợ thanh toán qua [VNPay](https://vnpay.vn).</strong>
+**Thư viện VNPay:**
+- [vnpay.js.org](https://vnpay.js.org/) - Tài liệu chi tiết của thư viện
+- [sandbox.vnpayment.vn/apis](https://sandbox.vnpayment.vn/apis) - Tài liệu tích hợp từ VNPay
 
-## Tài liệu
-
-### Tài liệu của thư viện: [vnpay.js.org](https://vnpay.js.org/)
-
-### Tài liệu từ VNPay: [sandbox.vnpayment.vn/apis](https://sandbox.vnpayment.vn/apis)
-
-## Cài đặt
+## 🚀 Cài đặt
 
 > [!TIP]
-> Nếu bạn đang sử dụng [`Nestjs`](https://docs.nestjs.com) hãy cài đặt [`nestjs-vnpay`](https://github.com/lehuygiang28/nestjs-vnpay) cùng với thư viện này.
-
-Cài đặt `vnpay` với `npm`:
+> Nếu bạn đang sử dụng [`Nestjs`](https://docs.nestjs.com), hãy cài đặt [`nestjs-vnpay`](https://github.com/lehuygiang28/nestjs-vnpay) - một wrapper tích hợp sẵn cho NestJS.
 
 ```bash
-$ npm install vnpay
+# NPM
+npm install vnpay
+
+# Yarn
+yarn add vnpay
+
+# PNPM
+pnpm install vnpay
 ```
 
-Cài đặt `vnpay` với `yarn`:
+## 💡 Cách sử dụng
 
-```bash
-$ yarn add vnpay
-```
-
-Cài đặt `vnpay` với `pnpm`:
-
-```bash
-$ pnpm install vnpay
-```
-
-## Sử dụng
-
-### Khởi tạo
+### Khởi tạo VNPay
 
 ```typescript
 import { VNPay, ignoreLogger } from 'vnpay';
 
 const vnpay = new VNPay({
+    // Thông tin cấu hình bắt buộc
     tmnCode: '2QXUI4B4',
     secureSecret: 'secret',
     vnpayHost: 'https://sandbox.vnpayment.vn',
-    testMode: true, // tùy chọn
-    hashAlgorithm: 'SHA512', // tùy chọn
-
-    /**
-     * Sử dụng enableLog để bật/tắt logger
-     * Nếu enableLog là false, loggerFn sẽ không được sử dụng trong bất kỳ phương thức nào
-     */
-    enableLog: true, // tùy chọn
-
-    /**
-     * Hàm `loggerFn` sẽ được gọi để ghi log
-     * Mặc định, loggerFn sẽ ghi log ra console
-     * Bạn có thể ghi đè loggerFn để ghi log ra nơi khác
-     *
-     * `ignoreLogger` là một hàm không làm gì cả
-     */
-    loggerFn: ignoreLogger, // tùy chọn
+    
+    // Cấu hình tùy chọn
+    testMode: true,                // Chế độ test
+    hashAlgorithm: 'SHA512',      // Thuật toán mã hóa
+    enableLog: true,              // Bật/tắt ghi log
+    loggerFn: ignoreLogger,       // Hàm xử lý log tùy chỉnh
 });
 ```
 
-## Hỗ trợ
+## 🤝 Hỗ trợ & Đóng góp
 
-### Thư viện VNPay là một dự án mã nguồn mở và miễn phí. Nếu bạn thấy nó hữu ích, hãy xem xét hỗ trợ bằng cách tặng một ⭐️ trên [GitHub](https://github.com/lehuygiang28/vnpay) và mua cho tác giả một cốc cà phê
+**vnpayjs là một dự án mã nguồn mở và miễn phí**
 
-<a href="https://www.buymeacoffee.com/lehuygiang28" target="_blank">
-    <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=lehuygiang28&button_colour=1a1b27&font_colour=ffffff&font_family=Lato&outline_colour=ffffff&coffee_colour=FFDD00" alt="Buy me a coffee">
-</a>
+Nếu bạn thấy thư viện hữu ích, hãy:
+- Tặng sao ⭐️ trên [GitHub](https://github.com/lehuygiang28/vnpay)
+- Mời tác giả một ly cà phê ☕️
 
-<a href="https://me.momo.vn/lehuygiang28" target="_blank">
-  <img src="https://raw.githubusercontent.com/lehuygiang28/about-me/refs/heads/main/public/images/momo-donation.png" height=48 alt="Momo donation" />
-</a>
+<div align="center">
 
-## Đóng góp
+<a href="https://www.buymeacoffee.com/lehuygiang28" target="_blank"><img src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=&slug=lehuygiang28&button_colour=1a1b27&font_colour=ffffff&font_family=Lato&outline_colour=ffffff&coffee_colour=FFDD00" height="48" alt="Buy me a coffee"></a>
+<a href="https://me.momo.vn/lehuygiang28" target="_blank"><img src="https://raw.githubusercontent.com/lehuygiang28/about-me/refs/heads/main/public/images/momo-donation.png" height="48" alt="Momo donation"></a>
 
-### Bắt đầu
+</div>
 
-Trước khi bắt đầu, hãy đảm bảo rằng bạn đã đọc [hướng dẫn đóng góp](.github/CONTRIBUTING.md).
+### Tham gia đóng góp
 
-### Người đóng góp
+Tham gia phát triển dự án:
+1. Đọc [hướng dẫn đóng góp](.github/CONTRIBUTING.md)
+2. Fork dự án và tạo Pull Request
+3. Tham gia thảo luận trong [Issues](https://github.com/lehuygiang28/vnpay/issues)
 
-<a href="https://github.com/lehuygiang28/vnpay/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=lehuygiang28/vnpay&max=20" alt="List of Contributors"/>
-</a>
+### Những người đóng góp
 
-## Giấy phép
+Cảm ơn tất cả những người đã đóng góp cho dự án:
 
-**[MIT](LICENSE) © [Lê Huy Giang](https://github.com/lehuygiang28)**
+<div align="center">
+
+[![Contributors](https://contrib.rocks/image?repo=lehuygiang28/vnpay&max=20)](https://github.com/lehuygiang28/vnpay/graphs/contributors)
+
+</div>
+
+## 📄 Giấy phép
+
+[MIT](LICENSE) © [Lê Huy Giang](https://github.com/lehuygiang28)
