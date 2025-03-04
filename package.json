@@ -41,7 +41,7 @@
         "chalk": "^4.1.2",
         "dotenv": "^16.4.5",
         "express": "^4.18.3",
-        "release-it": "^17.6.0",
+        "release-it": "^18.1.2",
         "rimraf": "^5.0.5",
         "ts-jest": "^29.1.1",
         "ts-node": "^10.9.2",
