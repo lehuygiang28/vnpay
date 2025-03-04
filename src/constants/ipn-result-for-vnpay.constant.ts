@@ -21,6 +21,11 @@ export const InpOrderAlreadyConfirmed: IpnResponse = {
     Message: 'Order already confirmed',
 };
 
+export const IpnIpProhibited: IpnResponse = {
+    RspCode: '03',
+    Message: 'IP prohibited',
+};
+
 export const IpnInvalidAmount: IpnResponse = {
     RspCode: '04',
     Message: 'Invalid amount',
