@@ -1,11 +1,11 @@
 # Query Transaction Result (queryDr) {#query-dr}
 
-This is an API for the merchant system to query the payment result of a transaction at the VNPAY system.
+This is an API for the merchant system to query the payment result of a transaction in the VNPAY system.
 
 :::warning
 
 -   `queryDr` is currently suitable for `PAY` payments
--   `token`, `installment`, `periodic` are not yet compatible
+-   `token`, `installment`, and `periodic` payment types are not yet compatible
 
 :::
 
@@ -55,18 +55,18 @@ const res: QueryDrResponse = await vnpay.queryDr({
 | isSuccess  | boolean | Result of the request                                                                                                                                                         |
 | isVerified | boolean | Verification result of data integrity when received from VNPay                                                                                                                |
 | message    | string  | Verification message                                                                                                                                                          |
-| ...        | ...     | Other parameters that VNPay will return, refer [here](https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#danh-sach-tham-so-querydr-VNPAY-response) |
+| ...        | ...     | Other parameters that VNPay will return, refer to [official documentation](https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#danh-sach-tham-so-querydr-VNPAY-response) |
 
-See more properties that VNPay will return at [VNPay](https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#danh-sach-tham-so-querydr-VNPAY-response).
+See more properties that VNPay will return in the [official documentation](https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#danh-sach-tham-so-querydr-VNPAY-response).
 :::tip
-The parameters that [VNPay returns](https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#danh-sach-tham-so-querydr-VNPAY-response) are also in the `QueryDrResponse` object.
+All parameters returned by VNPay are also included in the `QueryDrResponse` object.
 :::
 
 ## Usage
 
-### With logger
+### With Logger
 
--   To be able to use the logger, you need to initialize [`VNPay`](/installation#init-vnpay) with `enableLog` set to `true`.
+-   To use the logger, you need to initialize [`VNPay`](/installation#init-vnpay) with `enableLog` set to `true`.
 
 ```typescript
 import { QueryDr, QueryDrResponse, getDateInGMT7, dateFormat } from 'vnpay';
@@ -95,7 +95,7 @@ const res: QueryDrResponse = await vnpay.queryDr(
             type: 'all',
             loggerFn: (data) => {
                 console.log(data.message);
-                // Or send log to server, database, ...
+                // Or send logs to a server, database, etc.
             },
         },
     },

@@ -1,15 +1,17 @@
 # Examples
 
-## Sample project with Express MVC
+## Sample Project with Express MVC
 
--   Github: [lehuygiang28/vnpay-mvc-example](https://github.com/lehuygiang28/vnpay-mvc-example)
+-   GitHub: [lehuygiang28/vnpay-mvc-example](https://github.com/lehuygiang28/vnpay-mvc-example)
 -   Live Demo: [vnpay-mvc-example.vercel.app](https://vnpay-mvc-example.vercel.app/)
--   Technologies used: Express, Typescript, Bootstrap 5, Handlebars
+-   Technologies used: Express, TypeScript, Bootstrap 5, Handlebars
 
-## Example of how to use the methods
+## Usage Examples
 
-See [here](https://github.com/lehuygiang28/vnpay/blob/main/example/index.ts)
+### Library Methods
 
-## Example of how to use with Express
+See examples of all library methods [here](https://github.com/lehuygiang28/vnpay/blob/main/example/index.ts)
 
-See [here](https://github.com/lehuygiang28/vnpay/blob/main/example/express.ts)
+### Express Implementation
+
+See a complete Express implementation example [here](https://github.com/lehuygiang28/vnpay/blob/main/example/express.ts)

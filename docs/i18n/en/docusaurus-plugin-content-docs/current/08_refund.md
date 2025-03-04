@@ -4,7 +4,7 @@ This is an API for the merchant system to send a refund request for a transactio
 
 :::warning Note:
 
--   `refund` is one of the functions restricted by VNPAY in the sandbox environment, you need to contact VNPAY for support.
+-   `refund` is one of the functions restricted by VNPAY in the sandbox environment. You need to contact VNPAY for support.
 -   See more at [issue#12](https://github.com/lehuygiang28/vnpay/issues/12)
 
 :::
@@ -12,7 +12,7 @@ This is an API for the merchant system to send a refund request for a transactio
 ## Refund
 
 ```typescript
-import { Refund, RefundResponse, dateFormat, getDateInGMT7, VnpTransactionType } from 'vnpay';
+import { Refund, RefundResponse, dateFormat, getDateInGMT7, VnpTransactionType, VnpLocale } from 'vnpay';
 
 /* ... */
 
@@ -55,6 +55,7 @@ const result: RefundResponse = await vnpay.refund({
 | `vnp_TransactionNo`   | `number`             | The transaction code recorded in the VNPAY system.                                                                                                                 |
 | `vnp_TransactionType` | `VnpTransactionType` | The type of transaction in the VNPAY system.                                                                                                                       |
 | `vnp_TxnRef`          | `string`             | The payment transaction code of the merchant's system sent to VNPAY for payment request.                                                                           |
+| `vnp_Locale`          | `VnpLocale`          | The language displayed in the response. Currently supports Vietnamese (vn), English (en).                                                                          |
 
 ### `RefundResponse` {#refund-response-properties}
 
@@ -63,9 +64,9 @@ const result: RefundResponse = await vnpay.refund({
 | isSuccess  | boolean | The result of the request.                                                                                                                                                  |
 | isVerified | boolean | The result of data integrity verification when received from VNPay.                                                                                                         |
 | message    | string  | Verification message.                                                                                                                                                       |
-| ...        | ...     | Other parameters that VNPay will return, refer [here](https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#danh-s%C3%A1ch-tham-s%E1%BB%91-refund). |
+| ...        | ...     | Other parameters that VNPay will return, refer to [official documentation](https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#danh-s%C3%A1ch-tham-s%E1%BB%91-refund). |
 
-See more properties that VNPay will return at [VNPay](https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#danh-s%C3%A1ch-tham-s%E1%BB%91-refund).
+See more properties that VNPay will return in the [official documentation](https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#danh-s%C3%A1ch-tham-s%E1%BB%91-refund).
 :::tip
-The parameters that [VNPay returns](https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#danh-s%C3%A1ch-tham-s%E1%BB%91-refund) are also in the `RefundResponse` object.
+All parameters returned by VNPay are also included in the `RefundResponse` object.
 :::

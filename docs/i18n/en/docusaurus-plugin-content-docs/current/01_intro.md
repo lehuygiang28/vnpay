@@ -7,12 +7,14 @@ slug: /
 
 ## Description
 
-The [VNPay](https://github.com/lehuygiang28/vnpay) library is an open source project, and completely free to help everyone integrate online payments easily and quickly with VNPay.
+The [VNPay](https://github.com/lehuygiang28/vnpay) library is an open source project, completely free to help everyone integrate VNPay online payments easily and quickly.
 
 ## Documentation
 
 -   Learn how to use the VNPay library [here](/installation).
--   You can also learn how VNPay works [here](https://sandbox.vnpayment.vn/apis/).
+-   Learn more about how VNPay works in the [official VNPay documentation](https://sandbox.vnpayment.vn/apis/).
+
+## Resources
 
 -   `vnpay` on [GitHub](https://github.com/lehuygiang28/vnpay)
 -   `vnpay` on [NPM](https://www.npmjs.com/package/vnpay)
@@ -29,7 +31,7 @@ _[github.com/lehuygiang28](https://github.com/lehuygiang28)_
 ## Contributors
 
 <a href="https://github.com/lehuygiang28/vnpay/graphs/contributors" target="_blank">
-  <img src="https://contrib.rocks/image?repo=lehuygiang28/vnpay&max=20" class="contributors_img" />
+  <img src="https://contrib.rocks/image?repo=lehuygiang28/vnpay&max=20" class="contributors_img" alt="Contributors" />
 </a>
 
 ## License

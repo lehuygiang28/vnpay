@@ -2,14 +2,16 @@
 
 ## Dự án mẫu với Express MVC
 
--   Github: [lehuygiang28/vnpay-mvc-example](https://github.com/lehuygiang28/vnpay-mvc-example)
+-   GitHub: [lehuygiang28/vnpay-mvc-example](https://github.com/lehuygiang28/vnpay-mvc-example)
 -   Live Demo: [vnpay-mvc-example.vercel.app](https://vnpay-mvc-example.vercel.app/)
--   Công nghệ sử dụng: Express, Typescript, Bootstrap 5, Handlebars
+-   Công nghệ sử dụng: Express, TypeScript, Bootstrap 5, Handlebars
 
-## Ví dụ về cách sử dụng các phương thức
+## Ví dụ sử dụng
 
-Xem tại [đây](https://github.com/lehuygiang28/vnpay/blob/main/example/index.ts)
+### Các phương thức thư viện
 
-## Ví dụ về cách sử dụng với Express
+Xem các ví dụ về cách sử dụng tất cả các phương thức thư viện [tại đây](https://github.com/lehuygiang28/vnpay/blob/main/example/index.ts)
 
-Xem tại [đây](https://github.com/lehuygiang28/vnpay/blob/main/example/express.ts)
+### Triển khai với Express
+
+Xem ví dụ triển khai hoàn chỉnh với Express [tại đây](https://github.com/lehuygiang28/vnpay/blob/main/example/express.ts)

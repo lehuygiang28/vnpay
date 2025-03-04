@@ -1,6 +1,6 @@
 # Verify Return URL
 
-When the customer successfully makes a payment, VNPay will redirect the customer to the return notification URL (`vnp_ReturnUrl`) that you have provided.
+When a customer successfully completes a payment, VNPay will redirect the customer to the return notification URL (`vnp_ReturnUrl`) that you provided.
 
 ## Verify Return URL
 
@@ -12,17 +12,22 @@ import { VerifyReturnUrl } from 'vnpay';
 const verify: VerifyReturnUrl = vnpay.verifyReturnUrl(req.query);
 ```
 
-## Properties of the `VerifyReturnUrl`
+## Properties of the `VerifyReturnUrl` Object
 
-Information after verification and returned by VNPay
+Information after verification and returned by VNPay:
 
 :::info
-Similar to the properties of the [`VerifyIpnCall`](/ipn/verify-ipn-call#properties-of-the-verify-ipn-call)
+Similar to the properties of the [`VerifyIpnCall`](/ipn/verify-ipn-call#properties-of-the-verify-ipn-call) object
 :::
 
-## Use in Express
+## Usage
 
-### With MVC
+### Using Logger
+
+- Similar to when creating a payment URL, you can use a logger to log return URL verification information
+  [see here](/create-payment-url#using-logger).
+
+### With Express MVC
 
 Steps to verify the return URL in Express with MVC:
 
@@ -48,7 +53,9 @@ app.get('/vnpay-return', (req, res) => {
         return res.send('Invalid data');
     }
 
-    // Check order information and handle
+    // Check order information and handle accordingly
+    // Only handle UI-related here, do not handle business logic
+    // Important business logic must be handled on the server side via IPN
 
     return res.send('Return URL verification successful');
 });

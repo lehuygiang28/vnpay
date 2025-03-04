@@ -1,11 +1,11 @@
 # Truy vấn kết quả giao dịch (queryDr) {#query-dr}
 
-Đây là API để hệ thống merchant truy vấn kết quả thanh toán của giao dịch tại hệ thống VNPAY.
+Đây là API để hệ thống merchant truy vấn kết quả thanh toán của giao dịch trong hệ thống VNPAY.
 
 :::warning
 
--   `queryDr` hiện đang thích hợp với thanh toán `PAY`
--   `token`, `trả góp`, `định kỳ` hiện chưa tương thích
+-   `queryDr` hiện chỉ phù hợp cho các giao dịch thanh toán `PAY`
+-   Các loại thanh toán `token`, `installment` và `periodic` chưa tương thích
 
 :::
 
@@ -17,9 +17,9 @@ import { QueryDr, QueryDrResponse, getDateInGMT7, dateFormat } from 'vnpay';
 /* ... */
 
 /**
- * Date phải là timezone GMT+7
- * Và format theo định dạng `yyyyMMddHHmmss`
- * Dùng 2 hàm `getDateInGMT7` và `dateFormat` để chuyển đổi
+ * Ngày phải ở múi giờ GMT+7
+ * Và được định dạng theo `yyyyMMddHHmmss`
+ * Sử dụng các hàm `getDateInGMT7` và `dateFormat` để chuyển đổi
  */
 const date = dateFormat(getDateInGMT7(new Date('2024/05/21')));
 
@@ -34,39 +34,39 @@ const res: QueryDrResponse = await vnpay.queryDr({
 } as QueryDr);
 ```
 
-## Các thuộc tính
+## Thuộc tính
 
 ### `QueryDr` {#query-dr-properties}
 
-| Thuộc tính            | Kiểu dữ liệu | Mô tả                                                                                      |
-| --------------------- | ------------ | ------------------------------------------------------------------------------------------ |
-| `vnp_RequestId`       | `string`     | Mã yêu cầu truy vấn kết quả giao dịch. Mã này phải là duy nhất trong mỗi yêu cầu truy vấn. |
-| `vnp_IpAddr`          | `string`     | Địa chỉ IP của máy khách hàng.                                                             |
-| `vnp_TxnRef`          | `string`     | Mã giao dịch của hệ thống merchant.                                                        |
-| `vnp_TransactionNo`   | `number`     | Mã giao dịch của hệ thống VNPAY.                                                           |
-| `vnp_OrderInfo`       | `string`     | Thông tin đơn hàng.                                                                        |
-| `vnp_TransactionDate` | `number`     | Thời gian giao dịch.                                                                       |
-| `vnp_CreateDate`      | `number`     | Thời gian tạo giao dịch.                                                                   |
+| Thuộc tính           | Kiểu dữ liệu | Mô tả                                                                              |
+| -------------------- | ------------ | ---------------------------------------------------------------------------------- |
+| `vnp_RequestId`      | `string`     | ID yêu cầu truy vấn kết quả giao dịch. ID này phải là duy nhất cho mỗi yêu cầu.    |
+| `vnp_IpAddr`         | `string`     | Địa chỉ IP của máy khách.                                                          |
+| `vnp_TxnRef`         | `string`     | Mã giao dịch của hệ thống merchant.                                                |
+| `vnp_TransactionNo`  | `number`     | Mã giao dịch của hệ thống VNPAY.                                                   |
+| `vnp_OrderInfo`      | `string`     | Thông tin đơn hàng.                                                                |
+| `vnp_TransactionDate`| `number`     | Thời gian giao dịch.                                                               |
+| `vnp_CreateDate`     | `number`     | Thời gian tạo giao dịch.                                                           |
 
 ### `QueryDrResponse` {#query-dr-response-properties}
 
-| Thuộc tính | Kiểu dữ liệu | Mô tả                                                                                                                                                                             |
-| ---------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| isSuccess  | boolean      | Kết quả của yêu cầu                                                                                                                                                               |
-| isVerified | boolean      | Kết quả xác thực tính toàn vẹn của dữ liệu khi nhận về từ VNPay                                                                                                                   |
-| message    | string       | Thông báo xác thực                                                                                                                                                                |
-| ...        | ...          | Các tham số khác của VNPay sẽ trả về, tham khảo tại [đây](https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#danh-sach-tham-so-querydr-VNPAY-response) |
+| Thuộc tính  | Kiểu dữ liệu | Mô tả                                                                                                                                                                    |
+| ----------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| isSuccess   | boolean      | Kết quả của yêu cầu                                                                                                                                                       |
+| isVerified  | boolean      | Kết quả xác thực tính toàn vẹn dữ liệu khi nhận từ VNPay                                                                                                                 |
+| message     | string       | Thông điệp xác thực                                                                                                                                                       |
+| ...         | ...          | Các tham số khác mà VNPay sẽ trả về, tham khảo [tài liệu chính thức](https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#danh-sach-tham-so-querydr-VNPAY-response) |
 
-Xem thêm các thuộc tính VNPay sẽ trả về tại [VNPay](https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#danh-sach-tham-so-querydr-VNPAY-response).
+Xem thêm các thuộc tính mà VNPay sẽ trả về trong [tài liệu chính thức](https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#danh-sach-tham-so-querydr-VNPAY-response).
 :::tip
-Các tham số mà [VNPay trả về](https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#danh-sach-tham-so-querydr-VNPAY-response) cũng nằm trong đối tượng `QueryDrResponse`.
+Tất cả các tham số được VNPay trả về đều có trong đối tượng `QueryDrResponse`.
 :::
 
-## Sử dụng
+## Cách sử dụng
 
-### Với logger
+### Với Logger
 
--   Để có thể sử dụng logger, bạn cần phải khởi tạo [`VNPay`](/installation#init-vnpay) với `enableLog` là `true`.
+-   Để sử dụng logger, bạn cần khởi tạo [`VNPay`](/installation#init-vnpay) với `enableLog` được đặt là `true`.
 
 ```typescript
 import { QueryDr, QueryDrResponse, getDateInGMT7, dateFormat } from 'vnpay';
@@ -74,9 +74,9 @@ import { QueryDr, QueryDrResponse, getDateInGMT7, dateFormat } from 'vnpay';
 /* ... */
 
 /**
- * Date phải là timezone GMT+7
- * Và format theo định dạng `yyyyMMddHHmmss`
- * Dùng 2 hàm `getDateInGMT7` và `dateFormat` để chuyển đổi
+ * Ngày phải ở múi giờ GMT+7
+ * Và được định dạng theo `yyyyMMddHHmmss`
+ * Sử dụng các hàm `getDateInGMT7` và `dateFormat` để chuyển đổi
  */
 const date = dateFormat(getDateInGMT7(new Date('2024/05/21')));
 
@@ -95,8 +95,7 @@ const res: QueryDrResponse = await vnpay.queryDr(
             type: 'all',
             loggerFn: (data) => {
                 console.log(data.message);
-
-                // Hoặc gửi log lên server, database, ...
+                // Hoặc gửi log đến server, cơ sở dữ liệu, v.v.
             },
         },
     },

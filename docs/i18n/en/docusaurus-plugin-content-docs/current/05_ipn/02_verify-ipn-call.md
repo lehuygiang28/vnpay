@@ -12,9 +12,9 @@ import { VerifyIpnCall } from 'vnpay';
 const verify: VerifyIpnCall = vnpay.verifyIpnCall(req.query);
 ```
 
-## Properties of the `VerifyIpnCall` {#properties-of-the-verify-ipn-call}
+## Properties of the `VerifyIpnCall` Object {#properties-of-the-verify-ipn-call}
 
-Information after verification and returned by VNPay
+Information after verification and returned by VNPay:
 
 | Property   | Data Type | Description                                                                                                                                            |
 | ---------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -22,29 +22,29 @@ Information after verification and returned by VNPay
 | isVerified | boolean   | The result of verifying the integrity of the data received from VNPay                                                                                  |
 | message    | string    | Verification message                                                                                                                                   |
 | vnp_Amount | number    | The payment amount, automatically calculated by the library                                                                                            |
-| ...        | ...       | Other parameters that VNPay will return, refer [here](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91-1) |
+| ...        | ...       | Other parameters returned by VNPay, refer to [official documentation](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91-1) |
 
-See more properties VNPay will return at [VNPay](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91-1).
+See more properties that VNPay will return in the [official documentation](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91-1).
 :::tip
-The parameters that VNPay returns are also in the `VerifyIpnCall`.
+All parameters returned by VNPay are also included in the `VerifyIpnCall` object.
 :::
 
 ## Usage
 
-### Using logger
+### Using Logger
 
 -   Similar to when creating a payment URL, you can use a logger to log IPN verification information
     [see here](/create-payment-url#using-logger).
 
 ### With Express
 
-Steps to verify the return URL in Express:
+Steps to verify the IPN call in Express:
 
-1. Create a route to handle the return URL
-2. Verify the return URL
-3. Handle the information returned from VNPay
+1. Create a route to handle the IPN call
+2. Verify the IPN call
+3. Process the information returned from VNPay
 4. Update the order status in your database
-5. Update the status back to VNPay to let them know that you have confirmed the order
+5. Update the status back to VNPay to confirm that you have received and processed the order
 
 ```typescript title="controllers/payment.controller.ts"
 import {
@@ -63,6 +63,10 @@ app.get('/vnpay-ipn', async (req, res) => {
         const verify: VerifyReturnUrl = vnpay.verifyIpnCall(req.query);
         if (!verify.isVerified) {
             return res.json(IpnFailChecksum);
+        }
+
+        if (!verify.isSuccess) {
+            return res.json(IpnUnknownError);
         }
 
         // Find the order in your database

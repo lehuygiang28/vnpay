@@ -1,7 +1,7 @@
 # Hướng dẫn cài đặt
 
 :::tip
-Nếu bạn đang sử dụng [`Nestjs`](https://docs.nestjs.com) hãy cài đặt [`nestjs-vnpay`](https://github.com/lehuygiang28/nestjs-vnpay) cùng với thư viện này.
+Nếu bạn đang sử dụng [`Nestjs`](https://docs.nestjs.com), hãy cài đặt [`nestjs-vnpay`](https://github.com/lehuygiang28/nestjs-vnpay) - một wrapper tích hợp sẵn cho NestJS.
 :::
 
 ## Cài đặt với các trình quản lý thư viện
@@ -45,18 +45,18 @@ const vnpay = new VNPay({
     hashAlgorithm: 'SHA512', // tùy chọn
 
     /**
-     * Sử dụng enableLog để bật/tắt logger
+     * Bật/tắt ghi log
      * Nếu enableLog là false, loggerFn sẽ không được sử dụng trong bất kỳ phương thức nào
      */
-    enableLog: true, // optional
+    enableLog: true, // tùy chọn
 
     /**
-     * Hàm `loggerFn` sẽ được gọi để ghi log
+     * Hàm `loggerFn` sẽ được gọi để ghi log khi enableLog là true
      * Mặc định, loggerFn sẽ ghi log ra console
-     * Bạn có thể ghi đè loggerFn để ghi log ra nơi khác
+     * Bạn có thể cung cấp một hàm khác nếu muốn ghi log vào nơi khác
      *
      * `ignoreLogger` là một hàm không làm gì cả
      */
-    loggerFn: ignoreLogger, // optional
+    loggerFn: ignoreLogger, // tùy chọn
 });
 ```

@@ -1,28 +1,30 @@
-# Cài đặt IPN url
+# Cài đặt URL IPN
 
-Khi thanh toán hoàn tất, VNPay sẽ gửi lời gọi IPN (Instant Payment Notification) đến URL IPN mà bạn đã cài đặt. Để xác thực lời gọi IPN, bạn có thể sử dụng thư viện VNPay.
+Khi thanh toán hoàn tất, VNPay sẽ gửi một thông báo IPN (Instant Payment Notification) đến URL IPN mà bạn đã cấu hình. Để xác thực thông báo IPN, bạn có thể sử dụng thư viện VNPay.
 
-## Cài đặt IPN url môi trường sandbox
+## Cài đặt URL IPN cho môi trường Sandbox
 
-**Lưu ý**: Để cài đặt IPN url môi trường production, bạn cần liên hệ với VNPay để được hỗ trợ.
+:::caution Lưu ý
+Để cài đặt URL IPN cho môi trường production, bạn cần liên hệ trực tiếp với VNPay để được hỗ trợ.
+:::
 
-1. Đăng nhập vào merchant portal của VNPay tại [đây](https://sandbox.vnpayment.vn/merchantv2/Users/Login.htm)
-2. Tại góc trên bên phải, chọn thông tin tài khoản:
+1. Đăng nhập vào cổng thông tin merchant của VNPay [tại đây](https://sandbox.vnpayment.vn/merchantv2/Users/Login.htm)
+2. Ở góc trên bên phải, chọn `Thông tin tài khoản`:
  <p align="center">
      ![Chọn thông tin tài khoản](/img/ipn-step-2.png)
  </p>
-3. Sau khi chọn thông tin tài khoản, VNPay sẽ hiện thị 1 danh sách rất nhiều website. Và bạn không cần quan tâm điều đó
-4. Từ bất kì 1 website nào đó, kéo màn hình sang phải và chọn vào icon chỉnh sửa:
+3. Sau khi chọn thông tin tài khoản, VNPay sẽ hiển thị danh sách các website. Bạn không cần quan tâm đến danh sách này.
+4. Từ bất kỳ website nào trong danh sách, cuộn sang phải và nhấp vào biểu tượng chỉnh sửa:
  <p align="center">
-     ![Chọn vào icon chỉnh sửa](/img/ipn-step-4.png)
+     ![Chọn biểu tượng chỉnh sửa](/img/ipn-step-4.png)
  </p>
-5. Cấu hình IPN:
+5. Cấu hình URL IPN:
  <p align="center">
      ![Cấu hình IPN](/img/ipn-step-5.png)
  </p>
 
-## Cài đặt IPN url môi trường production
+## Cài đặt URL IPN cho môi trường Production
 
-:::caution Chú ý
-Để cài đặt IPN url môi trường production, bạn cần liên hệ với VNPay để được hỗ trợ.
+:::caution Lưu ý
+Để cài đặt URL IPN cho môi trường production, bạn cần liên hệ trực tiếp với VNPay để được hỗ trợ.
 :::

@@ -1,10 +1,10 @@
 # Installation
 
 :::tip
-If you are using [`Nestjs`](https://docs.nestjs.com) you should install [`nestjs-vnpay`](https://github.com/lehuygiang28/nestjs-vnpay) along with this library.
+If you're using [`NestJS`](https://docs.nestjs.com), install [`nestjs-vnpay`](https://github.com/lehuygiang28/nestjs-vnpay) - a ready-to-use wrapper for NestJS.
 :::
 
-## Installation with package managers
+## Installation with Package Managers
 
 ### NPM
 
@@ -26,13 +26,13 @@ $ pnpm install vnpay
 
 ## Usage
 
-### Import the library
+### Import the Library
 
 ```typescript
 import { VNPay } from 'vnpay';
 ```
 
-### Initialize the instance {#init-vnpay}
+### Initialize the Instance {#init-vnpay}
 
 ```typescript
 import { VNPay, ignoreLogger } from 'vnpay';
@@ -45,18 +45,17 @@ const vnpay = new VNPay({
     hashAlgorithm: 'SHA512', // optional
 
     /**
-     * On/off logger
+     * Enable/disable logging
      * If enableLog is false, loggerFn will not be used in any method
      */
     enableLog: true, // optional
 
     /**
-     * `loggerFn` will be called to write log when enableLog is true
-     * By default, loggerFn will write log to console
-     * If you want to write log to other place, you can provide other function here
+     * `loggerFn` will be called to write logs when enableLog is true
+     * By default, loggerFn will write logs to the console
+     * If you want to write logs elsewhere, you can provide a custom function
      *
-     * `ignoreLogger` is a function do nothing
-     *
+     * `ignoreLogger` is a function that does nothing
      */
     loggerFn: ignoreLogger, // optional
 });
