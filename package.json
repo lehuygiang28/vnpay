@@ -7,16 +7,26 @@
     "homepage": "https://vnpay.js.org",
     "version": "1.6.1",
     "description": "An open-source nodejs library support to payment with VNPay",
-    "main": "lib/index.js",
-    "types": "lib/index.d.ts",
-    "files": ["lib"],
+    "type": "module",
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs"
+        }
+    },
+    "files": ["dist"],
     "scripts": {
-        "build": "rimraf ./lib && tsc",
+        "build": "npx tsup",
         "prepare": "npm run build",
+        "dev": "npx tsup --watch",
         "postinstall": "npm run format:fix",
         "postuninstall": "npm run format:fix",
-        "test": "jest",
-        "test:cov": "jest --coverage",
+        "test": "npx jest",
+        "test:cov": "npx jest --coverage",
         "example": "ts-node ./example/index.ts",
         "example:server": "ts-node ./example/express.ts",
         "lint": "npx @biomejs/biome lint .",
@@ -45,6 +55,7 @@
         "rimraf": "^5.0.5",
         "ts-jest": "^29.1.1",
         "ts-node": "^10.9.2",
+        "tsup": "^8.4.0",
         "typescript": "^5.2.2"
     }
 }
