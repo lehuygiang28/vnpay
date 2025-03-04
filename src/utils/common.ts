@@ -136,6 +136,10 @@ export function resolveUrlString(host: string, path: string): string {
     return `${trimmedHost}/${trimmedPath}`;
 }
 
-export function hash(secret: string, data: BinaryLike, algorithm: HashAlgorithm): string {
-    return crypto.createHmac(algorithm, secret).update(data).digest('hex');
+export function hash(
+    secret: string,
+    data: BinaryLike | string | Buffer,
+    algorithm: HashAlgorithm,
+): string {
+    return crypto.createHmac(algorithm, secret).update(data.toString()).digest('hex');
 }
