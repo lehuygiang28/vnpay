@@ -133,17 +133,6 @@ const config: Config = {
             indexName: 'vnpay-lib',
             contextualSearch: true,
         },
-        announcementBar: {
-            id: 'help_us',
-            content: `
-            We are looking for contributors to help us translate our docs to English. 
-            If you're interested, please check out 
-            <a target="_blank" rel="noopener noreferrer" href="https://github.com/lehuygiang28/vnpay/issues/9">this issue on GitHub</a>.
-        `,
-            backgroundColor: '#fafbfc',
-            textColor: '#091E42',
-            isCloseable: true,
-        },
     } satisfies Preset.ThemeConfig,
     plugins: [
         [
