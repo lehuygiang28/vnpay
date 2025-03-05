@@ -3,8 +3,8 @@ import type { Config } from '@docusaurus/types';
 import { themes as prismThemes } from 'prism-react-renderer';
 
 const config: Config = {
-    title: 'Open-source VNPay library documentation',
-    tagline: 'An open-source library for VNPay',
+    title: 'A open-source nodejs library support to payment with VNPay',
+    tagline: 'A Node.js library for integrating VNPay payment gateway into your applications.',
     favicon: 'https://github.githubassets.com/favicons/favicon.png',
 
     // Set the production url of your site here
@@ -47,6 +47,10 @@ const config: Config = {
                 blog: false,
                 theme: {
                     customCss: ['./static/css/custom.css'],
+                },
+                gtag: {
+                    trackingID: 'G-7FJ9XVCX4G',
+                    anonymizeIP: false,
                 },
             } satisfies Preset.Options,
         ],
