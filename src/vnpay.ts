@@ -127,6 +127,7 @@ export class VNPay {
             vnp_Locale,
             vnp_OrderType: ProductCode.Other,
             vnp_Command: VNP_DEFAULT_COMMAND,
+            paymentEndpoint,
             ...config,
         };
     }
