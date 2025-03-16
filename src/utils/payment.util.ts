@@ -1,8 +1,7 @@
 import crypto from 'crypto';
-import { PAYMENT_ENDPOINT, VNPAY_GATEWAY_SANDBOX_HOST } from '../constants';
 import type { HashAlgorithm } from '../enums';
-import type { BuildPaymentUrl, DefaultConfig, GlobalConfig } from '../types';
-import { hash, resolveUrlString } from './common';
+import type { GlobalConfig } from '../types';
+import { resolveUrlString } from './common';
 
 /**
  * Hàm tạo các parameter cho query string
@@ -35,7 +34,7 @@ export function createPaymentUrl({
     config: GlobalConfig;
     data: Record<string, unknown>;
 }): URL {
-    const redirectUrl = new URL(`${config.vnpayHost}/${config.paymentEndpoint}`);
+    const redirectUrl = new URL(resolveUrlString(config.vnpayHost, config.paymentEndpoint));
 
     const searchParams = buildPaymentUrlSearchParams(data);
     redirectUrl.search = searchParams.toString();
