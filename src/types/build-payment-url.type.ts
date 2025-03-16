@@ -1,5 +1,6 @@
-import type { DefaultConfig, GlobalConfig } from './common.type';
+import type { DefaultConfig } from './common.type';
 import type { LoggerData, LoggerOptions } from './logger.type';
+import type { GlobalConfig } from './vnpay-config.type';
 
 export type BuildPaymentUrl = {
     /**
