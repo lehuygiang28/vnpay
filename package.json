@@ -27,8 +27,8 @@
         "postuninstall": "npm run format:fix",
         "test": "npx jest",
         "test:cov": "npx jest --coverage",
-        "example": "ts-node ./example/index.ts",
-        "example:server": "ts-node ./example/express.ts",
+        "example": "tsx --tsconfig ./example/tsconfig.example.json ./example/index.ts",
+        "example:server": "tsx --tsconfig ./example/tsconfig.example.json ./example/express.ts",
         "lint": "npx @biomejs/biome lint .",
         "lint:fix": "npx @biomejs/biome lint . --write",
         "format": "npx @biomejs/biome format .",
@@ -47,15 +47,15 @@
         "@tsconfig/recommended": "^1.0.7",
         "@types/express": "^4.17.21",
         "@types/jest": "^29.5.5",
-        "@types/node": "^20.8.4",
+        "@types/node": "^20.17.24",
         "chalk": "^4.1.2",
         "dotenv": "^16.4.5",
         "express": "^4.18.3",
         "release-it": "^18.1.2",
         "rimraf": "^5.0.5",
         "ts-jest": "^29.1.1",
-        "ts-node": "^10.9.2",
         "tsup": "^8.4.0",
+        "tsx": "^4.19.3",
         "typescript": "^5.2.2"
     }
 }
