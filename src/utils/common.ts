@@ -1,11 +1,13 @@
 import crypto, { type BinaryLike } from 'crypto';
-import { tz, utc } from 'moment-timezone';
+import * as moment from 'moment-timezone';
 import { RESPONSE_MAP } from '../constants/response-map.constant';
 import { type HashAlgorithm, VnpLocale } from '../enums';
 
+const { tz: momentTz, utc: momentUtc } = moment;
+
 export function getDateInGMT7(date?: Date): Date {
     return new Date(
-        tz(date ?? new Date(), 'Asia/Ho_Chi_Minh').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+        momentTz(date ?? new Date(), 'Asia/Ho_Chi_Minh').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
     );
 }
 
@@ -60,7 +62,7 @@ export function parseDate(
     switch (tz) {
         case 'utc':
             return new Date(
-                utc([year, month, day, hour, minute, second], true).format(
+                momentUtc([year, month, day, hour, minute, second], true).format(
                     'YYYY-MM-DDTHH:mm:ss.SSS[Z]',
                 ),
             );
