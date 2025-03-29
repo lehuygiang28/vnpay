@@ -1,6 +1,27 @@
 import type { HashAlgorithm, ProductCode, VnpCurrCode, VnpLocale } from '../enums';
 
 /**
+ * Endpoints configuration for VNPay API
+ * Allows overriding individual endpoints when the API changes
+ */
+export interface EndpointConfig {
+    /**
+     * Payment endpoint path - defaults to 'paymentv2/vpcpay.html'
+     */
+    paymentEndpoint?: string;
+
+    /**
+     * Query DR and Refund endpoint - defaults to 'merchant_webapi/api/transaction'
+     */
+    queryDrRefundEndpoint?: string;
+
+    /**
+     * Get bank list endpoint - defaults to 'qrpayauth/api/merchant/get_bank_list'
+     */
+    getBankListEndpoint?: string;
+}
+
+/**
  * Strong typing for the configuration of VNPay
  */
 export interface VNPayConfig {
@@ -40,11 +61,6 @@ export interface VNPayConfig {
     testMode?: boolean;
 
     /**
-     * Payment endpoint path - defaults to standard VNPay endpoint
-     */
-    paymentEndpoint?: string;
-
-    /**
      * Hash algorithm to use - defaults to SHA512
      */
     hashAlgorithm?: HashAlgorithm;
@@ -68,6 +84,18 @@ export interface VNPayConfig {
      * Default command - defaults to "pay"
      */
     vnp_Command?: string;
+
+    /**
+     * Payment endpoint path - defaults to standard VNPay endpoint
+     * @deprecated Use endpoints.paymentEndpoint instead
+     */
+    paymentEndpoint?: string;
+
+    /**
+     * Custom endpoint configuration
+     * Use this to override individual endpoints when the VNPay API changes
+     */
+    endpoints?: EndpointConfig;
 }
 
 export interface GlobalConfig extends VNPayConfig {
@@ -78,4 +106,5 @@ export interface GlobalConfig extends VNPayConfig {
     vnp_OrderType: ProductCode;
     vnp_Command: string;
     paymentEndpoint: string;
+    endpoints: EndpointConfig;
 }

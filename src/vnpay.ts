@@ -1,6 +1,7 @@
 import {
     GET_BANK_LIST_ENDPOINT,
     PAYMENT_ENDPOINT,
+    QUERY_DR_REFUND_ENDPOINT,
     VNPAY_GATEWAY_SANDBOX_HOST,
     VNP_DEFAULT_COMMAND,
     VNP_VERSION,
@@ -16,6 +17,7 @@ import type {
     BuildPaymentUrlLogger,
     BuildPaymentUrlOptions,
     DefaultConfig,
+    EndpointConfig,
     GlobalConfig,
     QueryDr,
     QueryDrResponse,
@@ -50,7 +52,12 @@ import { resolveUrlString } from './utils/common';
  *     secureSecret: 'SERCRET',
  *     testMode: true, // optional
  *     hashAlgorithm: 'SHA512', // optional
- *     paymentEndpoint: 'paymentv2/vpcpay.html', // optional
+ *     // Using new endpoints configuration
+ *     endpoints: {
+ *       paymentEndpoint: 'paymentv2/vpcpay.html',
+ *       queryDrRefundEndpoint: 'merchant_webapi/api/transaction',
+ *       getBankListEndpoint: 'qrpayauth/api/merchant/get_bank_list',
+ *     }
  * });
  *
  * const tnx = '12345678'; // Generate your own transaction code
@@ -86,6 +93,7 @@ export class VNPay {
         vnp_Locale = VnpLocale.VN,
         testMode = false,
         paymentEndpoint = PAYMENT_ENDPOINT,
+        endpoints = {},
         ...config
     }: VNPayConfig) {
         if (testMode) {
@@ -94,6 +102,13 @@ export class VNPay {
 
         this.hashAlgorithm = config?.hashAlgorithm ?? HashAlgorithm.SHA512;
 
+        // Initialize endpoints with defaults and overrides
+        const initializedEndpoints: EndpointConfig = {
+            paymentEndpoint: endpoints.paymentEndpoint || paymentEndpoint,
+            queryDrRefundEndpoint: endpoints.queryDrRefundEndpoint || QUERY_DR_REFUND_ENDPOINT,
+            getBankListEndpoint: endpoints.getBankListEndpoint || GET_BANK_LIST_ENDPOINT,
+        };
+
         this.globalConfig = {
             vnpayHost,
             vnp_Version,
@@ -101,7 +116,8 @@ export class VNPay {
             vnp_Locale,
             vnp_OrderType: ProductCode.Other,
             vnp_Command: VNP_DEFAULT_COMMAND,
-            paymentEndpoint,
+            paymentEndpoint: initializedEndpoints.paymentEndpoint as string,
+            endpoints: initializedEndpoints,
             ...config,
         };
 
@@ -155,7 +171,7 @@ export class VNPay {
         const response = await fetch(
             resolveUrlString(
                 this.globalConfig.vnpayHost ?? VNPAY_GATEWAY_SANDBOX_HOST,
-                GET_BANK_LIST_ENDPOINT,
+                this.globalConfig.endpoints.getBankListEndpoint as string,
             ),
             {
                 method: 'POST',

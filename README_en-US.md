@@ -52,6 +52,14 @@ const vnpay = new VNPay({
     hashAlgorithm: 'SHA512',      // Hash algorithm
     enableLog: true,              // Enable/disable logging
     loggerFn: ignoreLogger,       // Custom logger function
+    
+    // Custom endpoints for each API method (new)
+    // Useful when VNPay changes endpoints in the future
+    endpoints: {
+        paymentEndpoint: 'paymentv2/vpcpay.html',          // Payment endpoint
+        queryDrRefundEndpoint: 'merchant_webapi/api/transaction', // Query & refund endpoint
+        getBankListEndpoint: 'qrpayauth/api/merchant/get_bank_list', // Get bank list endpoint
+    }
 });
 ```
 

@@ -75,7 +75,9 @@ export class QueryService {
             ...query,
         };
 
-        const url = new URL(resolveUrlString(this.config.vnpayHost, QUERY_DR_REFUND_ENDPOINT));
+        const queryEndpoint =
+            this.config.endpoints.queryDrRefundEndpoint || QUERY_DR_REFUND_ENDPOINT;
+        const url = new URL(resolveUrlString(this.config.vnpayHost, queryEndpoint));
 
         const stringToCreateHash = [
             dataQuery.vnp_RequestId,
@@ -207,7 +209,7 @@ export class QueryService {
         const dataQuery = {
             ...data,
             vnp_Command,
-            vnp_Version: this.config.vnp_Version,
+            vnp_Version: this.config.vnp_Version ?? VNP_VERSION,
             vnp_TmnCode: this.config.tmnCode,
             vnp_Amount: data.vnp_Amount * 100,
         };
@@ -218,7 +220,7 @@ export class QueryService {
             vnp_RequestId,
             vnp_TransactionType,
             vnp_TxnRef,
-            vnp_TransactionNo = '0',
+            vnp_TransactionNo = DEFAULT_TRANSACTION_NO_IF_NOT_EXIST,
             vnp_TransactionDate,
             vnp_CreateBy,
             vnp_CreateDate,
@@ -226,7 +228,10 @@ export class QueryService {
             vnp_OrderInfo,
         } = dataQuery;
 
-        const url = new URL(resolveUrlString(this.config.vnpayHost, QUERY_DR_REFUND_ENDPOINT));
+        // Use custom endpoint if configured
+        const refundEndpoint =
+            this.config.endpoints.queryDrRefundEndpoint || QUERY_DR_REFUND_ENDPOINT;
+        const url = new URL(resolveUrlString(this.config.vnpayHost, refundEndpoint));
 
         const stringToHashOfRequest = [
             vnp_RequestId,
@@ -306,7 +311,7 @@ export class QueryService {
                 responseData.vnp_Amount,
                 responseData.vnp_BankCode,
                 responseData.vnp_PayDate,
-                responseData.vnp_TransactionNo ?? DEFAULT_TRANSACTION_NO_IF_NOT_EXIST,
+                responseData.vnp_TransactionNo,
                 responseData.vnp_TransactionType,
                 responseData.vnp_TransactionStatus,
                 responseData.vnp_OrderInfo,

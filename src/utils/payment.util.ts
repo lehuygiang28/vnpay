@@ -34,7 +34,10 @@ export function createPaymentUrl({
     config: GlobalConfig;
     data: Record<string, unknown>;
 }): URL {
-    const redirectUrl = new URL(resolveUrlString(config.vnpayHost, config.paymentEndpoint));
+    // Use the endpoints.paymentEndpoint if available, or fall back to config.paymentEndpoint for backward compatibility
+    const paymentEndpoint = config.endpoints?.paymentEndpoint || config.paymentEndpoint;
+
+    const redirectUrl = new URL(resolveUrlString(config.vnpayHost, paymentEndpoint as string));
 
     const searchParams = buildPaymentUrlSearchParams(data);
     redirectUrl.search = searchParams.toString();
