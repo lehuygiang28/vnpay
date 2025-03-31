@@ -4,7 +4,19 @@ When a payment is completed, VNPay will send an IPN (Instant Payment Notificatio
 
 ## Setting up IPN URL for Sandbox Environment
 
-**Note**: To set up the IPN URL for the production environment, you need to contact VNPay for support.
+:::caution Note
+To set up the IPN URL for the production environment, you need to contact VNPay for support.
+:::
+
+### Quick Access (After Login)
+
+After logging into the VNPay merchant portal, you can directly access the Terminal configuration page (where IPN URL is set) by navigating to:
+
+```text
+https://sandbox.vnpayment.vn/merchantv2/Account/TerminalEdit.htm
+```
+
+### Step-by-Step Instructions
 
 1. Log in to the VNPay merchant portal [here](https://sandbox.vnpayment.vn/merchantv2/Users/Login.htm)
 2. In the top right corner, select `Account Information`:

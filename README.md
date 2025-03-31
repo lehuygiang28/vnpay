@@ -52,6 +52,14 @@ const vnpay = new VNPay({
     hashAlgorithm: 'SHA512',      // Thuật toán mã hóa
     enableLog: true,              // Bật/tắt ghi log
     loggerFn: ignoreLogger,       // Hàm xử lý log tùy chỉnh
+    
+    // Tùy chỉnh endpoints cho từng phương thức API (mới)
+    // Hữu ích khi VNPay thay đổi endpoints trong tương lai
+    endpoints: {
+        paymentEndpoint: 'paymentv2/vpcpay.html',          // Endpoint thanh toán
+        queryDrRefundEndpoint: 'merchant_webapi/api/transaction', // Endpoint tra cứu & hoàn tiền
+        getBankListEndpoint: 'qrpayauth/api/merchant/get_bank_list', // Endpoint lấy danh sách ngân hàng
+    }
 });
 ```
 

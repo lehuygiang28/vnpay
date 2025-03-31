@@ -18,7 +18,9 @@
             "require": "./dist/index.cjs"
         }
     },
-    "files": ["dist"],
+    "files": [
+        "dist"
+    ],
     "scripts": {
         "build": "npx tsup",
         "prepare": "npm run build",
@@ -35,12 +37,21 @@
         "format:fix": "npx @biomejs/biome format --write .",
         "release": "release-it"
     },
-    "keywords": ["vnpay", "vnpayjs", "vnpay.vn", "payment", "vn-payment", "vn-payments"],
+    "keywords": [
+        "vnpay",
+        "vnpayjs",
+        "vnpay.vn",
+        "payment",
+        "vn-payment",
+        "vn-payments"
+    ],
     "author": "lehuygiang28 <lehuygiang28@gmail.com>",
-    "maintainers": ["lehuygiang28"],
+    "maintainers": [
+        "lehuygiang28"
+    ],
     "license": "MIT",
     "dependencies": {
-        "moment-timezone": "^0.5.43"
+        "dayjs": "^1.11.13"
     },
     "devDependencies": {
         "@biomejs/biome": "^1.8.3",
