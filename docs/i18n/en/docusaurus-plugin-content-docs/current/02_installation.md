@@ -58,5 +58,17 @@ const vnpay = new VNPay({
      * `ignoreLogger` is a function that does nothing
      */
     loggerFn: ignoreLogger, // optional
+
+    /**
+     * Customize VNPay API endpoints
+     * Usually doesn't need to be changed unless:
+     * - VNPay updates their paths
+     * - There are differences between sandbox and production environments
+     */
+    endpoints: {
+        paymentEndpoint: 'paymentv2/vpcpay.html',
+        queryDrRefundEndpoint: 'merchant_webapi/api/transaction',
+        getBankListEndpoint: 'qrpayauth/api/merchant/get_bank_list',
+    }, // optional
 });
 ```

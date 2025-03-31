@@ -14,6 +14,13 @@ Thư viện [VNPay](https://github.com/lehuygiang28/vnpay) là một dự án m�
 -   Tìm hiểu cách sử dụng thư viện VNPay tại [đây](/installation).
 -   Tìm hiểu thêm về cách VNPay hoạt động tại [tài liệu chính thức của VNPay](https://sandbox.vnpayment.vn/apis/).
 
+## Tính năng
+
+- API đơn giản để tích hợp cổng thanh toán VNPay
+- Hỗ trợ TypeScript với định nghĩa kiểu dữ liệu đầy đủ
+- Hỗ trợ môi trường sandbox và production
+- Có thể tuỳ chỉnh các endpoint cho các dịch vụ VNPay khác nhau
+
 ## Nguồn tài nguyên
 
 -   `vnpay` trên [GitHub](https://github.com/lehuygiang28/vnpay)

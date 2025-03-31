@@ -14,6 +14,13 @@ The [VNPay](https://github.com/lehuygiang28/vnpay) library is an open source pro
 -   Learn how to use the VNPay library [here](/installation).
 -   Learn more about how VNPay works in the [official VNPay documentation](https://sandbox.vnpayment.vn/apis/).
 
+## Features
+
+- Simple API for integrating VNPay payment gateway
+- TypeScript support with comprehensive type definitions
+- Sandbox and production environment support
+- Customizable endpoints for different VNPay services
+
 ## Resources
 
 -   `vnpay` on [GitHub](https://github.com/lehuygiang28/vnpay)
