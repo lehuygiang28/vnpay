@@ -15,7 +15,7 @@ import { consoleLogger, ignoreLogger } from '../src/utils';
 import { VNPay } from '../src/vnpay';
 
 const app = express();
-const port = 3000;
+const port = 8000;
 
 const vnpay = new VNPay({
     tmnCode: process.env.VNPAY_TMN_CODE ?? '2QXUI4B4',
@@ -35,6 +35,17 @@ const vnpay = new VNPay({
      * Then you still re-use loggerFn in each method that allow you to log
      */
     loggerFn: ignoreLogger, // optional
+
+    /**
+     * Use endpoints if you want to override the default endpoints
+     * This is useful when VNPay changes the endpoints in the future
+     * Or useful when production environment is different from sandbox environment
+     */
+    endpoints: {
+        paymentEndpoint: 'paymentv2/vpcpay.html',
+        queryDrRefundEndpoint: 'merchant_webapi/api/transaction',
+        getBankListEndpoint: 'qrpayauth/api/merchant/get_bank_list',
+    },
 });
 
 app.get('/', (req: Request, res: Response) => {
@@ -90,6 +101,7 @@ app.get(
                     },
                 },
             );
+
             if (!verify.isVerified) {
                 return res.json(IpnFailChecksum);
             }

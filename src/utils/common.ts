@@ -1,14 +1,18 @@
 import crypto, { type BinaryLike } from 'crypto';
-import * as moment from 'moment-timezone';
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import { RESPONSE_MAP } from '../constants/response-map.constant';
 import { type HashAlgorithm, VnpLocale } from '../enums';
 
-const { tz: momentTz, utc: momentUtc } = moment;
+// Setup plugins
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export function getDateInGMT7(date?: Date): Date {
-    return new Date(
-        momentTz(date ?? new Date(), 'Asia/Ho_Chi_Minh').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-    );
+    const inputDate = date ?? new Date();
+    const utcDate = dayjs.utc(inputDate);
+    return new Date(utcDate.add(7, 'hour').valueOf());
 }
 
 /**
@@ -59,15 +63,21 @@ export function parseDate(
     const minute = _parseInt(dateString.slice(10, 12));
     const second = _parseInt(dateString.slice(12, 14));
 
+    // Create a formatted date string
+    const formattedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}T${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:${String(second).padStart(2, '0')}`;
+
     switch (tz) {
-        case 'utc':
-            return new Date(
-                momentUtc([year, month, day, hour, minute, second], true).format(
-                    'YYYY-MM-DDTHH:mm:ss.SSS[Z]',
-                ),
-            );
-        case 'gmt7':
-            return getDateInGMT7(new Date(year, month, day, hour, minute, second));
+        case 'utc': {
+            // Create a UTC date
+            return dayjs.utc(formattedDate).toDate();
+        }
+        case 'gmt7': {
+            // For GMT+7, create a date in Asia/Ho_Chi_Minh timezone
+            const localDate = new Date(year, month, day, hour, minute, second);
+            // Clone the date as UTC, then add 7 hours to simulate GMT+7
+            const utcTime = dayjs.utc(localDate);
+            return utcTime.add(7, 'hour').toDate();
+        }
         // biome-ignore lint/complexity/noUselessSwitchCase: still good to readable
         case 'local':
         default:
