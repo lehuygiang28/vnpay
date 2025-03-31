@@ -12,7 +12,7 @@ To set up the IPN URL for the production environment, you need to contact VNPay 
 
 After logging into the VNPay merchant portal, you can directly access the Terminal configuration page (where IPN URL is set) by navigating to:
 
-```
+```text
 https://sandbox.vnpayment.vn/merchantv2/Account/TerminalEdit.htm
 ```
 
