@@ -8,6 +8,16 @@ Khi thanh toán hoàn tất, VNPay sẽ gửi một thông báo IPN (Instant Pay
 Để cài đặt URL IPN cho môi trường production, bạn cần liên hệ trực tiếp với VNPay để được hỗ trợ.
 :::
 
+### Truy cập nhanh (Sau khi đăng nhập)
+
+Sau khi đăng nhập vào cổng thông tin merchant của VNPay, bạn có thể truy cập trực tiếp vào trang cấu hình Terminal (nơi cài đặt URL IPN) bằng cách truy cập:
+
+```
+https://sandbox.vnpayment.vn/merchantv2/Account/TerminalEdit.htm
+```
+
+### Cách cài đặt theo từng bước
+
 1. Đăng nhập vào cổng thông tin merchant của VNPay [tại đây](https://sandbox.vnpayment.vn/merchantv2/Users/Login.htm)
 2. Ở góc trên bên phải, chọn `Thông tin tài khoản`:
  <p align="center">
