@@ -4,9 +4,9 @@ When a payment is completed, VNPay will send an IPN (Instant Payment Notificatio
 
 ## Setting up IPN URL for Sandbox Environment
 
-```caution Note
+:::caution Note
 To set up the IPN URL for the production environment, you need to contact VNPay for support.
-```
+:::
 
 ### Quick Access (After Login)
 
