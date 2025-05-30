@@ -88,6 +88,7 @@ export class VNPay {
      */
     constructor({
         vnpayHost = VNPAY_GATEWAY_SANDBOX_HOST,
+        queryDrAndRefundHost = VNPAY_GATEWAY_SANDBOX_HOST,
         vnp_Version = VNP_VERSION,
         vnp_CurrCode = VnpCurrCode.VND,
         vnp_Locale = VnpLocale.VN,
@@ -98,6 +99,7 @@ export class VNPay {
     }: VNPayConfig) {
         if (testMode) {
             vnpayHost = VNPAY_GATEWAY_SANDBOX_HOST;
+            queryDrAndRefundHost = VNPAY_GATEWAY_SANDBOX_HOST;
         }
 
         this.hashAlgorithm = config?.hashAlgorithm ?? HashAlgorithm.SHA512;
@@ -118,6 +120,7 @@ export class VNPay {
             vnp_Command: VNP_DEFAULT_COMMAND,
             paymentEndpoint: initializedEndpoints.paymentEndpoint as string,
             endpoints: initializedEndpoints,
+            queryDrAndRefundHost,
             ...config,
         };
 
