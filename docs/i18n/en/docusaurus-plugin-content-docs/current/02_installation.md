@@ -41,6 +41,8 @@ const vnpay = new VNPay({
     tmnCode: 'YOUR_TMNCODE',
     secureSecret: 'YOUR_SECURE_SECRET',
     vnpayHost: 'https://sandbox.vnpayment.vn',
+    queryDrAndRefundHost: 'https://sandbox.vnpayment.vn', // optional, when the url of querydr and refund is different from the payment url (usually used for production)
+
     testMode: true, // optional, overrides vnpayHost to sandbox if true
     hashAlgorithm: 'SHA512', // optional
 
