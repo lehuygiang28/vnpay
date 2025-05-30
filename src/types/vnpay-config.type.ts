@@ -31,6 +31,11 @@ export interface VNPayConfig {
     vnpayHost?: string;
 
     /**
+     * queryDr and refund host URL - defaults to sandbox if not provided
+     */
+    queryDrAndRefundHost?: string;
+
+    /**
      * TMN Code provided by VNPay
      */
     tmnCode: string;
@@ -100,6 +105,7 @@ export interface VNPayConfig {
 
 export interface GlobalConfig extends VNPayConfig {
     vnpayHost: string;
+    queryDrAndRefundHost: string;
     vnp_Version: string;
     vnp_CurrCode: VnpCurrCode;
     vnp_Locale: VnpLocale;

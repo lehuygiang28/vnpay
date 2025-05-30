@@ -77,7 +77,7 @@ export class QueryService {
 
         const queryEndpoint =
             this.config.endpoints.queryDrRefundEndpoint || QUERY_DR_REFUND_ENDPOINT;
-        const url = new URL(resolveUrlString(this.config.vnpayHost, queryEndpoint));
+        const url = new URL(resolveUrlString(this.config.queryDrAndRefundHost || this.config.vnpayHost, queryEndpoint));
 
         const stringToCreateHash = [
             dataQuery.vnp_RequestId,
@@ -231,7 +231,7 @@ export class QueryService {
         // Use custom endpoint if configured
         const refundEndpoint =
             this.config.endpoints.queryDrRefundEndpoint || QUERY_DR_REFUND_ENDPOINT;
-        const url = new URL(resolveUrlString(this.config.vnpayHost, refundEndpoint));
+        const url = new URL(resolveUrlString(this.config.queryDrAndRefundHost || this.config.vnpayHost, refundEndpoint));
 
         const stringToHashOfRequest = [
             vnp_RequestId,

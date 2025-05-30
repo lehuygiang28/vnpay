@@ -41,6 +41,7 @@ describe('VNPay Payment Utility Functions', () => {
         it('should create payment url from config and data', () => {
             const config: GlobalConfig = {
                 vnpayHost: 'https://sandbox.vnpayment.vn',
+                queryDrAndRefundHost: 'https://sandbox.vnpayment.vn',
                 paymentEndpoint: '/paymentv2/vpcpay.html',
                 vnp_Version: '2.1.0',
                 secureSecret: 'YOUR_SECURE_SECRET',
@@ -67,6 +68,7 @@ describe('VNPay Payment Utility Functions', () => {
         it('should create a default payment url', () => {
             const config: GlobalConfig = {
                 vnpayHost: 'https://sandbox.vnpayment.vn',
+                queryDrAndRefundHost: 'https://sandbox.vnpayment.vn',
                 paymentEndpoint: '/paymentv2/vpcpay.html',
                 vnp_Version: '2.1.0',
                 secureSecret: 'YOUR_SECURE_SECRET',
@@ -93,6 +95,7 @@ describe('VNPay Payment Utility Functions', () => {
         it('should correctly use custom endpoints.paymentEndpoint when provided', () => {
             const config: GlobalConfig = {
                 vnpayHost: 'https://sandbox.vnpayment.vn',
+                queryDrAndRefundHost: 'https://sandbox.vnpayment.vn',
                 paymentEndpoint: '/paymentv2/vpcpay.html', // Default endpoint
                 vnp_Version: '2.1.0',
                 secureSecret: 'YOUR_SECURE_SECRET',
@@ -124,6 +127,7 @@ describe('VNPay Payment Utility Functions', () => {
         it('should fallback to deprecated paymentEndpoint when endpoints.paymentEndpoint is not provided', () => {
             const config: GlobalConfig = {
                 vnpayHost: 'https://sandbox.vnpayment.vn',
+                queryDrAndRefundHost: 'https://sandbox.vnpayment.vn',
                 paymentEndpoint: '/deprecated-payment-endpoint.html', // Deprecated endpoint
                 vnp_Version: '2.1.0',
                 secureSecret: 'YOUR_SECURE_SECRET',
@@ -188,6 +192,7 @@ describe('VNPay Payment Utility Functions', () => {
         it('should use custom payment endpoint when provided', () => {
             const config: GlobalConfig = {
                 vnpayHost: 'https://sandbox.vnpayment.vn',
+                queryDrAndRefundHost: 'https://sandbox.vnpayment.vn',
                 paymentEndpoint: '/paymentv2/vpcpay.html',
                 vnp_Version: '2.1.0',
                 secureSecret: 'YOUR_SECURE_SECRET',
@@ -213,6 +218,7 @@ describe('VNPay Payment Utility Functions', () => {
         it('should use custom queryDrRefundEndpoint when provided', () => {
             const config: GlobalConfig = {
                 vnpayHost: 'https://sandbox.vnpayment.vn',
+                queryDrAndRefundHost: 'https://sandbox.vnpayment.vn',
                 paymentEndpoint: PAYMENT_ENDPOINT,
                 vnp_Version: '2.1.0',
                 secureSecret: 'YOUR_SECURE_SECRET',
@@ -241,6 +247,7 @@ describe('VNPay Payment Utility Functions', () => {
         it('should use custom getBankListEndpoint when provided', () => {
             const config: GlobalConfig = {
                 vnpayHost: 'https://sandbox.vnpayment.vn',
+                queryDrAndRefundHost: 'https://sandbox.vnpayment.vn',
                 paymentEndpoint: PAYMENT_ENDPOINT,
                 vnp_Version: '2.1.0',
                 secureSecret: 'YOUR_SECURE_SECRET',
@@ -269,6 +276,7 @@ describe('VNPay Payment Utility Functions', () => {
         it('should use all custom endpoints when provided', () => {
             const config: GlobalConfig = {
                 vnpayHost: 'https://sandbox.vnpayment.vn',
+                queryDrAndRefundHost: 'https://sandbox.vnpayment.vn',
                 paymentEndpoint: '/default-payment-endpoint.html',
                 vnp_Version: '2.1.0',
                 secureSecret: 'YOUR_SECURE_SECRET',
@@ -315,6 +323,7 @@ describe('VNPay Payment Utility Functions', () => {
         it('should fall back to default endpoints when custom ones are not provided', () => {
             const config: GlobalConfig = {
                 vnpayHost: 'https://sandbox.vnpayment.vn',
+                queryDrAndRefundHost: 'https://sandbox.vnpayment.vn',
                 paymentEndpoint: PAYMENT_ENDPOINT,
                 vnp_Version: '2.1.0',
                 secureSecret: 'YOUR_SECURE_SECRET',
