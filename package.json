@@ -5,7 +5,7 @@
         "url": "git+https://github.com/lehuygiang28/vnpay.git"
     },
     "homepage": "https://vnpay.js.org",
-    "version": "2.3.0",
+    "version": "2.3.1",
     "description": "An open-source nodejs library support to payment with VNPay",
     "type": "module",
     "main": "./dist/index.cjs",
@@ -23,8 +23,6 @@
         "build": "npx tsup",
         "prepare": "npm run build",
         "dev": "npx tsup --watch",
-        "postinstall": "npm run format:fix",
-        "postuninstall": "npm run format:fix",
         "test": "npx jest",
         "test:cov": "npx jest --coverage",
         "example": "tsx --tsconfig ./example/tsconfig.example.json ./example/index.ts",
