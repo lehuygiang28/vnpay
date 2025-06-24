@@ -15,7 +15,8 @@ export function buildPaymentUrlSearchParams(data: Record<string, unknown>): URLS
 
     // Add sorted parameters
     for (const key of sortedKeys) {
-        if (data[key] !== undefined && data[key] !== null) {
+        if (data[key] !== undefined && data[key] !== null && data[key] !== '') {
+            // Encode the key and value to ensure they are URL-safe
             params.append(key, String(data[key]));
         }
     }

@@ -65,6 +65,25 @@ describe('buildPaymentUrl', () => {
         expect(result).toContain('vnp_Amount=200000');
     });
 
+    it('should handle if provide a empty bank code', () => {
+        const input: BuildPaymentUrl = {
+            ...baseInput,
+            vnp_BankCode: '',
+        };
+
+        const result = vnpay.buildPaymentUrl(input);
+
+        expect(result).not.toContain('vnp_BankCode');
+    });
+
+    it('should handle if not provide a bank code', () => {
+        const { vnp_BankCode, ...input } = baseInput;
+
+        const result = vnpay.buildPaymentUrl(input);
+
+        expect(result).not.toContain('vnp_BankCode');
+    });
+
     it('should handle different order info correctly', () => {
         const input: BuildPaymentUrl = {
             ...baseInput,
