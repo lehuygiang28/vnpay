@@ -88,27 +88,26 @@ import { resolveUrlString, dateFormat } from 'vnpay/utils';
 import type { VNPayConfig, BuildPaymentUrl, Bank } from 'vnpay/types-only';
 ```
 
-:::warning **⚠️ IMPORTANT: Client-side (Frontend) Usage**
-
-**VNPay library is designed for Node.js backend only** as it uses modules like `fs`, `crypto` and server-only APIs.
-
-**❌ DON'T do this in React/Vue/Angular components:**
-
-```typescript
-import { VNPay } from 'vnpay'; // Error: Module not found: Can't resolve 'fs'
-```
-
-**✅ DO this for frontend:**
-
-```typescript
-import type { VNPayConfig, BuildPaymentUrl, Bank, VerifyReturnUrl } from 'vnpay/types-only';
-```
-
-- **Backend (Node.js)**: Use normal imports for payment processing
-- **Frontend (React/Vue/Angular)**: Only import types for type checking
-- **API calls**: Call backend APIs from frontend instead of direct imports
-
-:::
+> [!WARNING]
+> **⚠️ IMPORTANT: Client-side (Frontend) Usage**
+>
+> **VNPay library is designed for Node.js backend only** as it uses modules like `fs`, `crypto` and server-only APIs.
+>
+> **❌ DON'T do this in React/Vue/Angular components:**
+>
+> ```typescript
+> import { VNPay } from 'vnpay'; // Error: Module not found: Can't resolve 'fs'
+> ```
+>
+> **✅ DO this for frontend:**
+>
+> ```typescript
+> import type { VNPayConfig, BuildPaymentUrl, Bank, VerifyReturnUrl } from 'vnpay/types-only';
+> ```
+>
+> - **Backend (Node.js)**: Use normal imports for payment processing
+> - **Frontend (React/Vue/Angular)**: Only import types for type checking
+> - **API calls**: Call backend APIs from frontend instead of direct imports
 
 ---
 
@@ -228,10 +227,6 @@ if (verify.isSuccess) {
 **💡 Check out practical examples:**
 - **See [Examples](/docs/examples)** in documentation for full-stack implementations
 - **Next.js Fullstack Example**: [vnpay-nextjs-fullstack-example](https://github.com/lehuygiang28/vnpay-nextjs-fullstack-example)
-
-:::
-
-<div align="center">
 
 ```
 </div>

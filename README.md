@@ -88,27 +88,26 @@ import { resolveUrlString, dateFormat } from 'vnpay/utils';
 import type { VNPayConfig, BuildPaymentUrl, Bank } from 'vnpay/types-only';
 ```
 
-:::warning **⚠️ QUAN TRỌNG: Sử dụng trên Client-side (Frontend)**
-
-**Thư viện VNPay chỉ dành cho Node.js backend** vì sử dụng các module như `fs`, `crypto` và các API chỉ có trên server.
-
-**❌ KHÔNG làm thế này trong React/Vue/Angular components:**
-
-```typescript
-import { VNPay } from 'vnpay'; // Error: Module not found: Can't resolve 'fs'
-```
-
-**✅ SỬ DỤNG như thế này cho frontend:**
-
-```typescript
-import type { VNPayConfig, BuildPaymentUrl, Bank, VerifyReturnUrl } from 'vnpay/types-only';
-```
-
-- **Backend (Node.js)**: Sử dụng import bình thường để xử lý thanh toán
-- **Frontend (React/Vue/Angular)**: Chỉ import types để type checking
-- **API calls**: Gọi backend APIs từ frontend thay vì import trực tiếp
-
-:::
+> [!WARNING]
+> **⚠️ QUAN TRỌNG: Sử dụng trên Client-side (Frontend)**
+>
+> **Thư viện VNPay chỉ dành cho Node.js backend** vì sử dụng các module như `fs`, `crypto` và các API chỉ có trên server.
+>
+> **❌ KHÔNG làm thế này trong React/Vue/Angular components:**
+>
+> ```typescript
+> import { VNPay } from 'vnpay'; // Error: Module not found: Can't resolve 'fs'
+> ```
+>
+> **✅ SỬ DỤNG như thế này cho frontend:**
+>
+> ```typescript
+> import type { VNPayConfig, BuildPaymentUrl, Bank, VerifyReturnUrl } from 'vnpay/types-only';
+> ```
+>
+> - **Backend (Node.js)**: Sử dụng import bình thường để xử lý thanh toán
+> - **Frontend (React/Vue/Angular)**: Chỉ import types để type checking
+> - **API calls**: Gọi backend APIs từ frontend thay vì import trực tiếp
 
 ## 💡 Cách sử dụng
 
