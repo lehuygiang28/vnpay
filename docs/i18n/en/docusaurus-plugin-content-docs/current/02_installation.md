@@ -24,12 +24,67 @@ $ yarn add vnpay
 $ pnpm install vnpay
 ```
 
+## 📦 Import Options (v2.4.0+)
+
+:::info New in v2.4.0
+Starting from version 2.4.0, you can import specific parts of the library to reduce bundle size!
+:::
+
+### 🏆 Full Import (Backward Compatible)
+
+```typescript
+import { VNPay, HashAlgorithm, ProductCode } from 'vnpay';
+```
+
+### 🦩 Modular Imports (Recommended)
+
+```typescript
+import { VNPay } from 'vnpay/vnpay';
+import { HashAlgorithm, ProductCode } from 'vnpay/enums';
+import { VNP_VERSION, PAYMENT_ENDPOINT } from 'vnpay/constants';
+import { resolveUrlString, dateFormat } from 'vnpay/utils';
+```
+
+### 📘 Types-only (TypeScript)
+
+```typescript
+import type { VNPayConfig, BuildPaymentUrl, Bank } from 'vnpay/types-only';
+```
+
+:::danger IMPORTANT WARNING
+**VNPay library is designed exclusively for Node.js backend** and **CANNOT** be used directly in frontend applications (React, Vue, Angular, etc.) because:
+
+- ❌ Uses Node.js modules: `fs`, `crypto`, `path`
+- ❌ Contains server-side logic to secure `secureSecret`
+- ❌ Will cause build errors when imported in client components
+:::
+
+#### ❌ DON'T do this in Frontend:
+
+```typescript
+import { VNPay } from 'vnpay';
+```
+
+#### ✅ CORRECT usage in Frontend:
+
+```typescript
+import type { VNPayConfig, BuildPaymentUrl, Bank, VerifyReturnUrl } from 'vnpay/types-only';
+```
+
+- **Backend (Node.js)**: Use normal imports for payment processing
+- **Frontend (React/Vue/Angular)**: Only import types for type checking
+- **API calls**: Call backend APIs from frontend instead of direct imports
+
 ## Usage
 
 ### Import the Library
 
 ```typescript
+// Full import (backward compatible)
 import { VNPay } from 'vnpay';
+
+// Or specific module import (recommended for smaller bundle)
+import { VNPay } from 'vnpay/vnpay';
 ```
 
 ### Initialize the Instance {#init-vnpay}
@@ -73,4 +128,28 @@ const vnpay = new VNPay({
         getBankListEndpoint: 'qrpayauth/api/merchant/get_bank_list',
     }, // optional
 });
+```
+
+### ⚠️ **Client-side (Frontend) Usage Guide**
+
+:::danger IMPORTANT WARNING
+**VNPay library is designed exclusively for Node.js backend** and **CANNOT** be used directly in frontend applications (React, Vue, Angular, etc.) because:
+
+- 🚫 Uses Node.js modules: `fs`, `crypto`, `path`  
+- 🚫 Contains server-side logic to secure `secureSecret`
+- 🚫 Will cause build errors when imported in client components
+:::
+
+#### ❌ **DON'T do this in Frontend:**
+
+```typescript
+// 🚫 WILL CAUSE BUILD ERRORS!
+import { VNPay } from 'vnpay';
+// Error: Module not found: Can't resolve 'fs'
+// Error: Module not found: Can't resolve 'crypto'
+
+const MyComponent = () => {
+  const vnpay = new VNPay(config); // ❌ Cannot do this in browser!
+  return <div>Payment</div>;
+};
 ```

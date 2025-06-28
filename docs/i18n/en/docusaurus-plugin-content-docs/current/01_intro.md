@@ -16,10 +16,13 @@ The [VNPay](https://github.com/lehuygiang28/vnpay) library is an open source pro
 
 ## Features
 
-- Simple API for integrating VNPay payment gateway
-- TypeScript support with comprehensive type definitions
-- Sandbox and production environment support
-- Customizable endpoints for different VNPay services
+- 🚀 Simple API for integrating VNPay payment gateway
+- 📘 TypeScript support with comprehensive type definitions
+- 🧩 **Modular imports (v2.4.0+)** - Reduce bundle size by up to 80%
+- ⚡ Tree-shaking and code splitting for optimized builds
+- 🔧 Sandbox and production environment support
+- 🎯 Customizable endpoints for different VNPay services
+- 📦 Minimal dependencies - Only depends on dayjs for date handling
 
 ## Resources
 
