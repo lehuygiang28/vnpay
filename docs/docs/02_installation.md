@@ -24,12 +24,67 @@ $ yarn add vnpay
 $ pnpm install vnpay
 ```
 
+## 📦 Tuỳ chọn Import (v2.4.0+)
+
+:::info Mới trong v2.4.0
+Bắt đầu từ phiên bản 2.4.0, bạn có thể import các phần cụ thể của thư viện để giảm kích thước bundle!
+:::
+
+### 🏆 Import toàn bộ (Backward Compatible)
+
+```typescript
+import { VNPay, HashAlgorithm, ProductCode } from 'vnpay';
+```
+
+### 🦩 Import theo module (Khuyến nghị)
+
+```typescript
+import { VNPay } from 'vnpay/vnpay';
+import { HashAlgorithm, ProductCode } from 'vnpay/enums';
+import { VNP_VERSION, PAYMENT_ENDPOINT } from 'vnpay/constants';
+import { resolveUrlString, dateFormat } from 'vnpay/utils';
+```
+
+### 📘 Types-only (TypeScript)
+
+```typescript
+import type { VNPayConfig, BuildPaymentUrl, Bank } from 'vnpay/types-only';
+```
+
+:::danger CẢNH BÁO QUAN TRỌNG
+**Thư viện VNPay được thiết kế dành riêng cho Node.js backend** và **KHÔNG THỂ** sử dụng trực tiếp trong các ứng dụng frontend (React, Vue, Angular, etc.) vì:
+
+- ❌ Sử dụng Node.js modules: `fs`, `crypto`, `path`
+- ❌ Chứa logic server-side để bảo mật `secureSecret`
+- ❌ Sẽ gây lỗi build khi import vào client components
+:::
+
+#### ❌ KHÔNG làm thế này trong Frontend:
+
+```typescript
+import { VNPay } from 'vnpay';
+```
+
+#### ✅ SỬ DỤNG đúng cách trong Frontend:
+
+```typescript
+import type { VNPayConfig, BuildPaymentUrl, Bank, VerifyReturnUrl } from 'vnpay/types-only';
+```
+
+- **Backend (Node.js)**: Sử dụng import bình thường để xử lý thanh toán
+- **Frontend (React/Vue/Angular)**: Chỉ import types để type checking
+- **API calls**: Gọi backend APIs từ frontend thay vì import trực tiếp
+
 ## Sử dụng thư viện
 
 ### Import thư viện
 
 ```typescript
+// Import toàn bộ (backward compatible)
 import { VNPay } from 'vnpay';
+
+// Hoặc import module cụ thể (khuyến nghị cho bundle size nhỏ hơn)
+import { VNPay } from 'vnpay/vnpay';
 ```
 
 ### Khởi tạo đối tượng {#init-vnpay}
@@ -73,4 +128,68 @@ const vnpay = new VNPay({
         getBankListEndpoint: 'qrpayauth/api/merchant/get_bank_list',
     }, // tùy chọn
 });
+```
+
+### ⚠️ **Hướng dẫn sử dụng trên Client-side (Frontend)**
+
+:::danger CẢNH BÁO QUAN TRỌNG
+**Thư viện VNPay được thiết kế dành riêng cho Node.js backend** và **KHÔNG THỂ** sử dụng trực tiếp trong các ứng dụng frontend (React, Vue, Angular, etc.) vì:
+
+- 🚫 Sử dụng Node.js modules: `fs`, `crypto`, `path`  
+- 🚫 Chứa logic server-side để bảo mật `secureSecret`
+- 🚫 Sẽ gây lỗi build khi import vào client components
+:::
+
+#### ❌ **KHÔNG làm thế này trong Frontend:**
+
+```typescript
+// 🚫 SẼ GÂY LỖI BUILD!
+import { VNPay } from 'vnpay';
+// Error: Module not found: Can't resolve 'fs'
+// Error: Module not found: Can't resolve 'crypto'
+
+const MyComponent = () => {
+  const vnpay = new VNPay(config); // ❌ Không thể làm trong browser!
+  return <div>Payment</div>;
+};
+```
+
+#### ✅ **SỬ DỤNG đúng cách trong Frontend:**
+
+```typescript
+// ✅ An toàn - chỉ import types
+import type { 
+  VNPayConfig, 
+  BuildPaymentUrl, 
+  Bank, 
+  VerifyReturnUrl 
+} from 'vnpay/types-only';
+
+// Hoặc sử dụng type import với main package
+import type { VNPayConfig } from 'vnpay';
+
+interface PaymentComponentProps {
+  config: VNPayConfig;
+  onPaymentResult: (result: VerifyReturnUrl) => void;
+}
+
+const PaymentComponent: React.FC<PaymentComponentProps> = ({ config, onPaymentResult }) => {
+  const handleCreatePayment = async () => {
+    // ✅ Gọi API backend thay vì import trực tiếp
+    const response = await fetch('/api/create-payment', {
+      method: 'POST',
+      body: JSON.stringify({ amount: 100000 }),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    
+    const { paymentUrl } = await response.json();
+    window.location.href = paymentUrl;
+  };
+
+  return (
+    <button onClick={handleCreatePayment}>
+      Thanh toán VNPay
+    </button>
+  );
+};
 ```
