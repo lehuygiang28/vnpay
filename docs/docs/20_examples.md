@@ -46,7 +46,7 @@ Xem ví dụ triển khai hoàn chỉnh với Express [tại đây](https://gith
 
 ### ✅ Kiến trúc khuyến nghị
 
-```
+```text
 ┌─────────────────┐    API calls    ┌─────────────────┐
 │   Frontend      │ ──────────────► │   Backend       │
 │                 │                 │                 │

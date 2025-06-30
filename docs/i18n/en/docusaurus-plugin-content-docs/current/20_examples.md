@@ -37,7 +37,7 @@ See a complete Express implementation example [here](https://github.com/lehuygia
 ### ⚠️ Important Principles
 
 :::danger WARNING
-**VNPay library is designed for Node.js backend only!** Cannot be used directly in React/Vue/Angular components because:
+**The VNPay library is designed for Node.js backends only!** Cannot be used directly in React/Vue/Angular components because:
 
 - 🚫 Uses Node.js modules: `fs`, `crypto`, `path`  
 - 🚫 Contains server-side logic to secure `secureSecret`
@@ -46,7 +46,7 @@ See a complete Express implementation example [here](https://github.com/lehuygia
 
 ### ✅ Recommended Architecture
 
-```
+```text
 ┌─────────────────┐    API calls    ┌─────────────────┐
 │   Frontend      │ ──────────────► │   Backend       │
 │                 │                 │                 │

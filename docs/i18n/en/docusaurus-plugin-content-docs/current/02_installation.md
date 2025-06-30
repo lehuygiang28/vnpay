@@ -59,13 +59,13 @@ import type { VNPayConfig, BuildPaymentUrl, Bank } from 'vnpay/types-only';
 - ❌ Will cause build errors when imported in client components
 :::
 
-#### ❌ DON'T do this in Frontend:
+#### ❌ DON'T do this in Frontend
 
 ```typescript
 import { VNPay } from 'vnpay';
 ```
 
-#### ✅ CORRECT usage in Frontend:
+#### ✅ CORRECT usage in Frontend
 
 ```typescript
 import type { VNPayConfig, BuildPaymentUrl, Bank, VerifyReturnUrl } from 'vnpay/types-only';
@@ -73,7 +73,7 @@ import type { VNPayConfig, BuildPaymentUrl, Bank, VerifyReturnUrl } from 'vnpay/
 
 - **Backend (Node.js)**: Use normal imports for payment processing
 - **Frontend (React/Vue/Angular)**: Only import types for type checking
-- **API calls**: Call backend APIs from frontend instead of direct imports
+- **API calls**: Call the backend APIs from the frontend instead of direct imports
 
 ## Usage
 
@@ -140,7 +140,7 @@ const vnpay = new VNPay({
 - 🚫 Will cause build errors when imported in client components
 :::
 
-#### ❌ **DON'T do this in Frontend:**
+#### ❌ **DON'T do this in Frontend**
 
 ```typescript
 // 🚫 WILL CAUSE BUILD ERRORS!

@@ -91,7 +91,7 @@ import type { VNPayConfig, BuildPaymentUrl, Bank } from 'vnpay/types-only';
 > [!WARNING]
 > **⚠️ IMPORTANT: Client-side (Frontend) Usage**
 >
-> **VNPay library is designed for Node.js backend only** as it uses modules like `fs`, `crypto` and server-only APIs.
+> **The VNPay library is designed for Node.js backends only** as it uses modules like `fs`, `crypto`, and other server-only APIs.
 >
 > **❌ DON'T do this in React/Vue/Angular components:**
 >
@@ -107,7 +107,7 @@ import type { VNPayConfig, BuildPaymentUrl, Bank } from 'vnpay/types-only';
 >
 > - **Backend (Node.js)**: Use normal imports for payment processing
 > - **Frontend (React/Vue/Angular)**: Only import types for type checking
-> - **API calls**: Call backend APIs from frontend instead of direct imports
+> - **API calls**: Call the backend APIs from the frontend instead of direct imports
 
 ---
 
@@ -225,7 +225,7 @@ if (verify.isSuccess) {
 </div>
 
 **💡 Check out practical examples:**
-- **See [Examples](/docs/examples)** in documentation for full-stack implementations
+- **See [Examples](/docs/examples)** in the documentation for full-stack implementations
 - **Next.js Fullstack Example**: [vnpay-nextjs-fullstack-example](https://github.com/lehuygiang28/vnpay-nextjs-fullstack-example)
 
 ```

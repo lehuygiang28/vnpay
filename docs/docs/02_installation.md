@@ -59,13 +59,13 @@ import type { VNPayConfig, BuildPaymentUrl, Bank } from 'vnpay/types-only';
 - ❌ Sẽ gây lỗi build khi import vào client components
 :::
 
-#### ❌ KHÔNG làm thế này trong Frontend:
+#### ❌ KHÔNG làm thế này trong Frontend
 
 ```typescript
 import { VNPay } from 'vnpay';
 ```
 
-#### ✅ SỬ DỤNG đúng cách trong Frontend:
+#### ✅ SỬ DỤNG đúng cách trong Frontend
 
 ```typescript
 import type { VNPayConfig, BuildPaymentUrl, Bank, VerifyReturnUrl } from 'vnpay/types-only';
@@ -140,7 +140,7 @@ const vnpay = new VNPay({
 - 🚫 Sẽ gây lỗi build khi import vào client components
 :::
 
-#### ❌ **KHÔNG làm thế này trong Frontend:**
+#### ❌ **KHÔNG làm thế này trong Frontend**
 
 ```typescript
 // 🚫 SẼ GÂY LỖI BUILD!
@@ -154,7 +154,7 @@ const MyComponent = () => {
 };
 ```
 
-#### ✅ **SỬ DỤNG đúng cách trong Frontend:**
+#### ✅ **SỬ DỤNG đúng cách trong Frontend**
 
 ```typescript
 // ✅ An toàn - chỉ import types
