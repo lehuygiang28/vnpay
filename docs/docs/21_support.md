@@ -13,7 +13,3 @@ Nếu bạn gặp vấn đề hoặc có câu hỏi, bạn có thể:
 - Mở một [issue trên GitHub](https://github.com/lehuygiang28/vnpay/issues)
 - Kiểm tra các [thảo luận](https://github.com/lehuygiang28/vnpay/discussions) hiện tại
 - Xem các [ví dụ](https://github.com/lehuygiang28/vnpay/blob/main/example/) trong thư mục example
-
-## Hỗ trợ
-
-[![Sponsored by GitAds](https://gitads.dev/v1/ad-serve?source=lehuygiang28/vnpay@github)](https://gitads.dev/v1/ad-track?source=lehuygiang28/vnpay@github)

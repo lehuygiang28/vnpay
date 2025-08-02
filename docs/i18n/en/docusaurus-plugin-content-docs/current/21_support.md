@@ -13,7 +13,3 @@ If you encounter any issues or have questions, you can:
 - Open an [issue on GitHub](https://github.com/lehuygiang28/vnpay/issues)
 - Check existing [discussions](https://github.com/lehuygiang28/vnpay/discussions)
 - Review the [examples](https://github.com/lehuygiang28/vnpay/blob/main/example/) directory
-
-## Sponsored
-
-[![Sponsored by GitAds](https://gitads.dev/v1/ad-serve?source=lehuygiang28/vnpay@github)](https://gitads.dev/v1/ad-track?source=lehuygiang28/vnpay@github)

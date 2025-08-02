@@ -44,10 +44,6 @@ _[github.com/lehuygiang28](https://github.com/lehuygiang28)_
   <img src="https://contrib.rocks/image?repo=lehuygiang28/vnpay&max=20" class="contributors_img" alt="Người đóng góp" />
 </a>
 
-## Hỗ trợ
-
-[![Sponsored by GitAds](https://gitads.dev/v1/ad-serve?source=lehuygiang28/vnpay@github)](https://gitads.dev/v1/ad-track?source=lehuygiang28/vnpay@github)
-
 ## Giấy phép
 
 **[MIT](https://github.com/lehuygiang28/vnpay/blob/main/LICENSE) © [Lê Huy Giang](https://github.com/lehuygiang28)**
