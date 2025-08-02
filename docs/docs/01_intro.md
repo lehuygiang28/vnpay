@@ -11,8 +11,8 @@ Thư viện [VNPay](https://github.com/lehuygiang28/vnpay) là một dự án m�
 
 ## Tài liệu
 
--   Tìm hiểu cách sử dụng thư viện VNPay tại [đây](/installation).
--   Tìm hiểu thêm về cách VNPay hoạt động tại [tài liệu chính thức của VNPay](https://sandbox.vnpayment.vn/apis/).
+- Tìm hiểu cách sử dụng thư viện VNPay tại [đây](/installation).
+- Tìm hiểu thêm về cách VNPay hoạt động tại [tài liệu chính thức của VNPay](https://sandbox.vnpayment.vn/apis/).
 
 ## Tính năng
 
@@ -26,13 +26,13 @@ Thư viện [VNPay](https://github.com/lehuygiang28/vnpay) là một dự án m�
 
 ## Nguồn tài nguyên
 
--   `vnpay` trên [GitHub](https://github.com/lehuygiang28/vnpay)
--   `vnpay` trên [NPM](https://www.npmjs.com/package/vnpay)
+- `vnpay` trên [GitHub](https://github.com/lehuygiang28/vnpay)
+- `vnpay` trên [NPM](https://www.npmjs.com/package/vnpay)
 
 ## Môi trường
 
--   [Node.js](https://nodejs.org/en/download/) phiên bản 18.0 hoặc cao hơn (khuyến nghị).
--   Tương thích với cả TypeScript và JavaScript.
+- [Node.js](https://nodejs.org/en/download/) phiên bản 18.0 hoặc cao hơn (khuyến nghị).
+- Tương thích với cả TypeScript và JavaScript.
 
 ## Tác giả
 
@@ -43,6 +43,10 @@ _[github.com/lehuygiang28](https://github.com/lehuygiang28)_
 <a href="https://github.com/lehuygiang28/vnpay/graphs/contributors" target="_blank">
   <img src="https://contrib.rocks/image?repo=lehuygiang28/vnpay&max=20" class="contributors_img" alt="Người đóng góp" />
 </a>
+
+## Hỗ trợ
+
+[![Sponsored by GitAds](https://gitads.dev/v1/ad-serve?source=lehuygiang28/vnpay@github)](https://gitads.dev/v1/ad-track?source=lehuygiang28/vnpay@github)
 
 ## Giấy phép
 

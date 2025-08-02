@@ -11,8 +11,8 @@ The [VNPay](https://github.com/lehuygiang28/vnpay) library is an open source pro
 
 ## Documentation
 
--   Learn how to use the VNPay library [here](/installation).
--   Learn more about how VNPay works in the [official VNPay documentation](https://sandbox.vnpayment.vn/apis/).
+- Learn how to use the VNPay library [here](/installation).
+- Learn more about how VNPay works in the [official VNPay documentation](https://sandbox.vnpayment.vn/apis/).
 
 ## Features
 
@@ -26,13 +26,13 @@ The [VNPay](https://github.com/lehuygiang28/vnpay) library is an open source pro
 
 ## Resources
 
--   `vnpay` on [GitHub](https://github.com/lehuygiang28/vnpay)
--   `vnpay` on [NPM](https://www.npmjs.com/package/vnpay)
+- `vnpay` on [GitHub](https://github.com/lehuygiang28/vnpay)
+- `vnpay` on [NPM](https://www.npmjs.com/package/vnpay)
 
 ## Environment
 
--   [Node.js](https://nodejs.org/en/download/) version 18.0 or higher (recommended).
--   Compatible with both TypeScript and JavaScript.
+- [Node.js](https://nodejs.org/en/download/) version 18.0 or higher (recommended).
+- Compatible with both TypeScript and JavaScript.
 
 ## Author
 
@@ -43,6 +43,10 @@ _[github.com/lehuygiang28](https://github.com/lehuygiang28)_
 <a href="https://github.com/lehuygiang28/vnpay/graphs/contributors" target="_blank">
   <img src="https://contrib.rocks/image?repo=lehuygiang28/vnpay&max=20" class="contributors_img" alt="Contributors" />
 </a>
+
+## Sponsored
+
+[![Sponsored by GitAds](https://gitads.dev/v1/ad-serve?source=lehuygiang28/vnpay@github)](https://gitads.dev/v1/ad-track?source=lehuygiang28/vnpay@github)
 
 ## License
 
