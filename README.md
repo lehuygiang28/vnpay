@@ -16,6 +16,8 @@
 
 </div>
 
+<!-- GitAds-Verify: AS4WTM39TY1WOG94V1FIXPB924R4LHF1 -->
+
 ---
 
 ## ✨ Tính năng nổi bật
@@ -29,6 +31,7 @@
 </div>
 
 ### 🆕 **Mới trong v2.4.0**
+
 - 📦 **Import theo module** - Giảm kích thước bundle lên đến 80%
 - 🎯 **Types-only imports** - 0KB runtime cho TypeScript projects
 - ⚡ **Tối ưu build** - Code splitting và tree-shaking
@@ -71,11 +74,13 @@ pnpm install vnpay
 ## 📦 Import Options (v2.4.0+)
 
 ### 🏆 Import toàn bộ (Backward Compatible)
+
 ```typescript
 import { VNPay, HashAlgorithm, ProductCode } from 'vnpay';
 ```
 
 ### 🦩 Import theo module (Recommended)
+
 ```typescript
 import { VNPay } from 'vnpay/vnpay';
 import { HashAlgorithm, ProductCode } from 'vnpay/enums';
@@ -84,6 +89,7 @@ import { resolveUrlString, dateFormat } from 'vnpay/utils';
 ```
 
 ### 📘 Types-only (TypeScript)
+
 ```typescript
 import type { VNPayConfig, BuildPaymentUrl, Bank } from 'vnpay/types-only';
 ```
