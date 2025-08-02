@@ -18,6 +18,8 @@
 
 <!-- GitAds-Verify: AS4WTM39TY1WOG94V1FIXPB924R4LHF1 -->
 
+[![Sponsored by GitAds](https://gitads.dev/v1/ad-serve?source=lehuygiang28/vnpay@github)](https://gitads.dev/v1/ad-track?source=lehuygiang28/vnpay@github)
+
 ---
 
 ## ✨ Tính năng nổi bật

@@ -16,6 +16,8 @@
 
 </div>
 
+[![Sponsored by GitAds](https://gitads.dev/v1/ad-serve?source=lehuygiang28/vnpay@github)](https://gitads.dev/v1/ad-track?source=lehuygiang28/vnpay@github)
+
 ---
 
 ## ✨ Key Features
@@ -29,6 +31,7 @@
 </div>
 
 ### 🆕 **New in v2.4.0**
+
 - 📦 **Modular imports** - Reduce bundle size by up to 80%
 - 🎯 **Types-only imports** - 0KB runtime for TypeScript projects
 - ⚡ **Optimized builds** - Code splitting and tree-shaking
@@ -71,11 +74,13 @@ pnpm install vnpay
 ## 📦 Import Options (v2.4.0+)
 
 ### 🏆 Full Import (Backward Compatible)
+
 ```typescript
 import { VNPay, HashAlgorithm, ProductCode } from 'vnpay';
 ```
 
 ### 🦩 Modular Imports (Recommended)
+
 ```typescript
 import { VNPay } from 'vnpay/vnpay';
 import { HashAlgorithm, ProductCode } from 'vnpay/enums';
@@ -84,6 +89,7 @@ import { resolveUrlString, dateFormat } from 'vnpay/utils';
 ```
 
 ### 📘 Types-only (TypeScript)
+
 ```typescript
 import type { VNPayConfig, BuildPaymentUrl, Bank } from 'vnpay/types-only';
 ```
@@ -225,6 +231,7 @@ if (verify.isSuccess) {
 </div>
 
 **💡 Check out practical examples:**
+
 - **See [Examples](/docs/examples)** in the documentation for full-stack implementations
 - **Next.js Fullstack Example**: [vnpay-nextjs-fullstack-example](https://github.com/lehuygiang28/vnpay-nextjs-fullstack-example)
 
