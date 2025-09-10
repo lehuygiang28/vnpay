@@ -1,0 +1,9 @@
+dist/
+lib/
+coverage/
+build/
+node_modules/
+.docusaurus/
+docs/build/
+*.min.js
+*.min.css

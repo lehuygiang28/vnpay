@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 if (!window.va) {
     window.va =
         window.va ||
@@ -18,8 +19,9 @@ va('event', {
 });
 
 // page view on every page if changed
-// biome-ignore lint/style/noVar: follow vercel analytics's docs
-var pushState = history.pushState;
+// Disable rule follow vercel analytics's docs
+// eslint-disable-next-line no-var
+const pushState = history.pushState;
 history.pushState = () => {
     // biome-ignore lint/style/noArguments: follow vercel analytics's docs
     pushState.apply(history, arguments);

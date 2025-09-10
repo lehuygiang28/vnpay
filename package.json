@@ -46,7 +46,9 @@
             "types": "./dist/types-only.d.ts"
         }
     },
-    "files": ["dist"],
+    "files": [
+        "dist"
+    ],
     "scripts": {
         "build": "npx tsup",
         "prepare": "npm run build",
@@ -55,28 +57,42 @@
         "test:cov": "npx jest --coverage",
         "example": "tsx --tsconfig ./example/tsconfig.example.json ./example/index.ts",
         "example:server": "tsx --tsconfig ./example/tsconfig.example.json ./example/express.ts",
-        "lint": "npx @biomejs/biome lint .",
-        "lint:fix": "npx @biomejs/biome lint . --write",
-        "format": "npx @biomejs/biome format .",
-        "format:fix": "npx @biomejs/biome format --write .",
+        "lint": "npx eslint .",
+        "lint:fix": "npx eslint . --fix",
+        "format": "npx prettier --check .",
+        "format:fix": "npx prettier --write .",
         "release": "release-it"
     },
-    "keywords": ["vnpay", "vnpayjs", "vnpay.vn", "payment", "vn-payment", "vn-payments"],
+    "keywords": [
+        "vnpay",
+        "vnpayjs",
+        "vnpay.vn",
+        "payment",
+        "vn-payment",
+        "vn-payments"
+    ],
     "author": "lehuygiang28 <lehuygiang28@gmail.com>",
-    "maintainers": ["lehuygiang28"],
+    "maintainers": [
+        "lehuygiang28"
+    ],
     "license": "MIT",
     "dependencies": {
         "dayjs": "^1.11.13"
     },
     "devDependencies": {
-        "@biomejs/biome": "^1.8.3",
         "@tsconfig/recommended": "^1.0.7",
         "@types/express": "^4.17.21",
         "@types/jest": "^29.5.5",
         "@types/node": "^20.17.24",
+        "@typescript-eslint/eslint-plugin": "^7.0.0",
+        "@typescript-eslint/parser": "^7.0.0",
         "chalk": "^4.1.2",
         "dotenv": "^16.4.5",
+        "eslint": "^8.57.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-prettier": "^5.1.3",
         "express": "^4.18.3",
+        "prettier": "^3.2.5",
         "release-it": "^18.1.2",
         "rimraf": "^5.0.5",
         "ts-jest": "^29.1.1",
