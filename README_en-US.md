@@ -16,8 +16,6 @@
 
 </div>
 
-[![Sponsored by GitAds](https://gitads.dev/v1/ad-serve?source=lehuygiang28/vnpay@github)](https://gitads.dev/v1/ad-track?source=lehuygiang28/vnpay@github)
-
 ---
 
 ## ✨ Key Features
@@ -173,13 +171,17 @@ if (verify.isSuccess) {
 
 ---
 
+[![Sponsored by GitAds](https://gitads.dev/v1/ad-serve?source=lehuygiang28/vnpay@github)](https://gitads.dev/v1/ad-track?source=lehuygiang28/vnpay@github)
+
+---
+
 ## 🤝 Support & Contribute
 
 <div align="center">
 
 **🎉 vnpayjs is an open-source and completely free project!**
 
-*If this library helps you, please give us a ⭐ and buy us a coffee ☕*
+*If this library helps you, please give us a ⭐ and buy us a coffee ☕ and click the ads above to support us*
 
 <br/>
 

@@ -16,10 +16,6 @@
 
 </div>
 
-<!-- GitAds-Verify: AS4WTM39TY1WOG94V1FIXPB924R4LHF1 -->
-
-[![Sponsored by GitAds](https://gitads.dev/v1/ad-serve?source=lehuygiang28/vnpay@github)](https://gitads.dev/v1/ad-track?source=lehuygiang28/vnpay@github)
-
 ---
 
 ## ✨ Tính năng nổi bật
@@ -173,13 +169,19 @@ if (verify.isSuccess) {
 
 ---
 
+<!-- GitAds-Verify: AS4WTM39TY1WOG94V1FIXPB924R4LHF1 -->
+
+[![Sponsored by GitAds](https://gitads.dev/v1/ad-serve?source=lehuygiang28/vnpay@github)](https://gitads.dev/v1/ad-track?source=lehuygiang28/vnpay@github)
+
+---
+
 ## 🤝 Hỗ trợ & Đóng góp
 
 <div align="center">
 
 **🎉 vnpayjs là dự án mã nguồn mở và hoàn toàn miễn phí!**
 
-*Nếu thư viện giúp ích cho bạn, hãy tặng cho chúng tôi một ⭐ và mời một ly cà phê ☕*
+*Nếu thư viện giúp ích cho bạn, hãy tặng cho project này một ⭐ hoặc mời một ly cà phê ☕ và nhấn vào các quảng cáo trên để mình nhận được 1 khoản tiền nhỏ để duy trì project*
 
 <br/>
 
