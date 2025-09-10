@@ -12,7 +12,7 @@
 
 **🚀 Thư viện Node.js hiện đại cho tích hợp cổng thanh toán [VNPay](https://vnpay.vn) vào ứng dụng của bạn.**
 
-*Hỗ trợ TypeScript • Tree-shaking • Modular imports • Minimal dependencies*
+_Hỗ trợ TypeScript • Tree-shaking • Modular imports • Minimal dependencies_
 
 </div>
 
@@ -22,8 +22,8 @@
 
 <div align="center">
 
-| 🎯 **Dễ sử dụng** | 🧩 **Modular** | 📘 **TypeScript** | ⚡ **Tối ưu** |
-|:---:|:---:|:---:|:---:|
+|    🎯 **Dễ sử dụng**     |   🧩 **Modular**   | 📘 **TypeScript** |   ⚡ **Tối ưu**    |
+| :----------------------: | :----------------: | :---------------: | :----------------: |
 | API đơn giản & trực quan | Import theo module | Full type support | Tree-shaking ready |
 
 </div>
@@ -41,11 +41,11 @@
 
 <div align="center">
 
-| 📖 **Tài liệu** | 🔗 **Link** | 📝 **Mô tả** |
-|:---|:---|:---|
-| **Docs chính thức** | [vnpay.js.org](https://vnpay.js.org/) | Tài liệu chi tiết với ví dụ |
-| **VNPay API** | [sandbox.vnpayment.vn/apis](https://sandbox.vnpayment.vn/apis) | Tài liệu chính thức VNPay |
-| **GitHub** | [github.com/lehuygiang28/vnpay](https://github.com/lehuygiang28/vnpay) | Source code & Issues |
+| 📖 **Tài liệu**     | 🔗 **Link**                                                            | 📝 **Mô tả**                |
+| :------------------ | :--------------------------------------------------------------------- | :-------------------------- |
+| **Docs chính thức** | [vnpay.js.org](https://vnpay.js.org/)                                  | Tài liệu chi tiết với ví dụ |
+| **VNPay API**       | [sandbox.vnpayment.vn/apis](https://sandbox.vnpayment.vn/apis)         | Tài liệu chính thức VNPay   |
+| **GitHub**          | [github.com/lehuygiang28/vnpay](https://github.com/lehuygiang28/vnpay) | Source code & Issues        |
 
 </div>
 
@@ -125,19 +125,19 @@ const vnpay = new VNPay({
     tmnCode: '2QXUI4B4',
     secureSecret: 'your-secret-key',
     vnpayHost: 'https://sandbox.vnpayment.vn',
-    
+
     // 🔧 Cấu hình tùy chọn
-    testMode: true,                     // Chế độ test
-    hashAlgorithm: 'SHA512',           // Thuật toán mã hóa
-    enableLog: true,                   // Bật/tắt log
-    loggerFn: ignoreLogger,            // Custom logger
-    
-         // 🔧 Custom endpoints
+    testMode: true, // Chế độ test
+    hashAlgorithm: 'SHA512', // Thuật toán mã hóa
+    enableLog: true, // Bật/tắt log
+    loggerFn: ignoreLogger, // Custom logger
+
+    // 🔧 Custom endpoints
     endpoints: {
         paymentEndpoint: 'paymentv2/vpcpay.html',
         queryDrRefundEndpoint: 'merchant_webapi/api/transaction',
         getBankListEndpoint: 'qrpayauth/api/merchant/get_bank_list',
-    }
+    },
 });
 ```
 
@@ -145,7 +145,7 @@ const vnpay = new VNPay({
 
 ```typescript
 const paymentUrl = vnpay.buildPaymentUrl({
-    vnp_Amount: 100000,                    // 100,000 VND
+    vnp_Amount: 100000, // 100,000 VND
     vnp_IpAddr: '192.168.1.1',
     vnp_ReturnUrl: 'https://yourapp.com/return',
     vnp_TxnRef: 'ORDER_123',
@@ -181,7 +181,7 @@ if (verify.isSuccess) {
 
 **🎉 vnpayjs là dự án mã nguồn mở và hoàn toàn miễn phí!**
 
-*Nếu thư viện giúp ích cho bạn, hãy tặng cho project này một ⭐ hoặc mời một ly cà phê ☕ và nhấn vào các quảng cáo trên để mình nhận được 1 khoản tiền nhỏ để duy trì project*
+_Nếu thư viện giúp ích cho bạn, hãy tặng cho project này một ⭐ hoặc mời một ly cà phê ☕ và nhấn vào các quảng cáo trên để mình nhận được 1 khoản tiền nhỏ để duy trì project_
 
 <br/>
 
@@ -202,11 +202,11 @@ if (verify.isSuccess) {
 
 <div align="center">
 
-| 📋 **Bước** | 🔗 **Hành động** |
-|:---:|:---|
-| **1** | Đọc [Hướng dẫn đóng góp](.github/CONTRIBUTING.md) |
-| **2** | Fork repo và tạo Pull Request |
-| **3** | Tham gia thảo luận trong [Issues](https://github.com/lehuygiang28/vnpay/issues) |
+| 📋 **Bước** | 🔗 **Hành động**                                                                |
+| :---------: | :------------------------------------------------------------------------------ |
+|    **1**    | Đọc [Hướng dẫn đóng góp](.github/CONTRIBUTING.md)                               |
+|    **2**    | Fork repo và tạo Pull Request                                                   |
+|    **3**    | Tham gia thảo luận trong [Issues](https://github.com/lehuygiang28/vnpay/issues) |
 
 </div>
 
@@ -214,7 +214,7 @@ if (verify.isSuccess) {
 
 <div align="center">
 
-*Cảm ơn tất cả những người đã đóng góp cho dự án:*
+_Cảm ơn tất cả những người đã đóng góp cho dự án:_
 
 [![Contributors](https://contrib.rocks/image?repo=lehuygiang28/vnpay&max=20)](https://github.com/lehuygiang28/vnpay/graphs/contributors)
 
@@ -228,6 +228,6 @@ if (verify.isSuccess) {
 
 **[MIT License](LICENSE) © [Lê Huy Giang](https://github.com/lehuygiang28)**
 
-*Made with ❤️ in Vietnam*
+_Made with ❤️ in Vietnam_
 
 </div>

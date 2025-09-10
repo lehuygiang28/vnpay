@@ -4,26 +4,31 @@ First off, thank you for considering contributing to the VNPay library! 🎉 Eve
 
 ## Table of Contents
 
-- [Code of Conduct](#code-of-conduct)
-- [Getting Started](#getting-started)
-  - [Project Structure](#project-structure)
-  - [Setting Up Your Development Environment](#setting-up-your-development-environment)
-  - [Running the Documentation Site Locally](#running-the-documentation-site-locally)
-- [Contributing Workflow](#contributing-workflow)
-  - [Finding Issues to Work On](#finding-issues-to-work-on)
-  - [Making Changes](#making-changes)
-  - [Commit Messages](#commit-messages)
-  - [Pull Requests](#pull-requests)
-- [Documentation Guidelines](#documentation-guidelines)
-  - [Bilingual Documentation](#bilingual-documentation)
-  - [Documentation Structure](#documentation-structure)
-- [Testing](#testing)
-  - [Running Tests](#running-tests)
-  - [Writing Tests](#writing-tests)
-- [Review Process](#review-process)
-- [Style Guides](#style-guides)
-- [Release Process](#release-process)
-- [Additional Notes](#additional-notes)
+- [Contributing to VNPay](#contributing-to-vnpay)
+    - [Table of Contents](#table-of-contents)
+    - [Code of Conduct](#code-of-conduct)
+    - [Getting Started](#getting-started)
+        - [Project Structure](#project-structure)
+        - [Setting Up Your Development Environment](#setting-up-your-development-environment)
+        - [Running the Documentation Site Locally](#running-the-documentation-site-locally)
+    - [Contributing Workflow](#contributing-workflow)
+        - [Finding Issues to Work On](#finding-issues-to-work-on)
+        - [Making Changes](#making-changes)
+        - [Commit Messages](#commit-messages)
+        - [Pull Requests](#pull-requests)
+    - [Documentation Guidelines](#documentation-guidelines)
+        - [Bilingual Documentation](#bilingual-documentation)
+        - [Documentation Structure](#documentation-structure)
+    - [Testing](#testing)
+        - [Running Tests](#running-tests)
+        - [Writing Tests](#writing-tests)
+    - [Review Process](#review-process)
+    - [Style Guides](#style-guides)
+        - [TypeScript Style Guide](#typescript-style-guide)
+        - [Documentation Style Guide](#documentation-style-guide)
+    - [Release Process](#release-process)
+    - [Additional Notes](#additional-notes)
+        - [Issue and Pull Request Labels](#issue-and-pull-request-labels)
 
 ## Code of Conduct
 
@@ -52,51 +57,57 @@ vnpay/
 ### Setting Up Your Development Environment
 
 1. **Fork the repository**:
-   - Click the "Fork" button at the top right of the [repository page](https://github.com/lehuygiang28/vnpay)
-   
+    - Click the "Fork" button at the top right of the [repository page](https://github.com/lehuygiang28/vnpay)
 2. **Clone your fork**:
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/vnpay.git
-   cd vnpay
-   ```
+
+    ```bash
+    git clone https://github.com/YOUR_USERNAME/vnpay.git
+    cd vnpay
+    ```
 
 3. **Install dependencies**:
-   ```bash
-   npm install
-   ```
+
+    ```bash
+    npm install
+    ```
 
 4. **Set up remote**:
-   ```bash
-   git remote add upstream https://github.com/lehuygiang28/vnpay.git
-   ```
+
+    ```bash
+    git remote add upstream https://github.com/lehuygiang28/vnpay.git
+    ```
 
 5. **Start coding!** 🎉
 
 6. **Commit your changes**:
-   - Commit message must follow the [commit message convention](#commit-messages)
-   ```bash
-   git add .
-   git commit -m "feat: ✨ Add new feature"
-   ```
+    - Commit message must follow the [commit message convention](#commit-messages)
+
+    ```bash
+    git add .
+    git commit -m "feat: ✨ Add new feature"
+    ```
 
 ### Running the Documentation Site Locally
 
 The documentation is built with [Docusaurus](https://docusaurus.io/). To run it locally:
 
 1. Navigate to the docs directory:
-   ```bash
-   cd docs
-   ```
+
+    ```bash
+    cd docs
+    ```
 
 2. Install dependencies (if you haven't already):
-   ```bash
-   npm install
-   ```
+
+    ```bash
+    npm install
+    ```
 
 3. Start the development server:
-   ```bash
-   npm start
-   ```
+
+    ```bash
+    npm start
+    ```
 
 4. Open your browser and visit [http://localhost:3000](http://localhost:3000)
 
@@ -114,23 +125,25 @@ The documentation is built with [Docusaurus](https://docusaurus.io/). To run it 
 ### Making Changes
 
 1. **Create a branch**:
-   ```bash
-   git checkout -b feature/your-feature-name
-   # or
-   git checkout -b fix/your-bug-fix
-   ```
+
+    ```bash
+    git checkout -b feature/your-feature-name
+    # or
+    git checkout -b fix/your-bug-fix
+    ```
 
 2. **Make your changes**:
-   - Write clean, maintainable, and tested code
-   - Follow the [style guide](#style-guides)
-   - Add or update tests as necessary
-   - Update documentation if needed (both English and Vietnamese)
+    - Write clean, maintainable, and tested code
+    - Follow the [style guide](#style-guides)
+    - Add or update tests as necessary
+    - Update documentation if needed (both English and Vietnamese)
 
 3. **Keep your branch updated**:
-   ```bash
-   git fetch upstream
-   git rebase upstream/main
-   ```
+
+    ```bash
+    git fetch upstream
+    git rebase upstream/main
+    ```
 
 ### Commit Messages
 
@@ -145,6 +158,7 @@ We follow the [Conventional Commits](https://www.conventionalcommits.org/) speci
 ```
 
 **Types include:**
+
 - `feat`: A new feature
 - `fix`: A bug fix
 - `docs`: Documentation only changes
@@ -155,6 +169,7 @@ We follow the [Conventional Commits](https://www.conventionalcommits.org/) speci
 - `chore`: Changes to the build process or auxiliary tools
 
 **Examples:**
+
 ```
 feat: ✨ Add support for QR code payments
 fix: 🐛 Fix amount calculation in refund process
@@ -164,23 +179,24 @@ docs: 📝 Update installation instructions
 ### Pull Requests
 
 1. **Push your changes**:
-   ```bash
-   git push origin feature/your-feature-name
-   ```
+
+    ```bash
+    git push origin feature/your-feature-name
+    ```
 
 2. **Create a pull request**:
-   - Go to the [repository page](https://github.com/lehuygiang28/vnpay)
-   - Click "Pull requests" > "New pull request"
-   - Select "compare across forks"
-   - Select your fork and branch
-   - Click "Create pull request"
+    - Go to the [repository page](https://github.com/lehuygiang28/vnpay)
+    - Click "Pull requests" > "New pull request"
+    - Select "compare across forks"
+    - Select your fork and branch
+    - Click "Create pull request"
 
 3. **Fill in the PR template**:
-   - Provide a clear description of the changes
-   - Include screenshots or examples if applicable
-   - Reference any related issues
-   - Make sure all tests pass
-   - Ensure documentation is updated if necessary
+    - Provide a clear description of the changes
+    - Include screenshots or examples if applicable
+    - Reference any related issues
+    - Make sure all tests pass
+    - Ensure documentation is updated if necessary
 
 ## Documentation Guidelines
 
@@ -214,19 +230,22 @@ When making documentation changes, please update both language versions to keep 
 ### Running Tests
 
 - Run existing tests before making changes:
-  ```bash
-  npm test
-  ```
+
+    ```bash
+    npm test
+    ```
 
 - Run specific tests:
-  ```bash
-  npm test -- -t "specific test name"
-  ```
+
+    ```bash
+    npm test -- -t "specific test name"
+    ```
 
 - Run tests with coverage report:
-  ```bash
-  npm run test:coverage
-  ```
+
+    ```bash
+    npm run test:coverage
+    ```
 
 ### Writing Tests
 
@@ -247,6 +266,7 @@ After submitting a PR:
 5. Once approved, a maintainer will merge your PR
 
 The review will focus on:
+
 - Code correctness and quality
 - Test coverage
 - Documentation completeness
@@ -262,6 +282,7 @@ Please be patient during the review process. Maintainers are volunteers and may 
 All TypeScript code must adhere to the [TypeScript Style Guide](https://mkosir.github.io/typescript-style-guide/).
 
 Key points:
+
 - Use 2 spaces for indentation
 - Use semicolons
 - Use single quotes for strings

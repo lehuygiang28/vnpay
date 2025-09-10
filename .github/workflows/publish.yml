@@ -33,11 +33,11 @@ jobs:
             - name: Get npm tag
               id: npm-tag
               run: |
-                if [ "${{ github.event.release.prerelease }}" = "true" ]; then
-                  echo "tag=next" >> $GITHUB_OUTPUT
-                else
-                  echo "tag=latest" >> $GITHUB_OUTPUT
-                fi
+                  if [ "${{ github.event.release.prerelease }}" = "true" ]; then
+                    echo "tag=next" >> $GITHUB_OUTPUT
+                  else
+                    echo "tag=latest" >> $GITHUB_OUTPUT
+                  fi
 
             - name: 'Publish'
               run: npm publish --provenance --tag ${{ steps.npm-tag.outputs.tag }}

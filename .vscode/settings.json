@@ -56,5 +56,8 @@
         "readme",
         "verifyHash",
         "utils"
-    ]
+    ],
+    "[markdown]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
 }

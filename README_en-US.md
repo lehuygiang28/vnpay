@@ -12,7 +12,7 @@
 
 **🚀 Modern Node.js library for integrating [VNPay](https://vnpay.vn) payment gateway into your applications.**
 
-*TypeScript Support • Tree-shaking • Modular imports • Minimal dependencies*
+_TypeScript Support • Tree-shaking • Modular imports • Minimal dependencies_
 
 </div>
 
@@ -22,8 +22,8 @@
 
 <div align="center">
 
-| 🎯 **Easy to Use** | 🧩 **Modular** | 📘 **TypeScript** | ⚡ **Optimized** |
-|:---:|:---:|:---:|:---:|
+|   🎯 **Easy to Use**   |  🧩 **Modular**   | 📘 **TypeScript** |  ⚡ **Optimized**  |
+| :--------------------: | :---------------: | :---------------: | :----------------: |
 | Simple & intuitive API | Import by modules | Full type support | Tree-shaking ready |
 
 </div>
@@ -41,11 +41,11 @@
 
 <div align="center">
 
-| 📖 **Documentation** | 🔗 **Link** | 📝 **Description** |
-|:---|:---|:---|
-| **Official Docs** | [vnpay.js.org](https://vnpay.js.org/) | Detailed documentation with examples |
-| **VNPay API** | [sandbox.vnpayment.vn/apis](https://sandbox.vnpayment.vn/apis) | Official VNPay documentation |
-| **GitHub** | [github.com/lehuygiang28/vnpay](https://github.com/lehuygiang28/vnpay) | Source code & Issues |
+| 📖 **Documentation** | 🔗 **Link**                                                            | 📝 **Description**                   |
+| :------------------- | :--------------------------------------------------------------------- | :----------------------------------- |
+| **Official Docs**    | [vnpay.js.org](https://vnpay.js.org/)                                  | Detailed documentation with examples |
+| **VNPay API**        | [sandbox.vnpayment.vn/apis](https://sandbox.vnpayment.vn/apis)         | Official VNPay documentation         |
+| **GitHub**           | [github.com/lehuygiang28/vnpay](https://github.com/lehuygiang28/vnpay) | Source code & Issues                 |
 
 </div>
 
@@ -127,19 +127,19 @@ const vnpay = new VNPay({
     tmnCode: '2QXUI4B4',
     secureSecret: 'your-secret-key',
     vnpayHost: 'https://sandbox.vnpayment.vn',
-    
+
     // 🔧 Optional configuration
-    testMode: true,                     // Enable test mode
-    hashAlgorithm: 'SHA512',           // Hash algorithm
-    enableLog: true,                   // Enable/disable logging
-    loggerFn: ignoreLogger,            // Custom logger
-    
-         // 🔧 Custom endpoints
+    testMode: true, // Enable test mode
+    hashAlgorithm: 'SHA512', // Hash algorithm
+    enableLog: true, // Enable/disable logging
+    loggerFn: ignoreLogger, // Custom logger
+
+    // 🔧 Custom endpoints
     endpoints: {
         paymentEndpoint: 'paymentv2/vpcpay.html',
         queryDrRefundEndpoint: 'merchant_webapi/api/transaction',
         getBankListEndpoint: 'qrpayauth/api/merchant/get_bank_list',
-    }
+    },
 });
 ```
 
@@ -147,7 +147,7 @@ const vnpay = new VNPay({
 
 ```typescript
 const paymentUrl = vnpay.buildPaymentUrl({
-    vnp_Amount: 100000,                    // 100,000 VND
+    vnp_Amount: 100000, // 100,000 VND
     vnp_IpAddr: '192.168.1.1',
     vnp_ReturnUrl: 'https://yourapp.com/return',
     vnp_TxnRef: 'ORDER_123',
@@ -181,7 +181,7 @@ if (verify.isSuccess) {
 
 **🎉 vnpayjs is an open-source and completely free project!**
 
-*If this library helps you, please give us a ⭐ and buy us a coffee ☕ and click the ads above to support us*
+_If this library helps you, please give us a ⭐ and buy us a coffee ☕ and click the ads above to support us_
 
 <br/>
 
@@ -202,11 +202,11 @@ if (verify.isSuccess) {
 
 <div align="center">
 
-| 📋 **Step** | 🔗 **Action** |
-|:---:|:---|
-| **1** | Read [Contribution Guidelines](.github/CONTRIBUTING.md) |
-| **2** | Fork repo and create Pull Request |
-| **3** | Join discussions in [Issues](https://github.com/lehuygiang28/vnpay/issues) |
+| 📋 **Step** | 🔗 **Action**                                                              |
+| :---------: | :------------------------------------------------------------------------- |
+|    **1**    | Read [Contribution Guidelines](.github/CONTRIBUTING.md)                    |
+|    **2**    | Fork repo and create Pull Request                                          |
+|    **3**    | Join discussions in [Issues](https://github.com/lehuygiang28/vnpay/issues) |
 
 </div>
 
@@ -214,7 +214,7 @@ if (verify.isSuccess) {
 
 <div align="center">
 
-*Thanks to all contributors who have helped shape this project:*
+_Thanks to all contributors who have helped shape this project:_
 
 [![Contributors](https://contrib.rocks/image?repo=lehuygiang28/vnpay&max=20)](https://github.com/lehuygiang28/vnpay/graphs/contributors)
 
@@ -228,7 +228,7 @@ if (verify.isSuccess) {
 
 **[MIT License](LICENSE) © [Lê Huy Giang](https://github.com/lehuygiang28)**
 
-*Made with ❤️ in Vietnam*
+_Made with ❤️ in Vietnam_
 
 </div>
 
@@ -239,3 +239,4 @@ if (verify.isSuccess) {
 
 ```
 </div>
+```
