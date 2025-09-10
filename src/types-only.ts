@@ -10,28 +10,22 @@ export type {
     BuildPaymentUrlLogger,
     BuildPaymentUrlOptions,
 } from './types/build-payment-url.type';
+export type { DefaultConfig, ResultVerified } from './types/common.type';
+export type { LoggerData, LoggerOptions } from './types/logger.type';
 export type {
-    DefaultConfig,
-    ResultVerified,
-} from './types/common.type';
-export type {
-    LoggerData,
-    LoggerOptions,
-} from './types/logger.type';
-export type {
-    QueryDr,
     BodyRequestQueryDr,
-    QueryDrResponseFromVNPay,
+    QueryDr,
     QueryDrResponse,
+    QueryDrResponseFromVNPay,
     QueryDrResponseLogger,
     QueryDrResponseOptions,
 } from './types/query-dr.type';
 export type {
     Refund,
-    RefundResponseFromVNPay,
-    RefundResponse,
-    RefundResponseLogger,
     RefundOptions,
+    RefundResponse,
+    RefundResponseFromVNPay,
+    RefundResponseLogger,
 } from './types/refund.type';
 export type { ReturnQueryFromVNPay } from './types/return-from-vnpay.type';
 export type {
@@ -44,20 +38,16 @@ export type {
     VerifyReturnUrlLogger,
     VerifyReturnUrlOptions,
 } from './types/verify-return-url.type';
-export type {
-    EndpointConfig,
-    VNPayConfig,
-    GlobalConfig,
-} from './types/vnpay-config.type';
+export type { EndpointConfig, GlobalConfig, VNPayConfig } from './types/vnpay-config.type';
 
 // Enums from ./enums (as types)
-export type { ProductCode } from './enums/product-code.enum';
 export type {
-    UrlService,
     HashAlgorithm,
+    RefundTransactionType,
+    UrlService,
+    VnpCardType,
     VnpCurrCode,
     VnpLocale,
-    VnpCardType,
     VnpTransactionType,
-    RefundTransactionType,
 } from './enums';
+export type { ProductCode } from './enums/product-code.enum';
