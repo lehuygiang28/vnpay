@@ -16,13 +16,13 @@ const verify: VerifyIpnCall = vnpay.verifyIpnCall(req.query);
 
 Thông tin sau khi xác thực và được trả về từ VNPay:
 
-| Thuộc tính  | Kiểu dữ liệu | Mô tả                                                                                                                                         |
-| ----------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| isSuccess   | boolean      | Kết quả của đơn hàng thanh toán                                                                                                               |
-| isVerified  | boolean      | Kết quả xác thực tính toàn vẹn của dữ liệu nhận được từ VNPay                                                                                |
-| message     | string       | Thông điệp xác thực                                                                                                                           |
-| vnp_Amount  | number       | Số tiền thanh toán, đã được thư viện tự động tính toán                                                                                        |
-| ...         | ...          | Các tham số khác mà VNPay trả về, tham khảo [tài liệu chính thức](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91-1) |
+| Thuộc tính | Kiểu dữ liệu | Mô tả                                                                                                                                                              |
+| ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| isSuccess  | boolean      | Kết quả của đơn hàng thanh toán                                                                                                                                    |
+| isVerified | boolean      | Kết quả xác thực tính toàn vẹn của dữ liệu nhận được từ VNPay                                                                                                      |
+| message    | string       | Thông điệp xác thực                                                                                                                                                |
+| vnp_Amount | number       | Số tiền thanh toán, đã được thư viện tự động tính toán                                                                                                             |
+| ...        | ...          | Các tham số khác mà VNPay trả về, tham khảo [tài liệu chính thức](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91-1) |
 
 Xem thêm các thuộc tính mà VNPay sẽ trả về tại [tài liệu chính thức](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91-1).
 :::tip
@@ -33,7 +33,7 @@ Tất cả các tham số được VNPay trả về đều có trong đối tư�
 
 ### Sử dụng Logger
 
-- Tương tự như khi tạo URL thanh toán, bạn có thể sử dụng logger để ghi log thông tin xác thực IPN 
+- Tương tự như khi tạo URL thanh toán, bạn có thể sử dụng logger để ghi log thông tin xác thực IPN
   [xem tại đây](/create-payment-url#using-logger).
 
 ### Với Express

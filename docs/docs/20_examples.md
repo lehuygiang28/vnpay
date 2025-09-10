@@ -9,6 +9,7 @@
 - **Công nghệ**: Next.js 15, TypeScript, Tailwind CSS, Server Actions
 
 **Tính năng nổi bật:**
+
 - ✅ **Server-side VNPay integration** - Xử lý thanh toán hoàn toàn trên server
 - ✅ **Next.js 15 App Router** với Server Actions và API Routes
 - ✅ **IPN Handler** - Xử lý webhook từ VNPay
@@ -39,10 +40,10 @@ Xem ví dụ triển khai hoàn chỉnh với Express [tại đây](https://gith
 :::danger CẢNH BÁO
 **Thư viện VNPay chỉ dành cho Node.js backend!** Không thể sử dụng trực tiếp trong React/Vue/Angular components vì:
 
-- 🚫 Sử dụng Node.js modules: `fs`, `crypto`, `path`  
+- 🚫 Sử dụng Node.js modules: `fs`, `crypto`, `path`
 - 🚫 Chứa logic server-side để bảo mật `secureSecret`
 - 🚫 Sẽ gây lỗi build khi import vào client components
-:::
+  :::
 
 ### ✅ Kiến trúc khuyến nghị
 
@@ -63,34 +64,34 @@ Xem ví dụ triển khai hoàn chỉnh với Express [tại đây](https://gith
 import { VNPay } from 'vnpay'; // ✅ Import đầy đủ trên backend
 
 const vnpay = new VNPay({
-  tmnCode: process.env.VNP_TMNCODE!,
-  secureSecret: process.env.VNP_SECRET!,
-  testMode: true
+    tmnCode: process.env.VNP_TMNCODE!,
+    secureSecret: process.env.VNP_SECRET!,
+    testMode: true,
 });
 
 // Tạo URL thanh toán
 app.post('/api/payments/create', async (req, res) => {
-  try {
-    const { amount, orderInfo } = req.body;
-    
-    const paymentUrl = vnpay.buildPaymentUrl({
-      vnp_Amount: amount,
-      vnp_IpAddr: req.ip,
-      vnp_ReturnUrl: `${process.env.APP_URL}/payment/callback`,
-      vnp_TxnRef: `ORDER_${Date.now()}`,
-      vnp_OrderInfo: orderInfo,
-    });
-    
-    res.json({ success: true, paymentUrl });
-  } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
-  }
+    try {
+        const { amount, orderInfo } = req.body;
+
+        const paymentUrl = vnpay.buildPaymentUrl({
+            vnp_Amount: amount,
+            vnp_IpAddr: req.ip,
+            vnp_ReturnUrl: `${process.env.APP_URL}/payment/callback`,
+            vnp_TxnRef: `ORDER_${Date.now()}`,
+            vnp_OrderInfo: orderInfo,
+        });
+
+        res.json({ success: true, paymentUrl });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
 });
 
 // Xác thực kết quả thanh toán
 app.get('/api/payments/verify', (req, res) => {
-  const verification = vnpay.verifyReturnUrl(req.query);
-  res.json(verification);
+    const verification = vnpay.verifyReturnUrl(req.query);
+    res.json(verification);
 });
 ```
 
@@ -107,16 +108,16 @@ interface PaymentButtonProps {
   onPaymentResult?: (result: VerifyReturnUrl) => void;
 }
 
-export const PaymentButton: React.FC<PaymentButtonProps> = ({ 
-  amount, 
-  orderInfo, 
-  onPaymentResult 
+export const PaymentButton: React.FC<PaymentButtonProps> = ({
+  amount,
+  orderInfo,
+  onPaymentResult
 }) => {
   const [loading, setLoading] = useState(false);
 
   const handlePayment = async () => {
     setLoading(true);
-    
+
     try {
       // ✅ Gọi API backend thay vì import trực tiếp
       const response = await fetch('/api/payments/create', {
@@ -128,7 +129,7 @@ export const PaymentButton: React.FC<PaymentButtonProps> = ({
       });
 
       const data = await response.json();
-      
+
       if (data.success) {
         // Chuyển hướng đến VNPay
         window.location.href = data.paymentUrl;
@@ -144,8 +145,8 @@ export const PaymentButton: React.FC<PaymentButtonProps> = ({
   };
 
   return (
-    <button 
-      onClick={handlePayment} 
+    <button
+      onClick={handlePayment}
       disabled={loading}
       className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
     >
@@ -160,26 +161,26 @@ export const PaymentButton: React.FC<PaymentButtonProps> = ({
 ```typescript
 // backend/routes/ipn.ts
 app.post('/api/payment/ipn', (req, res) => {
-  try {
-    const verification = vnpay.verifyIpnCall(req.body);
-    
-    if (verification.isSuccess) {
-      // ✅ Thanh toán thành công - cập nhật database
-      console.log('Payment successful:', verification.vnp_TxnRef);
-      
-      // Cập nhật order status trong database
-      // updateOrderStatus(verification.vnp_TxnRef, 'PAID');
-      
-      res.status(200).json({ RspCode: '00', Message: 'success' });
-    } else {
-      // ❌ Thanh toán thất bại
-      console.log('Payment failed:', verification.message);
-      res.status(200).json({ RspCode: '01', Message: 'fail' });
+    try {
+        const verification = vnpay.verifyIpnCall(req.body);
+
+        if (verification.isSuccess) {
+            // ✅ Thanh toán thành công - cập nhật database
+            console.log('Payment successful:', verification.vnp_TxnRef);
+
+            // Cập nhật order status trong database
+            // updateOrderStatus(verification.vnp_TxnRef, 'PAID');
+
+            res.status(200).json({ RspCode: '00', Message: 'success' });
+        } else {
+            // ❌ Thanh toán thất bại
+            console.log('Payment failed:', verification.message);
+            res.status(200).json({ RspCode: '01', Message: 'fail' });
+        }
+    } catch (error) {
+        console.error('IPN processing error:', error);
+        res.status(500).json({ RspCode: '99', Message: 'error' });
     }
-  } catch (error) {
-    console.error('IPN processing error:', error);
-    res.status(500).json({ RspCode: '99', Message: 'error' });
-  }
 });
 ```
 
@@ -202,19 +203,14 @@ const MyComponent = () => {
 
 ```typescript
 // ✅ An toàn - chỉ import types
-import type { 
-  VNPayConfig, 
-  BuildPaymentUrl, 
-  Bank, 
-  VerifyReturnUrl 
-} from 'vnpay/types-only';
+import type { VNPayConfig, BuildPaymentUrl, Bank, VerifyReturnUrl } from 'vnpay/types-only';
 
 // Hoặc sử dụng type import với main package
 import type { VNPayConfig } from 'vnpay';
 
 interface PaymentComponentProps {
-  config: VNPayConfig;
-  onPaymentResult: (result: VerifyReturnUrl) => void;
+    config: VNPayConfig;
+    onPaymentResult: (result: VerifyReturnUrl) => void;
 }
 ```
 

@@ -16,12 +16,12 @@ const verify: VerifyIpnCall = vnpay.verifyIpnCall(req.query);
 
 Information after verification and returned by VNPay:
 
-| Property   | Data Type | Description                                                                                                                                            |
-| ---------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| isSuccess  | boolean   | The result of the payment order                                                                                                                        |
-| isVerified | boolean   | The result of verifying the integrity of the data received from VNPay                                                                                  |
-| message    | string    | Verification message                                                                                                                                   |
-| vnp_Amount | number    | The payment amount, automatically calculated by the library                                                                                            |
+| Property   | Data Type | Description                                                                                                                                                            |
+| ---------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| isSuccess  | boolean   | The result of the payment order                                                                                                                                        |
+| isVerified | boolean   | The result of verifying the integrity of the data received from VNPay                                                                                                  |
+| message    | string    | Verification message                                                                                                                                                   |
+| vnp_Amount | number    | The payment amount, automatically calculated by the library                                                                                                            |
 | ...        | ...       | Other parameters returned by VNPay, refer to [official documentation](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91-1) |
 
 See more properties that VNPay will return in the [official documentation](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91-1).
@@ -33,8 +33,8 @@ All parameters returned by VNPay are also included in the `VerifyIpnCall` object
 
 ### Using Logger
 
--   Similar to when creating a payment URL, you can use a logger to log IPN verification information
-    [see here](/create-payment-url#using-logger).
+- Similar to when creating a payment URL, you can use a logger to log IPN verification information
+  [see here](/create-payment-url#using-logger).
 
 ### With Express
 

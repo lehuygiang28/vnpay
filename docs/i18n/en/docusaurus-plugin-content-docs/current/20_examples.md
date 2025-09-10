@@ -9,6 +9,7 @@
 - **Technologies**: Next.js 15, TypeScript, Tailwind CSS, Server Actions
 
 **Key Features:**
+
 - ✅ **Server-side VNPay integration** - All payment processing on server
 - ✅ **Next.js 15 App Router** with Server Actions and API Routes
 - ✅ **IPN Handler** - Webhook processing from VNPay
@@ -39,10 +40,10 @@ See a complete Express implementation example [here](https://github.com/lehuygia
 :::danger WARNING
 **The VNPay library is designed for Node.js backends only!** Cannot be used directly in React/Vue/Angular components because:
 
-- 🚫 Uses Node.js modules: `fs`, `crypto`, `path`  
+- 🚫 Uses Node.js modules: `fs`, `crypto`, `path`
 - 🚫 Contains server-side logic to secure `secureSecret`
 - 🚫 Will cause build errors when imported in client components
-:::
+  :::
 
 ### ✅ Recommended Architecture
 
@@ -63,34 +64,34 @@ See a complete Express implementation example [here](https://github.com/lehuygia
 import { VNPay } from 'vnpay'; // ✅ Full import on backend
 
 const vnpay = new VNPay({
-  tmnCode: process.env.VNP_TMNCODE!,
-  secureSecret: process.env.VNP_SECRET!,
-  testMode: true
+    tmnCode: process.env.VNP_TMNCODE!,
+    secureSecret: process.env.VNP_SECRET!,
+    testMode: true,
 });
 
 // Create payment URL
 app.post('/api/payments/create', async (req, res) => {
-  try {
-    const { amount, orderInfo } = req.body;
-    
-    const paymentUrl = vnpay.buildPaymentUrl({
-      vnp_Amount: amount,
-      vnp_IpAddr: req.ip,
-      vnp_ReturnUrl: `${process.env.APP_URL}/payment/callback`,
-      vnp_TxnRef: `ORDER_${Date.now()}`,
-      vnp_OrderInfo: orderInfo,
-    });
-    
-    res.json({ success: true, paymentUrl });
-  } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
-  }
+    try {
+        const { amount, orderInfo } = req.body;
+
+        const paymentUrl = vnpay.buildPaymentUrl({
+            vnp_Amount: amount,
+            vnp_IpAddr: req.ip,
+            vnp_ReturnUrl: `${process.env.APP_URL}/payment/callback`,
+            vnp_TxnRef: `ORDER_${Date.now()}`,
+            vnp_OrderInfo: orderInfo,
+        });
+
+        res.json({ success: true, paymentUrl });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
 });
 
 // Verify payment result
 app.get('/api/payments/verify', (req, res) => {
-  const verification = vnpay.verifyReturnUrl(req.query);
-  res.json(verification);
+    const verification = vnpay.verifyReturnUrl(req.query);
+    res.json(verification);
 });
 ```
 
@@ -107,16 +108,16 @@ interface PaymentButtonProps {
   onPaymentResult?: (result: VerifyReturnUrl) => void;
 }
 
-export const PaymentButton: React.FC<PaymentButtonProps> = ({ 
-  amount, 
-  orderInfo, 
-  onPaymentResult 
+export const PaymentButton: React.FC<PaymentButtonProps> = ({
+  amount,
+  orderInfo,
+  onPaymentResult
 }) => {
   const [loading, setLoading] = useState(false);
 
   const handlePayment = async () => {
     setLoading(true);
-    
+
     try {
       // ✅ Call backend API instead of direct import
       const response = await fetch('/api/payments/create', {
@@ -128,7 +129,7 @@ export const PaymentButton: React.FC<PaymentButtonProps> = ({
       });
 
       const data = await response.json();
-      
+
       if (data.success) {
         // Redirect to VNPay
         window.location.href = data.paymentUrl;
@@ -144,8 +145,8 @@ export const PaymentButton: React.FC<PaymentButtonProps> = ({
   };
 
   return (
-    <button 
-      onClick={handlePayment} 
+    <button
+      onClick={handlePayment}
       disabled={loading}
       className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
     >
@@ -160,26 +161,26 @@ export const PaymentButton: React.FC<PaymentButtonProps> = ({
 ```typescript
 // backend/routes/ipn.ts
 app.post('/api/payment/ipn', (req, res) => {
-  try {
-    const verification = vnpay.verifyIpnCall(req.body);
-    
-    if (verification.isSuccess) {
-      // ✅ Payment successful - update database
-      console.log('Payment successful:', verification.vnp_TxnRef);
-      
-      // Update order status in database
-      // updateOrderStatus(verification.vnp_TxnRef, 'PAID');
-      
-      res.status(200).json({ RspCode: '00', Message: 'success' });
-    } else {
-      // ❌ Payment failed
-      console.log('Payment failed:', verification.message);
-      res.status(200).json({ RspCode: '01', Message: 'fail' });
+    try {
+        const verification = vnpay.verifyIpnCall(req.body);
+
+        if (verification.isSuccess) {
+            // ✅ Payment successful - update database
+            console.log('Payment successful:', verification.vnp_TxnRef);
+
+            // Update order status in database
+            // updateOrderStatus(verification.vnp_TxnRef, 'PAID');
+
+            res.status(200).json({ RspCode: '00', Message: 'success' });
+        } else {
+            // ❌ Payment failed
+            console.log('Payment failed:', verification.message);
+            res.status(200).json({ RspCode: '01', Message: 'fail' });
+        }
+    } catch (error) {
+        console.error('IPN processing error:', error);
+        res.status(500).json({ RspCode: '99', Message: 'error' });
     }
-  } catch (error) {
-    console.error('IPN processing error:', error);
-    res.status(500).json({ RspCode: '99', Message: 'error' });
-  }
 });
 ```
 
@@ -202,19 +203,14 @@ const MyComponent = () => {
 
 ```typescript
 // ✅ Safe - import types only
-import type { 
-  VNPayConfig, 
-  BuildPaymentUrl, 
-  Bank, 
-  VerifyReturnUrl 
-} from 'vnpay/types-only';
+import type { VNPayConfig, BuildPaymentUrl, Bank, VerifyReturnUrl } from 'vnpay/types-only';
 
 // Or use type import with main package
 import type { VNPayConfig } from 'vnpay';
 
 interface PaymentComponentProps {
-  config: VNPayConfig;
-  onPaymentResult: (result: VerifyReturnUrl) => void;
+    config: VNPayConfig;
+    onPaymentResult: (result: VerifyReturnUrl) => void;
 }
 ```
 

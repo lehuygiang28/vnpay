@@ -57,7 +57,7 @@ import type { VNPayConfig, BuildPaymentUrl, Bank } from 'vnpay/types-only';
 - ❌ Uses Node.js modules: `fs`, `crypto`, `path`
 - ❌ Contains server-side logic to secure `secureSecret`
 - ❌ Will cause build errors when imported in client components
-:::
+  :::
 
 #### ❌ DON'T do this in Frontend
 
@@ -135,10 +135,10 @@ const vnpay = new VNPay({
 :::danger IMPORTANT WARNING
 **VNPay library is designed exclusively for Node.js backend** and **CANNOT** be used directly in frontend applications (React, Vue, Angular, etc.) because:
 
-- 🚫 Uses Node.js modules: `fs`, `crypto`, `path`  
+- 🚫 Uses Node.js modules: `fs`, `crypto`, `path`
 - 🚫 Contains server-side logic to secure `secureSecret`
 - 🚫 Will cause build errors when imported in client components
-:::
+  :::
 
 #### ❌ **DON'T do this in Frontend**
 

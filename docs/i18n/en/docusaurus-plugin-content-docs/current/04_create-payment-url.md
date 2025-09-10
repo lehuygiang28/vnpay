@@ -35,33 +35,33 @@ buildPaymentUrl(params: BuildPaymentUrl, options?: BuildPaymentUrlOptions): stri
 
 ### Properties of `BuildPaymentUrl` {#build-payment-url}
 
-| Property      | Description                                   | Note                                                                                                                                                                                                           |
-| ------------- | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| vnp_Amount    | Payment amount                                | In VND. The amount has been automatically calculated, no need to multiply by 100 as per VNPay                                                                                                                  |
-| vnp_IpAddr    | IP address of the customer making the transaction | Example: 13.160.92.202                                                                                                                                                                                    |
-| vnp_TxnRef    | Customer's order code                         | This code is unique and used to distinguish orders sent to VNPAY. It should not be duplicated within a day. Example: 23554                                                                                     |
-| vnp_OrderInfo | Order information                             | Data regulations sent to VNPAY (Vietnamese without accents and does not include special characters). Example: Top up for subscriber 0123456789. Amount 100,000 VND                                             |
-| vnp_OrderType | Order type                                    | Each product will belong to a category group as regulated by VNPAY. Use the available enum from `ProductCode` or see more in the [Product Category](https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/) table |
-| vnp_ReturnUrl | Return URL after payment                      | This is the URL to which VNPay will redirect the user after the payment is completed. Example: https://domain.vn/VnPayReturn                                                                                   |
-| vnp_Locale    | Language displayed on the payment gateway     | Currently supports Vietnamese (vn), English (en)                                                                                                                                                               |
-| vnp_BankCode  | Bank code                                     | The code of the bank selected for payment, see more [here](get-bank-list)                                                                                                                                     |
+| Property      | Description                                       | Note                                                                                                                                                                                                             |
+| ------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| vnp_Amount    | Payment amount                                    | In VND. The amount has been automatically calculated, no need to multiply by 100 as per VNPay                                                                                                                    |
+| vnp_IpAddr    | IP address of the customer making the transaction | Example: 13.160.92.202                                                                                                                                                                                           |
+| vnp_TxnRef    | Customer's order code                             | This code is unique and used to distinguish orders sent to VNPAY. It should not be duplicated within a day. Example: 23554                                                                                       |
+| vnp_OrderInfo | Order information                                 | Data regulations sent to VNPAY (Vietnamese without accents and does not include special characters). Example: Top up for subscriber 0123456789. Amount 100,000 VND                                               |
+| vnp_OrderType | Order type                                        | Each product will belong to a category group as regulated by VNPAY. Use the available enum from `ProductCode` or see more in the [Product Category](https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/) table |
+| vnp_ReturnUrl | Return URL after payment                          | This is the URL to which VNPay will redirect the user after the payment is completed. Example: https://domain.vn/VnPayReturn                                                                                     |
+| vnp_Locale    | Language displayed on the payment gateway         | Currently supports Vietnamese (vn), English (en)                                                                                                                                                                 |
+| vnp_BankCode  | Bank code                                         | The code of the bank selected for payment, see more [here](get-bank-list)                                                                                                                                        |
 
 See more properties at [VNPay official documentation](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91).
 
 ### Properties of `BuildPaymentUrlOptions` {#build-payment-url-options}
 
-| Property  | Type                          | Description                           | Note      |
-| --------- | ----------------------------- | ------------------------------------- | --------- |
-| withHash  | boolean                       | Allow `paymentUrl` to have hash       | Optional  |
-| logger    | [LoggerOptions](#logger-options) | Logging options                   | Optional  |
+| Property | Type                             | Description                     | Note     |
+| -------- | -------------------------------- | ------------------------------- | -------- |
+| withHash | boolean                          | Allow `paymentUrl` to have hash | Optional |
+| logger   | [LoggerOptions](#logger-options) | Logging options                 | Optional |
 
 #### `LoggerOptions` {#logger-options}
 
-| Property  | Type       | Description                                                   | Note                           |
-| --------- | ---------- | ------------------------------------------------------------- | ------------------------------ |
-| type      | string     | Mode for selecting log fields, can be `pick`, `omit` or `all` | `all` or `pick` or `omit`      |
-| fields    | string[]   | Select fields to include or exclude, depending on `type`      | Optional                       |
-| loggerFn  | Function   | Logging function that receives an object and executes         | Optional                       |
+| Property | Type     | Description                                                   | Note                      |
+| -------- | -------- | ------------------------------------------------------------- | ------------------------- |
+| type     | string   | Mode for selecting log fields, can be `pick`, `omit` or `all` | `all` or `pick` or `omit` |
+| fields   | string[] | Select fields to include or exclude, depending on `type`      | Optional                  |
+| loggerFn | Function | Logging function that receives an object and executes         | Optional                  |
 
 ## Usage
 

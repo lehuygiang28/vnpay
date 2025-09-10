@@ -46,4 +46,4 @@ This section provides recommended practices when integrating VNPay into your app
 
 3. **Handle maintenance windows** - Be prepared for potential maintenance windows or downtime from VNPay.
 
-4. **Reconcile transactions** - Regularly reconcile transactions between your system and VNPay. 
+4. **Reconcile transactions** - Regularly reconcile transactions between your system and VNPay.

@@ -4,8 +4,8 @@ This is an API for the merchant system to query the payment result of a transact
 
 :::warning
 
--   `queryDr` is currently suitable for `PAY` payments
--   `token`, `installment`, and `periodic` payment types are not yet compatible
+- `queryDr` is currently suitable for `PAY` payments
+- `token`, `installment`, and `periodic` payment types are not yet compatible
 
 :::
 
@@ -50,11 +50,11 @@ const res: QueryDrResponse = await vnpay.queryDr({
 
 ### `QueryDrResponse` {#query-dr-response-properties}
 
-| Property   | Type    | Description                                                                                                                                                                   |
-| ---------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| isSuccess  | boolean | Result of the request                                                                                                                                                         |
-| isVerified | boolean | Verification result of data integrity when received from VNPay                                                                                                                |
-| message    | string  | Verification message                                                                                                                                                          |
+| Property   | Type    | Description                                                                                                                                                                                        |
+| ---------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| isSuccess  | boolean | Result of the request                                                                                                                                                                              |
+| isVerified | boolean | Verification result of data integrity when received from VNPay                                                                                                                                     |
+| message    | string  | Verification message                                                                                                                                                                               |
 | ...        | ...     | Other parameters that VNPay will return, refer to [official documentation](https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#danh-sach-tham-so-querydr-VNPAY-response) |
 
 See more properties that VNPay will return in the [official documentation](https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#danh-sach-tham-so-querydr-VNPAY-response).
@@ -66,7 +66,7 @@ All parameters returned by VNPay are also included in the `QueryDrResponse` obje
 
 ### With Logger
 
--   To use the logger, you need to initialize [`VNPay`](/installation#init-vnpay) with `enableLog` set to `true`.
+- To use the logger, you need to initialize [`VNPay`](/installation#init-vnpay) with `enableLog` set to `true`.
 
 ```typescript
 import { QueryDr, QueryDrResponse, getDateInGMT7, dateFormat } from 'vnpay';

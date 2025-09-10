@@ -46,4 +46,4 @@ Phần này cung cấp các thực hành được khuyến nghị khi tích hợ
 
 3. **Xử lý thời gian bảo trì** - Chuẩn bị cho các thời gian bảo trì tiềm năng hoặc thời gian ngừng hoạt động từ VNPay.
 
-4. **Đối chiếu giao dịch** - Thường xuyên đối chiếu các giao dịch giữa hệ thống của bạn và VNPay. 
+4. **Đối chiếu giao dịch** - Thường xuyên đối chiếu các giao dịch giữa hệ thống của bạn và VNPay.

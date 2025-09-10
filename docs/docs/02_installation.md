@@ -57,7 +57,7 @@ import type { VNPayConfig, BuildPaymentUrl, Bank } from 'vnpay/types-only';
 - ❌ Sử dụng Node.js modules: `fs`, `crypto`, `path`
 - ❌ Chứa logic server-side để bảo mật `secureSecret`
 - ❌ Sẽ gây lỗi build khi import vào client components
-:::
+  :::
 
 #### ❌ KHÔNG làm thế này trong Frontend
 
@@ -135,10 +135,10 @@ const vnpay = new VNPay({
 :::danger CẢNH BÁO QUAN TRỌNG
 **Thư viện VNPay được thiết kế dành riêng cho Node.js backend** và **KHÔNG THỂ** sử dụng trực tiếp trong các ứng dụng frontend (React, Vue, Angular, etc.) vì:
 
-- 🚫 Sử dụng Node.js modules: `fs`, `crypto`, `path`  
+- 🚫 Sử dụng Node.js modules: `fs`, `crypto`, `path`
 - 🚫 Chứa logic server-side để bảo mật `secureSecret`
 - 🚫 Sẽ gây lỗi build khi import vào client components
-:::
+  :::
 
 #### ❌ **KHÔNG làm thế này trong Frontend**
 
@@ -158,11 +158,11 @@ const MyComponent = () => {
 
 ```typescript
 // ✅ An toàn - chỉ import types
-import type { 
-  VNPayConfig, 
-  BuildPaymentUrl, 
-  Bank, 
-  VerifyReturnUrl 
+import type {
+  VNPayConfig,
+  BuildPaymentUrl,
+  Bank,
+  VerifyReturnUrl
 } from 'vnpay/types-only';
 
 // Hoặc sử dụng type import với main package
@@ -181,7 +181,7 @@ const PaymentComponent: React.FC<PaymentComponentProps> = ({ config, onPaymentRe
       body: JSON.stringify({ amount: 100000 }),
       headers: { 'Content-Type': 'application/json' }
     });
-    
+
     const { paymentUrl } = await response.json();
     window.location.href = paymentUrl;
   };

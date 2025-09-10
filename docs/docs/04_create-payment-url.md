@@ -40,33 +40,33 @@ buildPaymentUrl(params: BuildPaymentUrl, options?: BuildPaymentUrlOptions): stri
 
 ### Các thuộc tính của `BuildPaymentUrl` {#build-payment-url}
 
-| Thuộc tính    | Mô tả                                          | Ghi chú                                                                                                                                                                                       |
-| ------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| vnp_Amount    | Số tiền thanh toán                             | Đơn vị VND. Số tiền đã được tự động tính toán, không cần nhân 100 lần theo yêu cầu của VNPay                                                                                                 |
-| vnp_IpAddr    | Địa chỉ IP của khách hàng thực hiện giao dịch  | Ví dụ: 13.160.92.202                                                                                                                                                                          |
-| vnp_TxnRef    | Mã đơn hàng ở phía khách hàng                  | Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY. Không được trùng lặp trong ngày. Ví dụ: 23554                                                                               |
-| vnp_OrderInfo | Thông tin đơn hàng                             | Quy định dữ liệu gửi sang VNPAY (Tiếng Việt không dấu và không bao gồm các ký tự đặc biệt). Ví dụ: Nap tien cho thue bao 0123456789. So tien 100,000 VND                                      |
-| vnp_OrderType | Loại đơn hàng                                  | Mỗi loại sản phẩm sẽ thuộc một nhóm danh mục được quy định bởi VNPAY. Sử dụng enum có sẵn từ `ProductCode` hoặc xem thêm trong bảng [Danh mục hàng hóa](https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/) |
-| vnp_ReturnUrl | Đường dẫn trả về sau khi thanh toán            | Đây là URL mà VNPay sẽ chuyển hướng người dùng sau khi thanh toán hoàn tất. Ví dụ: https://domain.vn/VnPayReturn                                                                              |
-| vnp_Locale    | Ngôn ngữ hiển thị trên cổng thanh toán         | Hiện tại hỗ trợ Tiếng Việt (vn), Tiếng Anh (en)                                                                                                                                               |
-| vnp_BankCode  | Mã ngân hàng                                   | Mã ngân hàng được chọn để thanh toán, xem thêm [tại đây](get-bank-list)                                                                                                                      |
+| Thuộc tính    | Mô tả                                         | Ghi chú                                                                                                                                                                                                        |
+| ------------- | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| vnp_Amount    | Số tiền thanh toán                            | Đơn vị VND. Số tiền đã được tự động tính toán, không cần nhân 100 lần theo yêu cầu của VNPay                                                                                                                   |
+| vnp_IpAddr    | Địa chỉ IP của khách hàng thực hiện giao dịch | Ví dụ: 13.160.92.202                                                                                                                                                                                           |
+| vnp_TxnRef    | Mã đơn hàng ở phía khách hàng                 | Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY. Không được trùng lặp trong ngày. Ví dụ: 23554                                                                                                |
+| vnp_OrderInfo | Thông tin đơn hàng                            | Quy định dữ liệu gửi sang VNPAY (Tiếng Việt không dấu và không bao gồm các ký tự đặc biệt). Ví dụ: Nap tien cho thue bao 0123456789. So tien 100,000 VND                                                       |
+| vnp_OrderType | Loại đơn hàng                                 | Mỗi loại sản phẩm sẽ thuộc một nhóm danh mục được quy định bởi VNPAY. Sử dụng enum có sẵn từ `ProductCode` hoặc xem thêm trong bảng [Danh mục hàng hóa](https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/) |
+| vnp_ReturnUrl | Đường dẫn trả về sau khi thanh toán           | Đây là URL mà VNPay sẽ chuyển hướng người dùng sau khi thanh toán hoàn tất. Ví dụ: https://domain.vn/VnPayReturn                                                                                               |
+| vnp_Locale    | Ngôn ngữ hiển thị trên cổng thanh toán        | Hiện tại hỗ trợ Tiếng Việt (vn), Tiếng Anh (en)                                                                                                                                                                |
+| vnp_BankCode  | Mã ngân hàng                                  | Mã ngân hàng được chọn để thanh toán, xem thêm [tại đây](get-bank-list)                                                                                                                                        |
 
 Xem thêm các thuộc tính tại [tài liệu chính thức của VNPay](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91).
 
 ### Các thuộc tính của `BuildPaymentUrlOptions` {#build-payment-url-options}
 
-| Thuộc tính | Kiểu dữ liệu                  | Mô tả                                  | Ghi chú   |
-| ---------- | ----------------------------- | -------------------------------------- | --------- |
-| withHash   | boolean                       | Cho phép `paymentUrl` có hash          | Tùy chọn  |
-| logger     | [LoggerOptions](#logger-options) | Tùy chọn ghi log                   | Tùy chọn  |
+| Thuộc tính | Kiểu dữ liệu                     | Mô tả                         | Ghi chú  |
+| ---------- | -------------------------------- | ----------------------------- | -------- |
+| withHash   | boolean                          | Cho phép `paymentUrl` có hash | Tùy chọn |
+| logger     | [LoggerOptions](#logger-options) | Tùy chọn ghi log              | Tùy chọn |
 
 #### `LoggerOptions` {#logger-options}
 
-| Thuộc tính | Kiểu dữ liệu | Mô tả                                                          | Ghi chú                       |
-| ---------- | ------------ | -------------------------------------------------------------- | ----------------------------- |
+| Thuộc tính | Kiểu dữ liệu | Mô tả                                                           | Ghi chú                       |
+| ---------- | ------------ | --------------------------------------------------------------- | ----------------------------- |
 | type       | string       | Chế độ chọn trường ghi log, có thể là `pick`, `omit` hoặc `all` | `all` hoặc `pick` hoặc `omit` |
-| fields     | string[]     | Chọn trường để bao gồm hoặc loại trừ, tùy thuộc vào `type`     | Tùy chọn                      |
-| loggerFn   | Function     | Hàm ghi log nhận một đối tượng và thực thi                     | Tùy chọn                      |
+| fields     | string[]     | Chọn trường để bao gồm hoặc loại trừ, tùy thuộc vào `type`      | Tùy chọn                      |
+| loggerFn   | Function     | Hàm ghi log nhận một đối tượng và thực thi                      | Tùy chọn                      |
 
 ## Sử dụng
 
