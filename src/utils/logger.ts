@@ -14,7 +14,7 @@ export function ignoreLogger(): void {}
  * @en Log data to console
  * @param data - Data to be logged
  */
-export function consoleLogger(data: unknown, symbol: keyof Console = 'log'): void {
+export function consoleLogger(data: unknown, symbol: keyof typeof console = 'log'): void {
     if (typeof console[symbol] === 'function') {
         (console[symbol] as (...data: unknown[]) => void)(data);
     }
