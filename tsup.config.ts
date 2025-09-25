@@ -74,8 +74,17 @@ export default defineConfig((options) => {
         // Post-build success hook
         onSuccess: async () => {
             if (!options.watch) {
-                console.log('✅ Build completed successfully!');
-                console.log('📦 Package ready for publishing');
+                try {
+                    // Import and run the dayjs import fixing helper
+                    const { fixDayjsImports } = await import('./scripts/fix-dayjs-imports.ts');
+                    await fixDayjsImports();
+
+                    console.log('✅ Build completed successfully!');
+                } catch (error) {
+                    console.error('❌ Failed to fix dayjs imports:', error);
+                    // Don't fail the build, just warn
+                    console.log('⚠️  Build completed with warnings');
+                }
             }
         },
     };
