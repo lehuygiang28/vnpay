@@ -1,5 +1,3 @@
-import fs from 'fs';
-import path from 'path';
 import { defineConfig } from 'tsup';
 
 export default defineConfig((options) => {
@@ -76,34 +74,17 @@ export default defineConfig((options) => {
         // Post-build success hook
         onSuccess: async () => {
             if (!options.watch) {
-                // Fix dayjs plugin imports in ESM files
-                const distDir = path.resolve('dist');
-                const files = fs.readdirSync(distDir);
+                try {
+                    // Import and run the dayjs import fixing helper
+                    const { fixDayjsImports } = await import('./scripts/fix-dayjs-imports.ts');
+                    await fixDayjsImports();
 
-                for (const file of files) {
-                    if (file.endsWith('.js') && !file.endsWith('.map')) {
-                        const filePath = path.join(distDir, file);
-                        let content = fs.readFileSync(filePath, 'utf8');
-
-                        // Replace dayjs plugin imports with .js extensions
-                        content = content.replace(
-                            /from 'dayjs\/plugin\/(timezone|utc)'/g,
-                            "from 'dayjs/plugin/$1.js'",
-                        );
-                        content = content.replace(
-                            /import 'dayjs\/plugin\/(timezone|utc)'/g,
-                            "import 'dayjs/plugin/$1.js'",
-                        );
-
-                        if (content !== fs.readFileSync(filePath, 'utf8')) {
-                            fs.writeFileSync(filePath, content);
-                            console.log(`🔧 Fixed dayjs imports in ${file}`);
-                        }
-                    }
+                    console.log('✅ Build completed successfully!');
+                } catch (error) {
+                    console.error('❌ Failed to fix dayjs imports:', error);
+                    // Don't fail the build, just warn
+                    console.log('⚠️  Build completed with warnings');
                 }
-
-                console.log('✅ Build completed successfully!');
-                console.log('📦 Package ready for publishing');
             }
         },
     };
