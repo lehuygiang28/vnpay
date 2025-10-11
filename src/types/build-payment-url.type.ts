@@ -5,7 +5,9 @@ import type { GlobalConfig } from './vnpay-config.type';
 export type BuildPaymentUrl = {
     /**
      * Số tiền thanh toán. Đã tự động tính toán theo đơn vị của VNPay. (100 lần số tiền của đơn hàng trong cơ sở dữ liệu của bạn)
+     * Bạn không cần tự nhân với 100 nữa, thư viện này sẽ tự nhân 100 khi build url
      * @en Amount of payment. Automatically calculated according to the unit of VNPay. (100 times the amount of the order in your database)
+     * You don't need to multiply by 100 yourself, this library will multiply by 100 when building the URL
      */
     vnp_Amount: number;
 
@@ -20,6 +22,9 @@ export type BuildPaymentUrl = {
      * Mã tham chiếu của giao dịch tại hệ thống của merchant.
      * Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY.
      * Không được trùng lặp trong ngày.
+     *
+     * `Đơn giản hóa: ID đơn hàng ở database của bạn`
+     *
      * @en Reference code of transaction on merchant system. This code is unique to distinguish orders sent to VNPAY. Not duplicated in a day.
      * @example 123456
      */
@@ -35,7 +40,10 @@ export type BuildPaymentUrl = {
     /**
      * URL thông báo kết quả giao dịch khi Khách hàng kết thúc thanh toán.
      * @en URL to notify result of transaction when customer finish payment
-     * @example https://domain.vn/VnPayReturn
+     * @example
+     * ```sh
+     * https://vnpay.js.org/payment-return
+     * ```
      */
     vnp_ReturnUrl: string;
 
@@ -79,14 +87,27 @@ export type BuildPaymentUrl = {
     /**
      * Đơn vị tiền tệ sử dụng thanh toán. Hiện tại chỉ hỗ trợ VND
      * @en Currency code using for payment. Currently only support VND
-     * @example VND
+     * @example
+     * ```ts
+     * import { VnpCurrCode } from 'vnpay/enums';
+     *
+     * // then
+     * vnp_CurrCode: VnpCurrCode.VND,
+     * ```
+     *
      */
     vnp_CurrCode?: GlobalConfig['vnp_CurrCode'];
 
     /**
      * Ngôn ngữ giao diện hiển thị. Hiện tại hỗ trợ Tiếng Việt (vn), Tiếng Anh (en)
      * @en Language display on payment gateway. Currently support Vietnamese (vn), English (en)
-     * @example vn
+     * @example
+     * ```ts
+     * import { VnpLocale } from 'vnpay/enums';
+     *
+     * // then
+     * vnp_Locale: VnpLocale.VN,
+     * ```
      */
     vnp_Locale?: GlobalConfig['vnp_Locale'];
 
