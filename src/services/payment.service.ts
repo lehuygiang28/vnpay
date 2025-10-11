@@ -1,19 +1,13 @@
-import { VNP_DEFAULT_COMMAND, VNP_VERSION } from '../constants';
-import { type HashAlgorithm, ProductCode, VnpCurrCode, VnpLocale } from '../enums';
+import { type HashAlgorithm } from '../enums';
 import type {
     BuildPaymentUrl,
     BuildPaymentUrlLogger,
     BuildPaymentUrlOptions,
     DefaultConfig,
     GlobalConfig,
-    VNPayConfig,
 } from '../types';
 import { dateFormat, getDateInGMT7, isValidVnpayDateFormat } from '../utils/common';
-import {
-    buildPaymentUrlSearchParams,
-    calculateSecureHash,
-    createPaymentUrl,
-} from '../utils/payment.util';
+import { calculateSecureHash, createPaymentUrl } from '../utils/payment.util';
 import type { LoggerService } from './logger.service';
 
 /**

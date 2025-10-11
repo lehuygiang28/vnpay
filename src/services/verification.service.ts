@@ -1,4 +1,4 @@
-import { WRONG_CHECKSUM_KEY, numberRegex } from '../constants';
+import { numberRegex } from '../constants';
 import type { HashAlgorithm } from '../enums';
 import type {
     GlobalConfig,
@@ -60,6 +60,9 @@ export class VerificationService {
         query: ReturnQueryFromVNPay,
         options?: VerifyReturnUrlOptions<LoggerFields>,
     ): VerifyReturnUrl {
+        // We disable rule unused to make sure we exclude the `vnp_SecureHashType` from `cloneQuery` to not using it
+        // when buildPaymentUrlSearchParams(cloneQuery) and verify it
+        // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
         const { vnp_SecureHash = '', vnp_SecureHashType, ...cloneQuery } = query;
 
         if (typeof cloneQuery?.vnp_Amount !== 'number') {
