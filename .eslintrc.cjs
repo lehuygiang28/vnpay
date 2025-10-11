@@ -11,6 +11,10 @@ module.exports = {
         sourceType: 'module',
     },
     plugins: ['@typescript-eslint', 'prettier'],
+    globals: {
+        NodeJS: true,
+        BufferEncoding: 'readonly',
+    },
     rules: {
         'prettier/prettier': 'error',
         '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
@@ -20,6 +24,7 @@ module.exports = {
         '@typescript-eslint/no-non-null-assertion': 'warn',
         'prefer-const': 'error',
         'no-var': 'error',
+        'no-undef': 'off',
     },
     ignorePatterns: [
         'dist/',
