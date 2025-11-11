@@ -306,47 +306,43 @@ export class QueryService {
             vnp_Message: message,
         };
 
-        // Only check signed hash when request is not error
-        if (
-            Number(responseData.vnp_ResponseCode) <= 90 &&
-            Number(responseData.vnp_ResponseCode) >= 99
-        ) {
-            const stringToCreateHashOfResponse = [
-                responseData.vnp_ResponseId,
-                responseData.vnp_Command,
-                responseData.vnp_ResponseCode,
-                responseData.vnp_Message,
-                responseData.vnp_TmnCode,
-                responseData.vnp_TxnRef,
-                responseData.vnp_Amount,
-                responseData.vnp_BankCode,
-                responseData.vnp_PayDate,
-                responseData.vnp_TransactionNo,
-                responseData.vnp_TransactionType,
-                responseData.vnp_TransactionStatus,
-                responseData.vnp_OrderInfo,
-            ]
-                .map(String)
-                .join('|')
-                .replace(/undefined/g, '');
+        // Always check signed hash for response data
+        const stringToCreateHashOfResponse = [
+            responseData.vnp_ResponseId,
+            responseData.vnp_Command,
+            responseData.vnp_ResponseCode,
+            responseData.vnp_Message,
+            responseData.vnp_TmnCode,
+            responseData.vnp_TxnRef,
+            responseData.vnp_Amount,
+            responseData.vnp_BankCode,
+            responseData.vnp_PayDate,
+            responseData.vnp_TransactionNo,
+            responseData.vnp_TransactionType,
+            responseData.vnp_TransactionStatus,
+            responseData.vnp_OrderInfo,
+        ]
+            .map(String)
+            .join('|')
+            .replace(/undefined/g, '');
 
-            const responseHashed = hash(
-                this.config.secureSecret,
-                Buffer.from(stringToCreateHashOfResponse, this.bufferEncode),
-                this.hashAlgorithm,
-            );
+        const responseHashed = hash(
+            this.config.secureSecret,
+            Buffer.from(stringToCreateHashOfResponse, this.bufferEncode),
+            this.hashAlgorithm,
+        );
 
-            if (responseData?.vnp_SecureHash && responseHashed !== responseData.vnp_SecureHash) {
-                outputResults = {
-                    ...outputResults,
-                    isVerified: false,
-                    message: getResponseByStatusCode(
-                        WRONG_CHECKSUM_KEY,
-                        this.config.vnp_Locale,
-                        REFUND_RESPONSE_MAP,
-                    ),
-                };
-            }
+        // Signed hash check for response data
+        if (responseData?.vnp_SecureHash && responseHashed !== responseData.vnp_SecureHash) {
+            outputResults = {
+                ...outputResults,
+                isVerified: false,
+                message: getResponseByStatusCode(
+                    WRONG_CHECKSUM_KEY,
+                    this.config.vnp_Locale,
+                    REFUND_RESPONSE_MAP,
+                ),
+            };
         }
 
         const data2Log: RefundResponseLogger = {
