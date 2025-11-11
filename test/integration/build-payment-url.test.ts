@@ -1,199 +1,220 @@
-import { ProductCode, VnpCurrCode, VnpLocale } from '../src/enums';
-import type { BuildPaymentUrl } from '../src/types';
-import { consoleLogger, dateFormat, getDateInGMT7, ignoreLogger } from '../src/utils';
-import { VNPay } from '../src/vnpay';
+import { VnpLocale } from '../../src/enums';
+import { consoleLogger, dateFormat, getDateInGMT7, ignoreLogger } from '../../src/utils';
+import {
+    createBuildPaymentUrlInput,
+    createTestVNPayInstance,
+    TEST_CONSTANTS,
+} from '../__helpers__';
+import { spyOnConsoleLog } from '../__helpers__/console-helpers';
 
 describe('buildPaymentUrl', () => {
-    let vnpay: VNPay;
-    let baseInput: BuildPaymentUrl;
+    let vnpay: ReturnType<typeof createTestVNPayInstance>;
+    let baseInput: ReturnType<typeof createBuildPaymentUrlInput>;
 
     beforeAll(() => {
-        vnpay = new VNPay({
-            vnpayHost: 'http://sandbox.vnpayment.vn',
-            tmnCode: 'TEST_TMN_CODE',
-            secureSecret: 'test_secret',
-            enableLog: true,
-            /**
-             * Ignore log global, since it's for test only
-             * If need test log feature, re-enable it in method scope
-             */
+        vnpay = createTestVNPayInstance({
             loggerFn: ignoreLogger,
         });
-        baseInput = {
-            vnp_Amount: 1000,
-            vnp_OrderInfo: 'Test order',
-            vnp_TxnRef: 'ref1234567',
-            vnp_IpAddr: '127.0.0.1',
-            vnp_ReturnUrl: 'https://example.com/return',
-            vnp_CurrCode: VnpCurrCode.VND,
-            vnp_Locale: VnpLocale.VN,
-            vnp_OrderType: ProductCode.Other,
-            vnp_BankCode: 'NCB',
-            vnp_CreateDate: 20210101070000,
-        };
+        baseInput = createBuildPaymentUrlInput();
     });
 
     it('should return a valid payment URL', () => {
         // Arrange
-        const input: BuildPaymentUrl = { ...baseInput };
+        const input = createBuildPaymentUrlInput();
+
+        // Act
+        const result = vnpay.buildPaymentUrl(input);
+        const url = new URL(result);
+
+        // Assert
+        expect(url.searchParams.get('vnp_Amount')).toBe(
+            String(input.vnp_Amount * TEST_CONSTANTS.AMOUNT_MULTIPLIER),
+        );
+        expect(url.searchParams.get('vnp_OrderInfo')).toBe(input.vnp_OrderInfo);
+        expect(url.searchParams.get('vnp_TxnRef')).toBe(input.vnp_TxnRef);
+        expect(url.searchParams.get('vnp_IpAddr')).toBe(input.vnp_IpAddr);
+        expect(url.searchParams.get('vnp_ReturnUrl')).toBe(input.vnp_ReturnUrl);
+        expect(url.searchParams.get('vnp_CreateDate')).toBe(String(input.vnp_CreateDate));
+        expect(url.searchParams.get('vnp_CurrCode')).toBe(input.vnp_CurrCode);
+        expect(url.searchParams.get('vnp_Locale')).toBe(
+            String(input.vnp_Locale ?? '').toLowerCase(),
+        );
+        expect(url.searchParams.get('vnp_OrderType')).toBe(
+            String(input.vnp_OrderType ?? '').toLowerCase(),
+        );
+        expect(url.searchParams.get('vnp_BankCode')).toBe(input.vnp_BankCode);
+    });
+
+    it('should handle different amounts correctly', () => {
+        // Arrange
+        const input = createBuildPaymentUrlInput({
+            vnp_Amount: 2000,
+            vnp_CreateDate: TEST_CONSTANTS.DEFAULT_DATE,
+        });
 
         // Act
         const result = vnpay.buildPaymentUrl(input);
 
         // Assert
-        expect(result).toContain(`vnp_Amount=${input.vnp_Amount * 100}`);
-        expect(result).toContain('vnp_OrderInfo=Test+order');
-        expect(result).toContain('vnp_TxnRef=ref1234567');
-        expect(result).toContain('vnp_IpAddr=127.0.0.1');
-        expect(result).toContain('vnp_ReturnUrl=https%3A%2F%2Fexample.com%2Freturn');
-        expect(result).toContain('vnp_CreateDate=20210101070000');
-        expect(result).toContain('vnp_CurrCode=VND');
-        expect(result).toContain('vnp_Locale=vn');
-        expect(result).toContain('vnp_OrderType=other');
-        expect(result).toContain('vnp_BankCode=NCB');
-    });
-
-    it('should handle different amounts correctly', () => {
-        const input: BuildPaymentUrl = {
-            ...baseInput,
-            vnp_Amount: 2000,
-            vnp_CreateDate: 20210101070000,
-        };
-
-        const result = vnpay.buildPaymentUrl(input);
-
-        expect(result).toContain('vnp_Amount=200000');
+        expect(result).toContain(`vnp_Amount=${2000 * TEST_CONSTANTS.AMOUNT_MULTIPLIER}`);
     });
 
     it('should handle if provide a empty bank code', () => {
-        const input: BuildPaymentUrl = {
-            ...baseInput,
+        // Arrange
+        const input = createBuildPaymentUrlInput({
             vnp_BankCode: '',
-        };
+        });
 
+        // Act
         const result = vnpay.buildPaymentUrl(input);
 
+        // Assert
         expect(result).not.toContain('vnp_BankCode');
     });
 
     it('should handle if not provide a bank code', () => {
-        const { vnp_BankCode, ...input } = baseInput;
+        // Arrange
+        const { vnp_BankCode: _vnp_BankCode, ...input } = baseInput;
 
+        // Act
         const result = vnpay.buildPaymentUrl(input);
 
+        // Assert
         expect(result).not.toContain('vnp_BankCode');
     });
 
     it('should handle different order info correctly', () => {
-        const input: BuildPaymentUrl = {
-            ...baseInput,
+        // Arrange
+        const input = createBuildPaymentUrlInput({
             vnp_OrderInfo: 'Different order',
-        };
+        });
 
+        // Act
         const result = vnpay.buildPaymentUrl(input);
+        const url = new URL(result);
 
-        expect(result).toContain('vnp_OrderInfo=Different+order');
+        // Assert
+        expect(url.searchParams.get('vnp_OrderInfo')).toBe('Different order');
     });
 
     it('should handle different transaction references correctly', () => {
-        const input: BuildPaymentUrl = {
-            ...baseInput,
+        // Arrange
+        const input = createBuildPaymentUrlInput({
             vnp_TxnRef: 'differentRef',
-        };
+        });
 
+        // Act
         const result = vnpay.buildPaymentUrl(input);
 
+        // Assert
         expect(result).toContain('vnp_TxnRef=differentRef');
     });
 
     it('should handle different IP addresses correctly', () => {
-        const input: BuildPaymentUrl = {
-            ...baseInput,
+        // Arrange
+        const input = createBuildPaymentUrlInput({
             vnp_IpAddr: '192.168.0.1',
-        };
+        });
 
+        // Act
         const result = vnpay.buildPaymentUrl(input);
 
+        // Assert
         expect(result).toContain('vnp_IpAddr=192.168.0.1');
     });
 
     it('should handle different return URLs correctly', () => {
-        const input: BuildPaymentUrl = {
-            ...baseInput,
+        // Arrange
+        const input = createBuildPaymentUrlInput({
             vnp_ReturnUrl: 'https://different-return-url.com',
-        };
+        });
 
+        // Act
         const result = vnpay.buildPaymentUrl(input);
+        const url = new URL(result);
 
-        expect(result).toContain('vnp_ReturnUrl=https%3A%2F%2Fdifferent-return-url.com');
+        // Assert
+        expect(url.searchParams.get('vnp_ReturnUrl')).toBe('https://different-return-url.com');
     });
 
     it('should handle different locales correctly', () => {
-        const input: BuildPaymentUrl = {
-            ...baseInput,
+        // Arrange
+        const input = createBuildPaymentUrlInput({
             vnp_Locale: VnpLocale.EN,
-        };
+        });
 
+        // Act
         const result = vnpay.buildPaymentUrl(input);
 
+        // Assert
         expect(result).toContain('vnp_Locale=en');
     });
 
     it('should handle different bank codes correctly', () => {
-        const input: BuildPaymentUrl = {
-            ...baseInput,
+        // Arrange
+        const input = createBuildPaymentUrlInput({
             vnp_BankCode: 'HSBC',
-        };
+        });
 
+        // Act
         const result = vnpay.buildPaymentUrl(input);
 
+        // Assert
         expect(result).toContain('vnp_BankCode=HSBC');
     });
 
     it('should handle current create date correctly', () => {
-        const input: BuildPaymentUrl = {
-            ...baseInput,
-            vnp_CreateDate: 20210101070000,
-        };
+        // Arrange
+        const input = createBuildPaymentUrlInput({
+            vnp_CreateDate: TEST_CONSTANTS.DEFAULT_DATE,
+        });
 
+        // Act
         const result = vnpay.buildPaymentUrl(input);
 
-        expect(result).toContain('vnp_CreateDate=20210101070000');
+        // Assert
+        expect(result).toContain(`vnp_CreateDate=${TEST_CONSTANTS.DEFAULT_DATE}`);
     });
 
     it('should handle current create date correctly when not provided', () => {
-        const { vnp_CreateDate, ...input } = baseInput;
+        // Arrange
+        const { vnp_CreateDate: _vnp_CreateDate, ...input } = baseInput;
         const currentTime = dateFormat(getDateInGMT7());
 
+        // Act
         const result = vnpay.buildPaymentUrl(input);
 
+        // Assert
         expect(result).toContain(`vnp_CreateDate=${currentTime}`);
     });
 
     it('should handle expired date correctly', () => {
-        const input: BuildPaymentUrl = {
-            ...baseInput,
-            vnp_ExpireDate: 20210101070000,
-        };
+        // Arrange
+        const input = createBuildPaymentUrlInput({
+            vnp_ExpireDate: TEST_CONSTANTS.DEFAULT_DATE,
+        });
 
+        // Act
         const result = vnpay.buildPaymentUrl(input);
 
-        expect(result).toContain('vnp_ExpireDate=20210101070000');
+        // Assert
+        expect(result).toContain(`vnp_ExpireDate=${TEST_CONSTANTS.DEFAULT_DATE}`);
     });
 
     it('should throw error when `vnp_ExpireDate` is not a valid date', () => {
-        const input: BuildPaymentUrl = {
-            ...baseInput,
-            vnp_ExpireDate: 1234567,
-        };
+        // Arrange
+        const input = createBuildPaymentUrlInput({
+            vnp_ExpireDate: TEST_CONSTANTS.INVALID_DATE,
+        });
 
+        // Act & Assert
         expect(() => vnpay.buildPaymentUrl(input)).toThrow(Error);
     });
 
     it('should log the object to the console', () => {
         // Arrange
-        const input: BuildPaymentUrl = { ...baseInput };
-        const consoleLogMock = jest.spyOn(console, 'log').mockImplementation();
+        const input = createBuildPaymentUrlInput();
+        const consoleLogMock = spyOnConsoleLog();
 
         // Act
         vnpay.buildPaymentUrl(input, {
@@ -216,8 +237,8 @@ describe('buildPaymentUrl', () => {
 
     it('should log the object with only one field is `paymentUrl`', () => {
         // Arrange
-        const input: BuildPaymentUrl = { ...baseInput };
-        const consoleLogMock = jest.spyOn(console, 'log').mockImplementation();
+        const input = createBuildPaymentUrlInput();
+        const consoleLogMock = spyOnConsoleLog();
 
         // Act
         vnpay.buildPaymentUrl(input, {
@@ -241,8 +262,8 @@ describe('buildPaymentUrl', () => {
 
     it('should log the object with other fields except `paymentUrl`', () => {
         // Arrange
-        const input: BuildPaymentUrl = { ...baseInput };
-        const consoleLogMock = jest.spyOn(console, 'log').mockImplementation();
+        const input = createBuildPaymentUrlInput();
+        const consoleLogMock = spyOnConsoleLog();
 
         // Act
         vnpay.buildPaymentUrl(input, {
