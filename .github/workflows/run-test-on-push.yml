@@ -1,11 +1,11 @@
-name: Build and test on pull request
+name: Run test on push
 
 on:
-    pull_request:
+    push:
         branches: ['*']
 
 jobs:
-    automation-tests:
+    run-test:
         runs-on: ubuntu-latest
 
         steps:
@@ -19,9 +19,6 @@ jobs:
 
             - name: Install dependencies
               run: npm install
-
-            - name: Build services
-              run: npm run build
 
             - name: Run tests with coverage
               run: npm test -- --coverage

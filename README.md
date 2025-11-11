@@ -9,6 +9,7 @@
 [![NPM Downloads](https://img.shields.io/npm/d18m/vnpay)](https://www.npmjs.com/package/vnpay)
 [![GitHub Stars](https://img.shields.io/github/stars/lehuygiang28/vnpay)](https://github.com/lehuygiang28/vnpay)
 [![GitHub Issues](https://img.shields.io/github/issues/lehuygiang28/vnpay)](https://github.com/lehuygiang28/vnpay/issues)
+[![Coverage](https://img.shields.io/codecov/c/github/lehuygiang28/vnpay)](https://codecov.io/gh/lehuygiang28/vnpay)
 
 **🚀 Thư viện Node.js hiện đại cho tích hợp cổng thanh toán [VNPay](https://vnpay.vn) vào ứng dụng của bạn.**
 
