@@ -1,0 +1,79 @@
+name: Test and Coverage
+
+on:
+    workflow_call:
+        inputs:
+            node-version:
+                description: 'Node.js version to use'
+                required: false
+                type: string
+                default: '18'
+            build:
+                description: 'Whether to run build step'
+                required: false
+                type: boolean
+                default: true
+            upload-test-results:
+                description: 'Whether to upload test results to Codecov'
+                required: false
+                type: boolean
+                default: true
+            codecov-token:
+                description: 'Codecov token (optional, uses secret if not provided)'
+                required: false
+                type: string
+            codecov-flags:
+                description: 'Codecov flags for coverage upload (default: tests)'
+                required: false
+                type: string
+                default: 'tests'
+            codecov-name:
+                description: 'Codecov name for coverage upload (default: codecov-umbrella)'
+                required: false
+                type: string
+                default: 'codecov-umbrella'
+        secrets:
+            CODECOV_TOKEN:
+                required: false
+
+permissions:
+    contents: read
+
+jobs:
+    test-coverage:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Use Node.js ${{ inputs.node-version }}
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ inputs.node-version }}
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: Build
+              if: ${{ inputs.build == true }}
+              run: npm run build
+
+            - name: Run tests with coverage
+              run: npm test -- --coverage
+
+            - name: Upload coverage reports to Codecov
+              uses: codecov/codecov-action@v5
+              with:
+                  files: ./coverage/lcov.info
+                  flags: ${{ inputs.codecov-flags }}
+                  name: ${{ inputs.codecov-name }}
+                  fail_ci_if_error: false
+                  token: ${{ inputs.codecov-token != '' && inputs.codecov-token || secrets.CODECOV_TOKEN }}
+
+            - name: Upload test results to Codecov
+              if: ${{ !cancelled() && inputs.upload-test-results == true }}
+              uses: codecov/test-results-action@v1
+              with:
+                  token: ${{ inputs.codecov-token != '' && inputs.codecov-token || secrets.CODECOV_TOKEN }}
+                  files: ./test-results/junit.xml
