@@ -3,6 +3,9 @@ name: Run test on push
 on:
     push:
 
+permissions:
+    contents: read
+
 jobs:
     run-test:
         uses: ./.github/workflows/test-coverage.yml

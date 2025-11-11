@@ -26,6 +26,9 @@ on:
             CODECOV_TOKEN:
                 required: false
 
+permissions:
+    contents: read
+
 jobs:
     test-coverage:
         runs-on: ubuntu-latest
