@@ -22,6 +22,16 @@ on:
                 description: 'Codecov token (optional, uses secret if not provided)'
                 required: false
                 type: string
+            codecov-flags:
+                description: 'Codecov flags for coverage upload (default: tests)'
+                required: false
+                type: string
+                default: 'tests'
+            codecov-name:
+                description: 'Codecov name for coverage upload (default: codecov-umbrella)'
+                required: false
+                type: string
+                default: 'codecov-umbrella'
         secrets:
             CODECOV_TOKEN:
                 required: false
@@ -56,14 +66,14 @@ jobs:
               uses: codecov/codecov-action@v5
               with:
                   files: ./coverage/lcov.info
-                  flags: tests
-                  name: codecov-umbrella
+                  flags: ${{ inputs.codecov-flags }}
+                  name: ${{ inputs.codecov-name }}
                   fail_ci_if_error: false
-                  token: ${{ secrets.CODECOV_TOKEN }}
+                  token: ${{ inputs.codecov-token != '' && inputs.codecov-token || secrets.CODECOV_TOKEN }}
 
             - name: Upload test results to Codecov
               if: ${{ !cancelled() && inputs.upload-test-results == true }}
               uses: codecov/test-results-action@v1
               with:
-                  token: ${{ secrets.CODECOV_TOKEN }}
+                  token: ${{ inputs.codecov-token != '' && inputs.codecov-token || secrets.CODECOV_TOKEN }}
                   files: ./test-results/junit.xml
