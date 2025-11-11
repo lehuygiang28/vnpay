@@ -1,0 +1,54 @@
+codecov:
+    require_ci_to_pass: true
+    notify:
+        wait_for_ci: true
+
+# Coverage settings
+coverage:
+    # Status checks - block PRs if coverage requirements not met
+    status:
+        project:
+            default:
+                target: 80% # Match the jest.config.ts threshold
+                threshold: 3% # Allow 3% variance
+                base: auto # Compare against base branch
+        patch:
+            default:
+                target: 80%
+                threshold: 3%
+                base: auto
+
+# PR comments configuration
+comment:
+    layout: 'reach, diff, flags, files, footer'
+    behavior: default
+    require_changes: false
+    require_base: true
+    require_head: true
+
+# Flags configuration (for different test types)
+flags:
+    tests:
+        paths:
+            - src/
+        carryforward: true
+
+# Ignore patterns (files that shouldn't affect coverage)
+ignore:
+    - '**/*.test.ts'
+    - '**/*.spec.ts'
+    - '**/test/**'
+    - '**/__tests__/**'
+    - '**/__helpers__/**'
+    - '**/coverage/**'
+    - '**/dist/**'
+    - '**/node_modules/**'
+    - '**/*.d.ts'
+    - '**/example/**'
+    - '**/docs/**'
+
+# Round coverage to nearest integer
+round: down
+
+# Precision for coverage display
+precision: 2
