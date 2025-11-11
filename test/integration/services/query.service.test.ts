@@ -1,7 +1,9 @@
 import { QUERY_DR_RESPONSE_MAP, REFUND_RESPONSE_MAP } from '../../../src/constants';
-import { RefundTransactionType, VnpLocale } from '../../../src/enums';
-import { consoleLogger, ignoreLogger } from '../../../src/utils';
+import { HashAlgorithm, RefundTransactionType, VnpLocale } from '../../../src/enums';
+import { consoleLogger, hash, ignoreLogger } from '../../../src/utils';
+import { getResponseByStatusCode } from '../../../src/utils/common';
 import {
+    DEFAULT_VNPAY_CONFIG,
     createMockQueryDrResponse,
     createMockRefundResponse,
     createQueryDrInput,
@@ -94,6 +96,52 @@ describe('QueryService', () => {
             );
         });
 
+        it('should set message for missing response code with valid hash', async () => {
+            // Arrange
+            const mockResponse = createMockQueryDrResponse({
+                vnp_ResponseCode: undefined,
+                vnp_SecureHash: undefined,
+            });
+            // Recalculate hash without response code
+            const secureSecret = DEFAULT_VNPAY_CONFIG.secureSecret;
+            const tmn = DEFAULT_VNPAY_CONFIG.tmnCode;
+            const stringToCreateHashOfResponse = [
+                mockResponse.vnp_ResponseId,
+                mockResponse.vnp_Command,
+                mockResponse.vnp_ResponseCode,
+                mockResponse.vnp_Message,
+                tmn,
+                mockResponse.vnp_TxnRef,
+                mockResponse.vnp_Amount,
+                mockResponse.vnp_BankCode,
+                mockResponse.vnp_PayDate,
+                mockResponse.vnp_TransactionNo,
+                mockResponse.vnp_TransactionType,
+                mockResponse.vnp_TransactionStatus,
+                mockResponse.vnp_OrderInfo,
+                mockResponse.vnp_PromotionCode,
+                mockResponse.vnp_PromotionAmount,
+            ]
+                .map(String)
+                .join('|')
+                .replace(/undefined/g, '');
+            mockResponse.vnp_SecureHash = hash(
+                secureSecret,
+                Buffer.from(stringToCreateHashOfResponse, 'utf-8'),
+                HashAlgorithm.SHA512,
+            );
+            mockFetchSuccess(mockResponse);
+
+            // Act
+            const result = await vnpay.queryDr(baseQueryDrInput);
+
+            // Assert
+            expect(result.message).toBe(
+                getResponseByStatusCode('', VnpLocale.VN, QUERY_DR_RESPONSE_MAP),
+            );
+            expect(result.isVerified).toBe(true);
+        });
+
         it('should handle HTTP error', async () => {
             // Arrange
             mockFetchError(500);
@@ -131,6 +179,56 @@ describe('QueryService', () => {
             // Assert
             const url = getLastFetchUrl();
             expect(url).toContain(customEndpoint);
+        });
+
+        it('falls back to default endpoint when queryDrRefundEndpoint is falsy', async () => {
+            // Arrange
+            const vnpayWithEmptyEndpoint = createTestVNPayInstance({
+                endpoints: {
+                    queryDrRefundEndpoint: '',
+                },
+            });
+            const mockResponse = createMockQueryDrResponse();
+            mockFetchSuccess(mockResponse);
+
+            // Act
+            await vnpayWithEmptyEndpoint.queryDr(baseQueryDrInput);
+
+            // Assert
+            const url = getLastFetchUrl();
+            expect(url).toContain('/merchant_webapi/api/transaction');
+        });
+
+        it('uses default VNP_VERSION when vnp_Version is undefined', async () => {
+            // Arrange
+            const vnpayNoVersion = createTestVNPayInstance({});
+            const mockResponse = createMockQueryDrResponse();
+            mockFetchSuccess(mockResponse);
+
+            // Act
+            await vnpayNoVersion.queryDr(baseQueryDrInput);
+
+            // Assert
+            const body = getLastFetchRequestBody() as Record<string, unknown>;
+            expect(body.vnp_Version).toBeDefined();
+        });
+
+        it('prefers queryDrAndRefundHost over vnpayHost when both are set (queryDr)', async () => {
+            // Arrange
+            const customHost = 'https://custom-host.example.com';
+            const vnpayWithCustomHost = createTestVNPayInstance({
+                vnpayHost: 'https://other-host.example.com',
+                queryDrAndRefundHost: customHost,
+            });
+            const mockResponse = createMockQueryDrResponse();
+            mockFetchSuccess(mockResponse);
+
+            // Act
+            await vnpayWithCustomHost.queryDr(baseQueryDrInput);
+
+            // Assert
+            const url = getLastFetchUrl();
+            expect(url?.startsWith(customHost)).toBe(true);
         });
 
         it('should log the result when logging is enabled', async () => {
@@ -190,6 +288,19 @@ describe('QueryService', () => {
             expect(result.isSuccess).toBe(true);
         });
 
+        it('should keep isVerified=true when response has no vnp_SecureHash', async () => {
+            // Arrange: remove hash from response to exercise branch where no verification occurs
+            const mockResponse = createMockQueryDrResponse();
+            delete mockResponse?.vnp_SecureHash;
+            mockFetchSuccess(mockResponse);
+
+            // Act
+            const result = await vnpay.queryDr(baseQueryDrInput);
+
+            // Assert
+            expect(result.isVerified).toBe(true);
+        });
+
         it('should handle promotion code and amount in response', async () => {
             // Arrange
             const mockResponse = createMockQueryDrResponse({
@@ -208,6 +319,33 @@ describe('QueryService', () => {
     });
 
     describe('refund', () => {
+        it('builds URL when both queryDrAndRefundHost and vnpayHost are undefined', async () => {
+            // Arrange
+            const vnpayNoHosts = createTestVNPayInstance({
+                queryDrAndRefundHost: undefined,
+                vnpayHost: undefined,
+            });
+            const mockResponse = createMockRefundResponse();
+            mockFetchSuccess(mockResponse);
+
+            // Act
+            await vnpayNoHosts.refund(baseRefundInput);
+
+            // Assert
+            expect(global.fetch).toHaveBeenCalled();
+        });
+        it('should keep isVerified=true when response has no vnp_SecureHash', async () => {
+            // Arrange
+            const mockResponse = createMockRefundResponse();
+            delete mockResponse?.vnp_SecureHash;
+            mockFetchSuccess(mockResponse);
+
+            // Act
+            const result = await vnpay.refund(baseRefundInput);
+
+            // Assert
+            expect(result.isVerified).toBe(true);
+        });
         it('should return successful refund result for full refund', async () => {
             // Arrange
             const mockResponse = createMockRefundResponse({
@@ -395,6 +533,56 @@ describe('QueryService', () => {
             expect(url).toContain(customEndpoint);
         });
 
+        it('falls back to default endpoint when queryDrRefundEndpoint is falsy (refund)', async () => {
+            // Arrange
+            const vnpayWithEmptyEndpoint = createTestVNPayInstance({
+                endpoints: {
+                    queryDrRefundEndpoint: '',
+                },
+            });
+            const mockResponse = createMockRefundResponse();
+            mockFetchSuccess(mockResponse);
+
+            // Act
+            await vnpayWithEmptyEndpoint.refund(baseRefundInput);
+
+            // Assert
+            const url = getLastFetchUrl();
+            expect(url).toContain('/merchant_webapi/api/transaction');
+        });
+
+        it('uses default VNP_VERSION when vnp_Version is undefined (refund)', async () => {
+            // Arrange
+            const vnpayNoVersion = createTestVNPayInstance({});
+            const mockResponse = createMockRefundResponse();
+            mockFetchSuccess(mockResponse);
+
+            // Act
+            await vnpayNoVersion.refund(baseRefundInput);
+
+            // Assert
+            const body = getLastFetchRequestBody() as Record<string, unknown>;
+            expect(body.vnp_Version).toBeDefined();
+        });
+
+        it('prefers queryDrAndRefundHost over vnpayHost when both are set (refund)', async () => {
+            // Arrange
+            const customHost = 'https://custom-host.example.com';
+            const vnpayWithCustomHost = createTestVNPayInstance({
+                vnpayHost: 'https://other-host.example.com',
+                queryDrAndRefundHost: customHost,
+            });
+            const mockResponse = createMockRefundResponse();
+            mockFetchSuccess(mockResponse);
+
+            // Act
+            await vnpayWithCustomHost.refund(baseRefundInput);
+
+            // Assert
+            const url = getLastFetchUrl();
+            expect(url?.startsWith(customHost)).toBe(true);
+        });
+
         it('should log the result when logging is enabled', async () => {
             // Arrange
             const consoleLogMock = jest.spyOn(console, 'log').mockImplementation();
@@ -476,6 +664,21 @@ describe('QueryService', () => {
 
             // Assert
             expect(result.message).toBe(REFUND_RESPONSE_MAP.get('91')?.[VnpLocale.EN]);
+        });
+
+        it('should set message for missing response code when no signature provided in refund', async () => {
+            const mockResponse = createMockRefundResponse({
+                vnp_ResponseCode: undefined,
+            });
+            delete mockResponse?.vnp_SecureHash;
+            mockFetchSuccess(mockResponse);
+
+            const result = await vnpay.refund(baseRefundInput);
+
+            expect(result.message).toBe(
+                getResponseByStatusCode('', VnpLocale.VN, REFUND_RESPONSE_MAP),
+            );
+            expect(result.isVerified).toBe(true);
         });
     });
 });

@@ -1,15 +1,14 @@
-import type { VerifyReturnUrl } from '../../src/types';
-import { consoleLogger, ignoreLogger } from '../../src/utils';
-import { createReturnQueryInput, createTestVNPayInstance, TEST_CONSTANTS } from '../__helpers__';
-import { spyOnConsoleLog } from '../__helpers__/console-helpers';
+import type { VerifyIpnCall } from '../../../src/types';
+import { consoleLogger, ignoreLogger } from '../../../src/utils';
+import { createReturnQueryInput, createTestVNPayInstance, TEST_CONSTANTS } from '../../__helpers__';
+import { spyOnConsoleLog } from '../../__helpers__/console-helpers';
 
-describe('verifyReturnUrl', () => {
+describe('verifyIpnCall', () => {
     let vnpay: ReturnType<typeof createTestVNPayInstance>;
     let validInput: ReturnType<typeof createReturnQueryInput>;
 
     beforeAll(() => {
         vnpay = createTestVNPayInstance({
-            testMode: true,
             loggerFn: ignoreLogger,
         });
         validInput = createReturnQueryInput();
@@ -44,7 +43,7 @@ describe('verifyReturnUrl', () => {
         };
 
         // Act
-        const result = vnpay.verifyReturnUrl(input);
+        const result = vnpay.verifyIpnCall(input);
 
         // Assert
         expect(result).toEqual(expect.objectContaining(expectedOutput));
@@ -60,7 +59,7 @@ describe('verifyReturnUrl', () => {
                 });
 
                 // Act
-                const result = vnpay.verifyReturnUrl(input);
+                const result = vnpay.verifyIpnCall(input);
 
                 // Assert
                 expect(result).toEqual(expect.objectContaining({ vnp_Amount: expectedAmount }));
@@ -73,14 +72,14 @@ describe('verifyReturnUrl', () => {
         const input = validInput;
 
         // Act
-        const result = vnpay.verifyReturnUrl(input);
+        const result = vnpay.verifyIpnCall(input);
 
         // Assert
         expect(result).toEqual(
             expect.objectContaining({
                 isSuccess: true,
                 isVerified: true,
-            } as VerifyReturnUrl),
+            } as VerifyIpnCall),
         );
     });
 
@@ -93,14 +92,14 @@ describe('verifyReturnUrl', () => {
         });
 
         // Act
-        const result = vnpay.verifyReturnUrl(input);
+        const result = vnpay.verifyIpnCall(input);
 
         // Assert
         expect(result).toEqual(
             expect.objectContaining({
                 isSuccess: false,
                 isVerified: true,
-            } as VerifyReturnUrl),
+            } as VerifyIpnCall),
         );
     });
 
@@ -111,38 +110,15 @@ describe('verifyReturnUrl', () => {
         });
 
         // Act
-        const result = vnpay.verifyReturnUrl(input);
+        const result = vnpay.verifyIpnCall(input);
 
         // Assert
         expect(result).toEqual(
             expect.objectContaining({
                 isSuccess: false,
                 isVerified: false,
-            } as VerifyReturnUrl),
+            } as VerifyIpnCall),
         );
-    });
-
-    it('should throw error if amount is invalid', () => {
-        // Arrange
-        const query = createReturnQueryInput({
-            vnp_Amount: TEST_CONSTANTS.INVALID_AMOUNT_STRING,
-        });
-
-        // Act & Assert
-        expect(() => vnpay.verifyReturnUrl(query)).toThrowError('Invalid amount');
-    });
-
-    it('should convert vnp_Amount from string to number', () => {
-        // Arrange
-        const query = createReturnQueryInput({
-            vnp_Amount: '1000000',
-        });
-
-        // Act
-        const result = vnpay.verifyReturnUrl(query);
-
-        // Assert
-        expect(result).toEqual(expect.objectContaining({ vnp_Amount: 10000 }));
     });
 
     it('should log the object to the console', () => {
@@ -151,7 +127,7 @@ describe('verifyReturnUrl', () => {
         const consoleLogMock = spyOnConsoleLog();
 
         // Act
-        vnpay.verifyReturnUrl(input, {
+        vnpay.verifyIpnCall(input, {
             logger: {
                 loggerFn: consoleLogger,
             },
@@ -174,7 +150,7 @@ describe('verifyReturnUrl', () => {
         const consoleLogMock = spyOnConsoleLog();
 
         // Act
-        vnpay.verifyReturnUrl(input, {
+        vnpay.verifyIpnCall(input, {
             withHash: true,
             logger: {
                 loggerFn: consoleLogger,

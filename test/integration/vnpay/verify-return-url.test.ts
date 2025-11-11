@@ -1,14 +1,18 @@
-import type { VerifyIpnCall } from '../../src/types';
-import { consoleLogger, ignoreLogger } from '../../src/utils';
-import { createReturnQueryInput, createTestVNPayInstance, TEST_CONSTANTS } from '../__helpers__';
-import { spyOnConsoleLog } from '../__helpers__/console-helpers';
+import { HashAlgorithm, VnpLocale } from '../../../src/enums';
+import type { VerifyReturnUrl } from '../../../src/types';
+import { consoleLogger, ignoreLogger } from '../../../src/utils';
+import { getResponseByStatusCode } from '../../../src/utils/common';
+import { buildPaymentUrlSearchParams, calculateSecureHash } from '../../../src/utils/payment.util';
+import { createReturnQueryInput, createTestVNPayInstance, TEST_CONSTANTS } from '../../__helpers__';
+import { spyOnConsoleLog } from '../../__helpers__/console-helpers';
 
-describe('verifyIpnCall', () => {
+describe('verifyReturnUrl', () => {
     let vnpay: ReturnType<typeof createTestVNPayInstance>;
     let validInput: ReturnType<typeof createReturnQueryInput>;
 
     beforeAll(() => {
         vnpay = createTestVNPayInstance({
+            testMode: true,
             loggerFn: ignoreLogger,
         });
         validInput = createReturnQueryInput();
@@ -43,7 +47,7 @@ describe('verifyIpnCall', () => {
         };
 
         // Act
-        const result = vnpay.verifyIpnCall(input);
+        const result = vnpay.verifyReturnUrl(input);
 
         // Assert
         expect(result).toEqual(expect.objectContaining(expectedOutput));
@@ -59,7 +63,7 @@ describe('verifyIpnCall', () => {
                 });
 
                 // Act
-                const result = vnpay.verifyIpnCall(input);
+                const result = vnpay.verifyReturnUrl(input);
 
                 // Assert
                 expect(result).toEqual(expect.objectContaining({ vnp_Amount: expectedAmount }));
@@ -72,14 +76,14 @@ describe('verifyIpnCall', () => {
         const input = validInput;
 
         // Act
-        const result = vnpay.verifyIpnCall(input);
+        const result = vnpay.verifyReturnUrl(input);
 
         // Assert
         expect(result).toEqual(
             expect.objectContaining({
                 isSuccess: true,
                 isVerified: true,
-            } as VerifyIpnCall),
+            } as VerifyReturnUrl),
         );
     });
 
@@ -92,14 +96,14 @@ describe('verifyIpnCall', () => {
         });
 
         // Act
-        const result = vnpay.verifyIpnCall(input);
+        const result = vnpay.verifyReturnUrl(input);
 
         // Assert
         expect(result).toEqual(
             expect.objectContaining({
                 isSuccess: false,
                 isVerified: true,
-            } as VerifyIpnCall),
+            } as VerifyReturnUrl),
         );
     });
 
@@ -110,15 +114,66 @@ describe('verifyIpnCall', () => {
         });
 
         // Act
-        const result = vnpay.verifyIpnCall(input);
+        const result = vnpay.verifyReturnUrl(input);
 
         // Assert
         expect(result).toEqual(
             expect.objectContaining({
                 isSuccess: false,
                 isVerified: false,
-            } as VerifyIpnCall),
+            } as VerifyReturnUrl),
         );
+    });
+
+    it('should convert string amount and remain verified when signature matches', () => {
+        // Arrange
+        const base = createReturnQueryInput();
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { vnp_SecureHash: _oldHash, ...clone } = base as any;
+        clone.vnp_Amount = '1000000';
+
+        const search = buildPaymentUrlSearchParams(clone);
+        const newHash = calculateSecureHash({
+            secureSecret: 'test_secret',
+            data: search.toString(),
+            hashAlgorithm: HashAlgorithm.SHA512,
+            bufferEncode: 'utf-8',
+        });
+
+        const input = {
+            ...clone,
+            vnp_SecureHash: newHash,
+        } as any;
+
+        // Act
+        const result = vnpay.verifyReturnUrl(input);
+
+        // Assert
+        expect(result.isVerified).toBe(true);
+        expect(result.vnp_Amount).toBe(10000);
+    });
+
+    it('should throw error if amount is invalid', () => {
+        // Arrange
+        const query = createReturnQueryInput({
+            vnp_Amount: TEST_CONSTANTS.INVALID_AMOUNT_STRING,
+        });
+
+        // Act & Assert
+        expect(() => vnpay.verifyReturnUrl(query)).toThrowError('Invalid amount');
+    });
+
+    it('should convert vnp_Amount from string to number', () => {
+        // Arrange
+        const query = createReturnQueryInput({
+            vnp_Amount: '1000000',
+        });
+
+        // Act
+        const result = vnpay.verifyReturnUrl(query);
+
+        // Assert
+        expect(result).toEqual(expect.objectContaining({ vnp_Amount: 10000 }));
     });
 
     it('should log the object to the console', () => {
@@ -127,7 +182,7 @@ describe('verifyIpnCall', () => {
         const consoleLogMock = spyOnConsoleLog();
 
         // Act
-        vnpay.verifyIpnCall(input, {
+        vnpay.verifyReturnUrl(input, {
             logger: {
                 loggerFn: consoleLogger,
             },
@@ -150,7 +205,7 @@ describe('verifyIpnCall', () => {
         const consoleLogMock = spyOnConsoleLog();
 
         // Act
-        vnpay.verifyIpnCall(input, {
+        vnpay.verifyReturnUrl(input, {
             withHash: true,
             logger: {
                 loggerFn: consoleLogger,
@@ -167,5 +222,48 @@ describe('verifyIpnCall', () => {
             }),
         );
         consoleLogMock.mockRestore();
+    });
+
+    it('should map message for empty response code when signature is valid', () => {
+        // Arrange: start from a valid input, but change vnp_ResponseCode to undefined and recompute hash
+        const base = createReturnQueryInput();
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { vnp_SecureHash: _oldHash, ...clone } = base as any;
+        delete (clone as any).vnp_ResponseCode;
+
+        const search = buildPaymentUrlSearchParams(clone);
+        const newHash = calculateSecureHash({
+            secureSecret: 'test_secret',
+            data: search.toString(),
+            hashAlgorithm: HashAlgorithm.SHA512,
+            bufferEncode: 'utf-8',
+        });
+
+        const input = {
+            ...clone,
+            vnp_SecureHash: newHash,
+        } as any;
+
+        // Act
+        const result = vnpay.verifyReturnUrl(input);
+
+        // Assert
+        expect(result.isVerified).toBe(true);
+        expect(result.isSuccess).toBe(false);
+        expect(result.message).toBe(getResponseByStatusCode('', VnpLocale.VN));
+    });
+
+    it('should ignore vnp_SecureHashType during verification', () => {
+        // Arrange: Start from a valid, already-signed input, then append vnp_SecureHashType
+        const input = createReturnQueryInput();
+        (input as any).vnp_SecureHashType = 'SHA512';
+
+        // Act
+        const result = vnpay.verifyReturnUrl(input);
+
+        // Assert: verification should succeed and message map should be for '00'
+        expect(result.isVerified).toBe(true);
+        expect(result.isSuccess).toBe(true);
+        expect(result.message).toBe(getResponseByStatusCode('00', VnpLocale.VN));
     });
 });

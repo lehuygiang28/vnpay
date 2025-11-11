@@ -1,11 +1,11 @@
-import { VnpLocale } from '../../src/enums';
-import { consoleLogger, dateFormat, getDateInGMT7, ignoreLogger } from '../../src/utils';
+import { VnpLocale } from '../../../src/enums';
+import { consoleLogger, dateFormat, getDateInGMT7, ignoreLogger } from '../../../src/utils';
 import {
     createBuildPaymentUrlInput,
     createTestVNPayInstance,
     TEST_CONSTANTS,
-} from '../__helpers__';
-import { spyOnConsoleLog } from '../__helpers__/console-helpers';
+} from '../../__helpers__';
+import { spyOnConsoleLog } from '../../__helpers__/console-helpers';
 
 describe('buildPaymentUrl', () => {
     let vnpay: ReturnType<typeof createTestVNPayInstance>;
