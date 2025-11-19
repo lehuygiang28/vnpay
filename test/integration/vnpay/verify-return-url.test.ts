@@ -266,4 +266,33 @@ describe('verifyReturnUrl', () => {
         expect(result.isSuccess).toBe(true);
         expect(result.message).toBe(getResponseByStatusCode('00', VnpLocale.VN));
     });
+
+    it('should handle vnp_ResponseCode as number 0 and mark as success', () => {
+        // Arrange: Create input with vnp_ResponseCode as number 0 instead of string '00'
+        const base = createReturnQueryInput();
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { vnp_SecureHash: _oldHash, ...clone } = base as any;
+        clone.vnp_ResponseCode = 0; // Number 0 instead of string '00'
+
+        const search = buildPaymentUrlSearchParams(clone);
+        const newHash = calculateSecureHash({
+            secureSecret: 'test_secret',
+            data: search.toString(),
+            hashAlgorithm: HashAlgorithm.SHA512,
+            bufferEncode: 'utf-8',
+        });
+
+        const input = {
+            ...clone,
+            vnp_SecureHash: newHash,
+        } as any;
+
+        // Act
+        const result = vnpay.verifyReturnUrl(input);
+
+        // Assert
+        expect(result.isVerified).toBe(true);
+        expect(result.isSuccess).toBe(true);
+        expect(result.message).toBe(getResponseByStatusCode('0', VnpLocale.VN));
+    });
 });
