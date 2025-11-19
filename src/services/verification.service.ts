@@ -83,7 +83,7 @@ export class VerificationService {
 
         let outputResults = {
             isVerified,
-            isSuccess: cloneQuery.vnp_ResponseCode === '00',
+            isSuccess: cloneQuery.vnp_ResponseCode === '00' || cloneQuery.vnp_ResponseCode === 0,
             message: getResponseByStatusCode(
                 cloneQuery.vnp_ResponseCode?.toString() ?? '',
                 this.config.vnp_Locale,

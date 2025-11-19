@@ -185,12 +185,21 @@ export class VNPay {
             },
         );
 
+        if (!response.ok) {
+            throw new Error(`Failed to fetch bank list: HTTP ${response.status}`);
+        }
+
         const bankList = (await response.json()) as Bank[];
 
         for (const bank of bankList) {
+            // Handle logo_link safely - only slice if it starts with a slash
+            const logoPath =
+                bank.logo_link && bank.logo_link.startsWith('/')
+                    ? bank.logo_link.slice(1)
+                    : bank.logo_link;
             bank.logo_link = resolveUrlString(
                 this.globalConfig.vnpayHost ?? VNPAY_GATEWAY_SANDBOX_HOST,
-                bank.logo_link.slice(1),
+                logoPath,
             );
         }
 

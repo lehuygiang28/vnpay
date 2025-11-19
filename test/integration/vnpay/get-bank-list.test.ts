@@ -1,4 +1,8 @@
-import { createTestVNPayInstance, DEFAULT_BANK_LIST, DEFAULT_VNPAY_CONFIG } from '../../__helpers__';
+import {
+    createTestVNPayInstance,
+    DEFAULT_BANK_LIST,
+    DEFAULT_VNPAY_CONFIG,
+} from '../../__helpers__';
 import { mockFetchSuccess } from '../../__helpers__/mock-helpers';
 
 global.fetch = jest.fn();
