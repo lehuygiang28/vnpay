@@ -138,3 +138,35 @@ export type BuildPaymentUrlLogger = LoggerData<
 export type BuildPaymentUrlOptions<Fields extends keyof BuildPaymentUrlLogger> = {
     withHash?: boolean;
 } & LoggerOptions<BuildPaymentUrlLogger, Fields>;
+
+export type GenerateQrResponse = {
+    /**
+     * Mã phản hồi từ VNPay
+     * @en Response code from VNPay
+     * @example '00'
+     */
+    code: string;
+
+    /**
+     * Thông báo kết quả giao dịch
+     * @en Message of transaction result
+     * @example 'Success'
+     */
+    message: string;
+
+    /**
+     * Nội dung QR code
+     * @en QR code content
+     * @example '000201010212...'
+     */
+    qrcontent: string;
+};
+
+export type GenerateQrResponseLogger = LoggerData<
+    {
+        createdAt: Date;
+    } & GenerateQrResponse
+>;
+
+export type GenerateQrResponseOptions<Fields extends keyof GenerateQrResponseLogger> =
+    LoggerOptions<GenerateQrResponseLogger, Fields>;
