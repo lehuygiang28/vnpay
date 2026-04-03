@@ -5,7 +5,12 @@ import {
     createTestVNPayInstance,
     TEST_CONSTANTS,
 } from '../../__helpers__';
-import { getLastFetchUrl, mockFetchError, mockFetchSuccess } from '../../__helpers__/mock-helpers';
+import {
+    getLastFetchUrl,
+    mockFetchError,
+    mockFetchReject,
+    mockFetchSuccess,
+} from '../../__helpers__/mock-helpers';
 
 describe('VNPay.generateQr', () => {
     let vnpay: ReturnType<typeof createTestVNPayInstance>;
@@ -77,6 +82,16 @@ describe('VNPay.generateQr', () => {
         await expect(vnpay.generateQr(input)).rejects.toThrow('Failed to generate QR: HTTP 500');
     });
 
+    it('should throw an error when fetch is rejected', async () => {
+        // Arrange
+        const input = createBuildPaymentUrlInput();
+        const errorMessage = 'Network Error';
+        mockFetchReject(new Error(errorMessage));
+
+        // Act & Assert
+        await expect(vnpay.generateQr(input)).rejects.toThrow(errorMessage);
+    });
+
     it('should correctly map error message when using English locale', async () => {
         // Arrange
         const input = createBuildPaymentUrlInput({
@@ -96,6 +111,26 @@ describe('VNPay.generateQr', () => {
         // Assert
         expect(result.code).toBe('01');
         expect(result.message).toBe('Transaction is already exist');
+    });
+
+    it('should use default locale when vnp_Locale is omitted in input', async () => {
+        // Arrange
+        const { vnp_Locale: _vnp_Locale, ...inputWithoutLocale } = createBuildPaymentUrlInput();
+        const mockErrorResponse = {
+            code: '01',
+            message: 'Original Message',
+            qrcontent: '',
+        };
+
+        mockFetchSuccess(mockErrorResponse);
+
+        // Act
+        const result = await vnpay.generateQr(inputWithoutLocale);
+
+        // Assert
+        expect(result.code).toBe('01');
+        expect(result.message).toBe('Giao dịch đã tồn tại');
+        expect(vnpay.defaultConfig.vnp_Locale).toBe(VnpLocale.VN);
     });
 
     it('should log the API result when logger is enabled', async () => {

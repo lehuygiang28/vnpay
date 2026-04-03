@@ -24,6 +24,13 @@ export function mockFetchError(status: number, statusText?: string): void {
 }
 
 /**
+ * Mocks fetch to return a rejected promise
+ */
+export function mockFetchReject(error: Error): void {
+    (global.fetch as jest.Mock).mockRejectedValue(error);
+}
+
+/**
  * Gets the request body from the last fetch call
  */
 export function getLastFetchRequestBody(): unknown {

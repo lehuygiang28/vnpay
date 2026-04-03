@@ -140,7 +140,7 @@ export class PaymentService {
 
     private buildVnpayUrlInternal(
         data: BuildPaymentUrl,
-        overrides?: Partial<DefaultConfig & BuildPaymentUrl>,
+        overrides?: Pick<DefaultConfig, 'vnp_Command'>,
     ): { url: URL; dataToBuild: DefaultConfig & BuildPaymentUrl } {
         const dataToBuild = {
             ...this.defaultConfig,
