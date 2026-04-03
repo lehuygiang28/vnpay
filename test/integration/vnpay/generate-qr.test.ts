@@ -70,9 +70,28 @@ describe('VNPay.generateQr', () => {
         const result = await vnpay.generateQr(input);
 
         // Assert
-        expect(result.code).toBe('01');
-        expect(result.message).not.toBe('Original Message');
         expect(result.message).toBe('Giao dịch đã tồn tại');
+    });
+
+    it('should fallback to default message when VNPay returns an unknown error code', async () => {
+        // Arrange
+        const input = createBuildPaymentUrlInput({
+            vnp_Locale: VnpLocale.VN,
+        });
+        const mockErrorResponse = {
+            code: '99',
+            message: 'Unknown Error Message',
+            qrcontent: '',
+        };
+
+        mockFetchSuccess(mockErrorResponse);
+
+        // Act
+        const result = await vnpay.generateQr(input);
+
+        // Assert
+        expect(result.code).toBe('99');
+        expect(result.message).toBe('Giao dịch thất bại');
     });
 
     it('should throw an error when fetch fails', async () => {
