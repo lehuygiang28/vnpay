@@ -84,6 +84,42 @@ app.get('/payment-url', (req: Request, res: Response) => {
 });
 
 /**
+ * Merchant hosted QR: calls VNPay with vnp_Command=genqr and returns JSON (code, message, qrcontent).
+ * Sandbox may require the feature enabled on your TMN — see docs / PR #46.
+ */
+app.get('/generate-qr', async (req: Request, res: Response) => {
+    try {
+        const result = await vnpay.generateQr(
+            {
+                vnp_Amount: 10000,
+                vnp_IpAddr: req.ip || req.socket.remoteAddress || '127.0.0.1',
+                vnp_TxnRef: `qr-${Date.now()}`,
+                vnp_OrderInfo: 'Demo QR payment',
+                vnp_ReturnUrl: `http://localhost:${port}/vnpay-return`,
+            },
+            {
+                logger: {
+                    type: 'pick',
+                    fields: ['createdAt', 'method', 'code', 'qrcontentLength'],
+                    loggerFn: (data) => consoleLogger(data),
+                },
+            },
+        );
+
+        return res.json({
+            code: result.code,
+            message: result.message,
+            qrcontent: result.qrcontent,
+        });
+    } catch (error) {
+        console.error('generateQr error', error);
+        return res.status(500).json({
+            message: error instanceof Error ? error.message : 'generateQr failed',
+        });
+    }
+});
+
+/**
  * This is the get request that VNPay will call this when the payment process is done to notify the result of the payment for merchant server,
  * So you need to implement this endpoint to handle the result of the payment
  * Eg: Update the order status, send the email to the customer, etc.
@@ -183,4 +219,7 @@ app.get(
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}!`);
     console.log(`Goto http://localhost:${port}/payment-url to get the sample payment url`);
+    console.log(
+        `Goto http://localhost:${port}/generate-qr to call generateQr (Merchant hosted QR)`,
+    );
 });

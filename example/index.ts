@@ -1,6 +1,6 @@
-import 'dotenv/config';
-import crypto from 'crypto';
 import chalk from 'chalk';
+import crypto from 'crypto';
+import 'dotenv/config';
 import { ProductCode, RefundTransactionType, VnpLocale } from '../src/enums';
 import type { ReturnQueryFromVNPay, VerifyReturnUrl } from '../src/types';
 import { buildPaymentUrlSearchParams, dateFormat } from '../src/utils';
@@ -67,6 +67,29 @@ async function main() {
         vnp_ExpireDate: dateFormat(tomorrow),
     });
     log('create payment url', urlString);
+
+    // Generate QR (vnp_Command=genqr) — requires Merchant hosted QR / sandbox access per VNPay
+    try {
+        const qrOrderId = `qr-${orderId}`;
+        const qrResult = await vnpay.generateQr({
+            vnp_Amount: 10000,
+            vnp_IpAddr: '1.1.1.1',
+            vnp_TxnRef: qrOrderId,
+            vnp_OrderInfo: `order information of ${qrOrderId}`,
+            vnp_OrderType: ProductCode.Other,
+            vnp_ReturnUrl: 'http://localhost:3000/return',
+            vnp_Locale: VnpLocale.VN,
+            vnp_CreateDate: dateFormat(createDate),
+            vnp_ExpireDate: dateFormat(tomorrow),
+        });
+        log('generate qr', {
+            code: qrResult.code,
+            message: qrResult.message,
+            qrcontentLength: qrResult.qrcontent?.length ?? 0,
+        });
+    } catch (error) {
+        log('generate qr error', error, true);
+    }
 
     // Verify return url, ipn call
     const queryResponseFromVNPay: ReturnQueryFromVNPay = {
