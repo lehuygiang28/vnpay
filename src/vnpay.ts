@@ -35,6 +35,9 @@ import type {
     VerifyReturnUrl,
     VerifyReturnUrlLogger,
     VerifyReturnUrlOptions,
+    GenerateQrResponse,
+    GenerateQrResponseLogger,
+    GenerateQrResponseOptions,
 } from './types';
 import { resolveUrlString } from './utils/common';
 
@@ -225,6 +228,26 @@ export class VNPay {
         options?: BuildPaymentUrlOptions<LoggerFields>,
     ): string {
         return this.paymentService.buildPaymentUrl(data, options);
+    }
+
+    /**
+     * Phương thức xây dựng, tạo thành qr thanh toán của VNPay
+     * @en Build the qr payment
+     *
+     * @param {BuildPaymentUrl} data - Dữ liệu thanh toán cần thiết để tạo URL QR
+     * @en @param {BuildPaymentUrl} data - Payment data required to create QR URL
+     *
+     * @param {GenerateQrResponseOptions<LoggerFields>} options - Tùy chọn bổ sung
+     * @en @param {GenerateQrResponseOptions<LoggerFields>} options - Additional options
+     *
+     * @returns {Promise<GenerateQrResponse>} Kết quả QR Pay
+     * @en @returns {Promise<GenerateQrResponse>} QR Pay result
+     */
+    public async generateQr<LoggerFields extends keyof GenerateQrResponseLogger>(
+        data: BuildPaymentUrl,
+        options?: GenerateQrResponseOptions<LoggerFields>,
+    ): Promise<GenerateQrResponse> {
+        return this.paymentService.generateQr(data, options);
     }
 
     /**

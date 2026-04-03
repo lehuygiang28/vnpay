@@ -9,6 +9,9 @@ export type {
     BuildPaymentUrl,
     BuildPaymentUrlLogger,
     BuildPaymentUrlOptions,
+    GenerateQrResponse,
+    GenerateQrResponseLogger,
+    GenerateQrResponseOptions,
 } from './types/build-payment-url.type';
 export type { DefaultConfig, ResultVerified } from './types/common.type';
 export type { LoggerData, LoggerOptions } from './types/logger.type';
