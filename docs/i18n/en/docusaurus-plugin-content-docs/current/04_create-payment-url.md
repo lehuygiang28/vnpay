@@ -1,5 +1,9 @@
 # Create Payment URL
 
+:::tip
+Need a **QR string** for your client instead of only a redirect URL? See [Generate payment QR](/generate-qr).
+:::
+
 - Create a payment URL for VNPay.
 - A payment URL is a URL that contains payment information.
 - The e-commerce website sends this information to the VNPAY Payment Gateway when processing online payment transactions for customers.

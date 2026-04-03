@@ -1,5 +1,9 @@
 # Tạo URL thanh toán
 
+:::tip
+Cần trả về **chuỗi QR** cho app thay vì chỉ link redirect? Xem [Tạo mã QR thanh toán](/generate-qr).
+:::
+
 - Tạo đường dẫn thanh toán cho VNPay.
 - URL thanh toán là một địa chỉ URL chứa thông tin thanh toán.
 - Website TMĐT gửi thông tin này đến Cổng thanh toán VNPAY khi xử lý giao dịch thanh toán trực tuyến cho khách hàng.
