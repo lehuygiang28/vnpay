@@ -78,7 +78,7 @@ export class PaymentService {
         const { url, dataToBuild } = this.buildVnpayUrlInternal(data);
 
         // Log if enabled
-        const data2Log: BuildPaymentUrlLogger = {
+        const buildPaymentUrlLogPayload: BuildPaymentUrlLogger = {
             createdAt: new Date(),
             method: 'buildPaymentUrl',
             paymentUrl: options?.withHash
@@ -91,7 +91,7 @@ export class PaymentService {
             ...dataToBuild,
         };
 
-        this.logger.log(data2Log, options, 'buildPaymentUrl');
+        this.logger.log(buildPaymentUrlLogPayload, options, 'buildPaymentUrl');
 
         return url.toString();
     }
@@ -122,18 +122,25 @@ export class PaymentService {
 
         const result = (await response.json()) as GenerateQrResponse;
 
+        // Bypassing runtime validation shape check
+        if (!result || typeof result !== 'object' || typeof result.code !== 'string') {
+            throw new Error('Invalid response from VNPay: Missing or malformed data');
+        }
+
         if (result.code !== '00') {
             const locale = data.vnp_Locale || this.defaultConfig.vnp_Locale;
             result.message = getResponseByStatusCode(result.code, locale, RESPONSE_MAP);
         }
 
-        const data2Log: GenerateQrResponseLogger = {
+        const { qrcontent, ...rest } = result;
+        const generateQrLogPayload: GenerateQrResponseLogger = {
             createdAt: new Date(),
             method: 'generateQr',
-            ...result,
+            qrcontentLength: qrcontent?.length ?? 0,
+            ...rest,
         };
 
-        this.logger.log(data2Log, options, 'generateQr');
+        this.logger.log(generateQrLogPayload, options, 'generateQr');
 
         return result;
     }

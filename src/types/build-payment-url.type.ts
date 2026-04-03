@@ -165,7 +165,9 @@ export type GenerateQrResponse = {
 export type GenerateQrResponseLogger = LoggerData<
     {
         createdAt: Date;
-    } & GenerateQrResponse
+        qrcontent?: string;
+        qrcontentLength?: number;
+    } & Omit<GenerateQrResponse, 'qrcontent'>
 >;
 
 export type GenerateQrResponseOptions<Fields extends keyof GenerateQrResponseLogger> =

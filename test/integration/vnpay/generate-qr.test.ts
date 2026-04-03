@@ -92,6 +92,17 @@ describe('VNPay.generateQr', () => {
         await expect(vnpay.generateQr(input)).rejects.toThrow(errorMessage);
     });
 
+    it('should throw an error when VNPay returns malformed data', async () => {
+        // Arrange
+        const input = createBuildPaymentUrlInput();
+        mockFetchSuccess({ invalid: 'data' });
+
+        // Act & Assert
+        await expect(vnpay.generateQr(input)).rejects.toThrow(
+            'Invalid response from VNPay: Missing or malformed data',
+        );
+    });
+
     it('should correctly map error message when using English locale', async () => {
         // Arrange
         const input = createBuildPaymentUrlInput({
@@ -158,8 +169,13 @@ describe('VNPay.generateQr', () => {
             expect.objectContaining({
                 method: 'generateQr',
                 code: '00',
-                qrcontent: 'some_qr_content',
+                qrcontentLength: 'some_qr_content'.length,
                 createdAt: expect.any(Date),
+            }),
+        );
+        expect(loggerFn).toHaveBeenCalledWith(
+            expect.not.objectContaining({
+                qrcontent: expect.any(String),
             }),
         );
     });
