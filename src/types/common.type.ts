@@ -11,17 +11,17 @@ export type DefaultConfig = Pick<
 
 export type ResultVerified = {
     /**
-     * Trạng thái giao dịch
+     * Trạng thái giao dịch. Chỉ là `true` khi `isVerified` là `true` và mã phản hồi là thành công.
      *
-     * @en Transaction status
+     * @en Transaction status. `true` only when `isVerified` is `true` and the response code is successful.
      * @example true
      */
     isSuccess: boolean;
 
     /**
-     * Trạng thái xác nhận tính đúng đắn, toàn vẹn khi nhận dữ liệu từ VNPay
+     * Trạng thái xác nhận chữ ký. `false` khi thiếu hoặc sai `vnp_SecureHash`.
      *
-     * @en Verification status, true when data from VNPay is correct and verified
+     * @en Signature verification status. `false` when `vnp_SecureHash` is missing or invalid.
      * @example true
      */
     isVerified: boolean;

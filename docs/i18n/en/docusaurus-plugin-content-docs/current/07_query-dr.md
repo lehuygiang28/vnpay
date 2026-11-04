@@ -52,7 +52,7 @@ const res: QueryDrResponse = await vnpay.queryDr({
 
 | Property   | Type    | Description                                                                                                                                                                                        |
 | ---------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| isSuccess  | boolean | Response-code result of the request. Use this value only when `isVerified` is `true`.                                                                                                              |
+| isSuccess  | boolean | `true` only when the signature is valid and the response code is successful. A missing or invalid `vnp_SecureHash` makes this `false`.                                                             |
 | isVerified | boolean | Result of verifying the response signature. Must be `true` before using `isSuccess`.                                                                                                               |
 | message    | string  | Verification message                                                                                                                                                                               |
 | ...        | ...     | Other parameters that VNPay will return, refer to [official documentation](https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#danh-sach-tham-so-querydr-VNPAY-response) |
