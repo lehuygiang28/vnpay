@@ -13,6 +13,17 @@ This section covers common issues and their solutions when integrating and using
 - Check that you're using the correct `secureSecret` value.
 - Ensure you're using the same hash algorithm as configured in the VNPay portal.
 - Verify that you haven't modified any parameters received from VNPay before verification.
+- Accept a payment only when `isVerified` is `true`, then read `isSuccess`. An invalid checksum yields `isVerified: false`, `isSuccess: false`, and the message `Wrong checksum`.
+
+### A payment is accepted even though the checksum is wrong
+
+**Problem**: A callback has `vnp_ResponseCode` `00` but `vnp_SecureHash` does not match, and the order is still marked as paid.
+
+**Solutions**:
+
+- Check `isVerified` before `isSuccess` on both the return URL and the IPN handler.
+- For IPN, return `RspCode` `97` when `isVerified` is `false`.
+- Match `vnp_TxnRef` and the amount against the order in your database before fulfilling it.
 
 ### Payment Failures
 

@@ -161,9 +161,11 @@ console.log('Payment URL:', paymentUrl);
 ### ✅ **Verify Payment**
 
 ```typescript
-// Verify return URL
+// Verify the return URL. `isSuccess` is meaningful only when the signature is valid.
 const verify = vnpay.verifyReturnUrl(req.query);
-if (verify.isSuccess) {
+if (!verify.isVerified) {
+    console.log('❌ Invalid signature:', verify.message);
+} else if (verify.isSuccess) {
     console.log('✅ Payment successful!', verify.message);
 } else {
     console.log('❌ Payment failed:', verify.message);

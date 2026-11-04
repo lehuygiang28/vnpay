@@ -3,8 +3,8 @@ import type { ReturnQueryFromVNPay } from './return-from-vnpay.type';
 
 export type VerifyReturnUrl = {
     /**
-     * Trạng thái giao dịch
-     * @en Transaction status
+     * Trạng thái giao dịch. Chỉ là `true` khi `isVerified` là `true` và `vnp_ResponseCode` là `00` hoặc `0`.
+     * @en Transaction status. `true` only when `isVerified` is `true` and `vnp_ResponseCode` is `00` or `0`.
      * @example true
      */
     isSuccess: boolean;

@@ -13,6 +13,17 @@ Phần này đề cập đến các vấn đề phổ biến và giải pháp c�
 - Kiểm tra xem bạn đang sử dụng giá trị `secureSecret` chính xác.
 - Đảm bảo bạn đang sử dụng cùng thuật toán hash đã được cấu hình trong cổng thông tin VNPay.
 - Xác minh rằng bạn không thay đổi bất kỳ tham số nào nhận được từ VNPay trước khi xác minh.
+- Chỉ ghi nhận thanh toán khi `isVerified` là `true`, rồi mới xét `isSuccess`. Checksum sai cho `isVerified: false`, `isSuccess: false` và `message` là `Wrong checksum`.
+
+### Thanh toán bị ghi nhận dù checksum sai
+
+**Vấn đề**: Callback có `vnp_ResponseCode` là `00` nhưng `vnp_SecureHash` không khớp, và đơn vẫn được đánh dấu đã thanh toán.
+
+**Giải pháp**:
+
+- Kiểm tra `isVerified` trước `isSuccess` ở cả URL trả về và IPN.
+- Với IPN, trả `RspCode` `97` khi `isVerified` là `false`.
+- Đối soát `vnp_TxnRef` và số tiền với đơn trong cơ sở dữ liệu trước khi hoàn tất đơn.
 
 ### Thanh Toán Thất Bại
 

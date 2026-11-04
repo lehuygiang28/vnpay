@@ -18,8 +18,8 @@ Thông tin sau khi xác thực và được trả về từ VNPay:
 
 | Thuộc tính | Kiểu dữ liệu | Mô tả                                                                                                                                                              |
 | ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| isSuccess  | boolean      | Kết quả của đơn hàng thanh toán                                                                                                                                    |
-| isVerified | boolean      | Kết quả xác thực tính toàn vẹn của dữ liệu nhận được từ VNPay                                                                                                      |
+| isSuccess  | boolean      | `true` chỉ khi `isVerified` là `true` và `vnp_ResponseCode` là `00` hoặc `0`. Kiểm tra `isVerified` trước khi ghi nhận thanh toán.                                 |
+| isVerified | boolean      | Kết quả xác thực chữ ký `vnp_SecureHash`. Phải là `true` trước khi dùng `isSuccess` hoặc các field còn lại.                                                        |
 | message    | string       | Thông điệp xác thực                                                                                                                                                |
 | vnp_Amount | number       | Số tiền thanh toán, đã được thư viện tự động tính toán                                                                                                             |
 | ...        | ...          | Các tham số khác mà VNPay trả về, tham khảo [tài liệu chính thức](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91-1) |
@@ -27,6 +27,9 @@ Thông tin sau khi xác thực và được trả về từ VNPay:
 Xem thêm các thuộc tính mà VNPay sẽ trả về tại [tài liệu chính thức](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91-1).
 :::tip
 Tất cả các tham số được VNPay trả về đều có trong đối tượng `VerifyIpnCall`.
+:::
+:::caution
+`isSuccess` chỉ có nghĩa khi `isVerified` là `true`. Checksum sai trả `isVerified: false`, `isSuccess: false` và `message: "Wrong checksum"`. Không ghi nhận đơn trong trường hợp đó. Với IPN, phản hồi `IpnFailChecksum` (`RspCode` `97`).
 :::
 
 ## Cách sử dụng
@@ -64,6 +67,7 @@ app.get('/vnpay-ipn', async (req, res) => {
             return res.json(IpnFailChecksum);
         }
 
+        // isSuccess chỉ có nghĩa sau khi chữ ký hợp lệ
         if (!verify.isSuccess) {
             return res.json(IpnUnknownError);
         }

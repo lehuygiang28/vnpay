@@ -68,8 +68,8 @@ const result: RefundResponse = await vnpay.refund({
 
 | Property   | Type    | Description                                                                                                                                                                                      |
 | ---------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| isSuccess  | boolean | The result of the request.                                                                                                                                                                       |
-| isVerified | boolean | The result of data integrity verification when received from VNPay.                                                                                                                              |
+| isSuccess  | boolean | `true` only when the signature is valid and the response code is successful. A missing or invalid `vnp_SecureHash` makes this `false`.                                                           |
+| isVerified | boolean | Result of verifying the response signature. Must be `true` before using `isSuccess`.                                                                                                             |
 | message    | string  | Verification message.                                                                                                                                                                            |
 | ...        | ...     | Other parameters that VNPay will return, refer to [official documentation](https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#danh-s%C3%A1ch-tham-s%E1%BB%91-refund). |
 

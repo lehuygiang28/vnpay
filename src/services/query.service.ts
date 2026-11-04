@@ -167,18 +167,23 @@ export class QueryService {
             Buffer.from(stringToCreateHashOfResponse, this.bufferEncode),
             this.hashAlgorithm,
         );
+        const isVerified =
+            Boolean(responseData.vnp_SecureHash) && responseHashed === responseData.vnp_SecureHash;
 
-        if (responseData?.vnp_SecureHash && responseHashed !== responseData.vnp_SecureHash) {
-            outputResults = {
-                ...outputResults,
-                isVerified: false,
-                message: getResponseByStatusCode(
-                    WRONG_CHECKSUM_KEY,
-                    this.config.vnp_Locale,
-                    QUERY_DR_RESPONSE_MAP,
-                ),
-            };
-        }
+        outputResults = {
+            ...outputResults,
+            isVerified,
+            isSuccess: isVerified && outputResults.isSuccess,
+            ...(isVerified
+                ? {}
+                : {
+                      message: getResponseByStatusCode(
+                          WRONG_CHECKSUM_KEY,
+                          this.config.vnp_Locale,
+                          QUERY_DR_RESPONSE_MAP,
+                      ),
+                  }),
+        };
 
         const data2Log: QueryDrResponseLogger = {
             createdAt: new Date(),
@@ -331,19 +336,23 @@ export class QueryService {
             Buffer.from(stringToCreateHashOfResponse, this.bufferEncode),
             this.hashAlgorithm,
         );
+        const isVerified =
+            Boolean(responseData.vnp_SecureHash) && responseHashed === responseData.vnp_SecureHash;
 
-        // Signed hash check for response data
-        if (responseData?.vnp_SecureHash && responseHashed !== responseData.vnp_SecureHash) {
-            outputResults = {
-                ...outputResults,
-                isVerified: false,
-                message: getResponseByStatusCode(
-                    WRONG_CHECKSUM_KEY,
-                    this.config.vnp_Locale,
-                    REFUND_RESPONSE_MAP,
-                ),
-            };
-        }
+        outputResults = {
+            ...outputResults,
+            isVerified,
+            isSuccess: isVerified && outputResults.isSuccess,
+            ...(isVerified
+                ? {}
+                : {
+                      message: getResponseByStatusCode(
+                          WRONG_CHECKSUM_KEY,
+                          this.config.vnp_Locale,
+                          REFUND_RESPONSE_MAP,
+                      ),
+                  }),
+        };
 
         const data2Log: RefundResponseLogger = {
             createdAt: new Date(),

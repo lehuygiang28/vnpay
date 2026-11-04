@@ -8,7 +8,7 @@ Phần này cung cấp các thực hành được khuyến nghị khi tích hợ
 
 2. **Xác thực địa chỉ IP** - Luôn xác thực và kiểm duyệt địa chỉ IP của khách hàng trước khi gửi đến VNPay.
 
-3. **Luôn xác thực các cuộc gọi IPN và URL trả về** - Luôn sử dụng các phương thức `verifyIpnCall` và `verifyReturnUrl` để xác minh tính toàn vẹn của dữ liệu nhận được từ VNPay.
+3. **Luôn xác thực các cuộc gọi IPN và URL trả về** - Luôn sử dụng `verifyIpnCall` và `verifyReturnUrl`. Kiểm tra `isVerified` trước. `isSuccess` chỉ là `true` khi chữ ký hợp lệ và `vnp_ResponseCode` là `00` hoặc `0`. Không ghi nhận đơn chỉ vì `isSuccess`.
 
 4. **Xử lý logic kinh doanh trong IPN** - Các hoạt động kinh doanh quan trọng (như cập nhật trạng thái đơn hàng, hoàn thành đơn hàng, v.v.) nên được xử lý thông qua IPN thay vì URL trả về. URL trả về chủ yếu dành cho việc phản hồi UI đến người dùng và có thể dễ dàng bị bỏ qua.
 

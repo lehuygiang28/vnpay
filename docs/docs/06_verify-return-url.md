@@ -19,6 +19,9 @@ Thông tin sau khi xác thực và được trả về từ VNPay:
 :::info
 Tương tự như các thuộc tính của đối tượng [`VerifyIpnCall`](/ipn/verify-ipn-call#properties-of-the-verify-ipn-call)
 :::
+:::caution
+`isSuccess` chỉ có nghĩa khi `isVerified` là `true`. Checksum sai trả `isVerified: false`, `isSuccess: false` và `message: "Wrong checksum"`. URL trả về chỉ dùng cho giao diện. Logic ghi nhận đơn phải nằm ở IPN và chỉ chạy sau khi `isVerified` là `true`.
+:::
 
 ## Cách sử dụng
 
@@ -46,6 +49,7 @@ app.get('/vnpay-return', (req, res) => {
         if (!verify.isVerified) {
             return res.send('Xác thực tính toàn vẹn dữ liệu thất bại');
         }
+        // isSuccess chỉ có nghĩa sau khi chữ ký hợp lệ
         if (!verify.isSuccess) {
             return res.send('Đơn hàng thanh toán thất bại');
         }

@@ -53,6 +53,9 @@ export class VerificationService {
      * @param {VerifyReturnUrlOptions<LoggerFields>} options - Tùy chọn
      * @en @param {VerifyReturnUrlOptions<LoggerFields>} options - Options
      *
+     * `isSuccess` chỉ là `true` khi chữ ký hợp lệ và `vnp_ResponseCode` là `00` hoặc `0`.
+     * @en `isSuccess` is `true` only when the signature is valid and `vnp_ResponseCode` is `00` or `0`.
+     *
      * @returns {VerifyReturnUrl} Kết quả xác thực
      * @en @returns {VerifyReturnUrl} The verification result
      */
@@ -80,10 +83,12 @@ export class VerificationService {
             hashAlgorithm: this.hashAlgorithm,
             receivedHash: vnp_SecureHash,
         });
+        const responseSucceeded =
+            cloneQuery.vnp_ResponseCode === '00' || cloneQuery.vnp_ResponseCode === 0;
 
         let outputResults = {
             isVerified,
-            isSuccess: cloneQuery.vnp_ResponseCode === '00' || cloneQuery.vnp_ResponseCode === 0,
+            isSuccess: isVerified && responseSucceeded,
             message: getResponseByStatusCode(
                 cloneQuery.vnp_ResponseCode?.toString() ?? '',
                 this.config.vnp_Locale,
@@ -131,6 +136,9 @@ export class VerificationService {
      *
      * @param {VerifyIpnCallOptions<LoggerFields>} options - Tùy chọn
      * @en @param {VerifyIpnCallOptions<LoggerFields>} options - Options
+     *
+     * `isSuccess` chỉ là `true` khi chữ ký hợp lệ và `vnp_ResponseCode` là `00` hoặc `0`.
+     * @en `isSuccess` is `true` only when the signature is valid and `vnp_ResponseCode` is `00` or `0`.
      *
      * @returns {VerifyIpnCall} Kết quả xác thực
      * @en @returns {VerifyIpnCall} The verification result

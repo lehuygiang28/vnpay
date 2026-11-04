@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### 🩹 Fixes
+
+- `verifyReturnUrl` và `verifyIpnCall`: `isSuccess` chỉ là `true` khi chữ ký hợp lệ và `vnp_ResponseCode` là `00` hoặc `0`
+- `queryDr` và `refund`: `isVerified` là `false` khi thiếu hoặc sai `vnp_SecureHash`; `isSuccess` chỉ là `true` khi chữ ký hợp lệ và mã phản hồi thành công
+
 ## v2.4.4
 
 [compare changes](https://github.com/lehuygiang28/vnpay/compare/2.4.3...2.4.4)

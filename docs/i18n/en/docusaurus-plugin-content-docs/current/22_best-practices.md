@@ -8,7 +8,7 @@ This section provides recommended practices when integrating VNPay into your app
 
 2. **Validate IP addresses** - Always validate and sanitize the client IP address before sending it to VNPay.
 
-3. **Always verify IPN and return calls** - Always use the `verifyIpnCall` and `verifyReturnUrl` methods to verify the integrity of data received from VNPay.
+3. **Always verify IPN and return calls** - Always use `verifyIpnCall` and `verifyReturnUrl`. Check `isVerified` first. `isSuccess` is `true` only when the signature is valid and `vnp_ResponseCode` is `00` or `0`. Do not accept a payment from `isSuccess` alone.
 
 4. **Process business logic in IPN** - Critical business operations (like updating order status, fulfilling orders, etc.) should be handled via IPN rather than the return URL. The return URL is primarily for UI feedback to the user and can be easily bypassed.
 

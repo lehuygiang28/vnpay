@@ -260,6 +260,9 @@ export class VNPay {
      * @param {VerifyReturnUrlOptions<LoggerFields>} options - Tùy chọn để xác thực
      * @en @param {VerifyReturnUrlOptions<LoggerFields>} options - Options for verification
      *
+     * `isSuccess` chỉ là `true` khi chữ ký hợp lệ và `vnp_ResponseCode` là `00` hoặc `0`.
+     * @en `isSuccess` is `true` only when the signature is valid and `vnp_ResponseCode` is `00` or `0`.
+     *
      * @returns {VerifyReturnUrl} Kết quả xác thực
      * @en @returns {VerifyReturnUrl} Verification result
      * @see https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#code-returnurl
@@ -291,6 +294,9 @@ export class VNPay {
      *
      * @param {VerifyIpnCallOptions<LoggerFields>} options - Tùy chọn để xác thực
      * @en @param {VerifyIpnCallOptions<LoggerFields>} options - Options for verification
+     *
+     * `isSuccess` chỉ là `true` khi chữ ký hợp lệ và `vnp_ResponseCode` là `00` hoặc `0`.
+     * @en `isSuccess` is `true` only when the signature is valid and `vnp_ResponseCode` is `00` or `0`.
      *
      * @returns {VerifyIpnCall} Kết quả xác thực
      * @en @returns {VerifyIpnCall} Verification result

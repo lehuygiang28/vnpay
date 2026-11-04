@@ -88,10 +88,17 @@ app.post('/api/payments/create', async (req, res) => {
     }
 });
 
-// Xác thực kết quả thanh toán
+// Xác thực kết quả thanh toán. Chỉ ghi nhận khi chữ ký hợp lệ.
 app.get('/api/payments/verify', (req, res) => {
     const verification = vnpay.verifyReturnUrl(req.query);
-    res.json(verification);
+    if (!verification.isVerified) {
+        return res.json({ success: false, message: verification.message });
+    }
+    res.json({
+        success: verification.isSuccess,
+        message: verification.message,
+        orderId: verification.vnp_TxnRef,
+    });
 });
 ```
 
@@ -163,6 +170,11 @@ export const PaymentButton: React.FC<PaymentButtonProps> = ({
 app.post('/api/payment/ipn', (req, res) => {
     try {
         const verification = vnpay.verifyIpnCall(req.body);
+
+        if (!verification.isVerified) {
+            console.log('Sai checksum:', verification.message);
+            return res.status(200).json({ RspCode: '97', Message: 'Fail checksum' });
+        }
 
         if (verification.isSuccess) {
             // ✅ Thanh toán thành công - cập nhật database
