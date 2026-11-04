@@ -125,6 +125,41 @@ describe('verifyReturnUrl', () => {
         );
     });
 
+    it.each(['invalid-hash', ''])(
+        'should reject a successful response code when the secure hash is %j',
+        (secureHash) => {
+            // Arrange
+            const input = createReturnQueryInput({
+                vnp_ResponseCode: '00',
+                vnp_SecureHash: secureHash,
+            });
+
+            // Act
+            const result = vnpay.verifyReturnUrl(input);
+
+            // Assert
+            expect(result.isVerified).toBe(false);
+            expect(result.isSuccess).toBe(false);
+            expect(result.message).toBe('Wrong checksum');
+        },
+    );
+
+    it('should reject numeric response code 0 when the secure hash is invalid', () => {
+        // Arrange
+        const input = createReturnQueryInput({
+            vnp_ResponseCode: 0,
+            vnp_SecureHash: 'invalid-hash',
+        });
+
+        // Act
+        const result = vnpay.verifyReturnUrl(input);
+
+        // Assert
+        expect(result.isVerified).toBe(false);
+        expect(result.isSuccess).toBe(false);
+        expect(result.message).toBe('Wrong checksum');
+    });
+
     it('should convert string amount and remain verified when signature matches', () => {
         // Arrange
         const base = createReturnQueryInput();

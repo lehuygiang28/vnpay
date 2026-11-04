@@ -159,9 +159,11 @@ console.log('Payment URL:', paymentUrl);
 ### ✅ **Xác thực thanh toán**
 
 ```typescript
-// Xác thực URL return
+// Xác thực URL return. `isSuccess` chỉ có nghĩa khi chữ ký hợp lệ.
 const verify = vnpay.verifyReturnUrl(req.query);
-if (verify.isSuccess) {
+if (!verify.isVerified) {
+    console.log('❌ Chữ ký không hợp lệ:', verify.message);
+} else if (verify.isSuccess) {
     console.log('✅ Thanh toán thành công!', verify.message);
 } else {
     console.log('❌ Thanh toán thất bại:', verify.message);

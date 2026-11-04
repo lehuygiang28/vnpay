@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### 🔒 Security
+
+- `verifyReturnUrl` và `verifyIpnCall`: `isSuccess` chỉ là `true` khi chữ ký hợp lệ và `vnp_ResponseCode` là `00` hoặc `0` ([GHSA-24f3-hqw8-j3ff](https://github.com/lehuygiang28/vnpay/security/advisories/GHSA-24f3-hqw8-j3ff))
+
 ## v2.4.4
 
 [compare changes](https://github.com/lehuygiang28/vnpay/compare/2.4.3...2.4.4)

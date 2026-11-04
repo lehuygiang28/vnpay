@@ -19,6 +19,9 @@ Information after verification and returned by VNPay:
 :::info
 Similar to the properties of the [`VerifyIpnCall`](/ipn/verify-ipn-call#properties-of-the-verify-ipn-call) object
 :::
+:::caution
+`isSuccess` is meaningful only when `isVerified` is `true`. An invalid checksum returns `isVerified: false`, `isSuccess: false`, and `message: "Wrong checksum"`. Use the return URL for the interface only. Order fulfillment belongs in the IPN handler and runs only after `isVerified` is `true`.
+:::
 
 ## Usage
 
@@ -46,6 +49,7 @@ app.get('/vnpay-return', (req, res) => {
         if (!verify.isVerified) {
             return res.send('Data integrity verification failed');
         }
+        // isSuccess is meaningful only after the signature is valid
         if (!verify.isSuccess) {
             return res.send('Payment order failed');
         }

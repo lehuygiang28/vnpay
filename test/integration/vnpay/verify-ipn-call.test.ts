@@ -121,6 +121,25 @@ describe('verifyIpnCall', () => {
         );
     });
 
+    it.each(['invalid-hash', ''])(
+        'should reject a successful response code when the secure hash is %j',
+        (secureHash) => {
+            // Arrange
+            const input = createReturnQueryInput({
+                vnp_ResponseCode: '00',
+                vnp_SecureHash: secureHash,
+            });
+
+            // Act
+            const result = vnpay.verifyIpnCall(input);
+
+            // Assert
+            expect(result.isVerified).toBe(false);
+            expect(result.isSuccess).toBe(false);
+            expect(result.message).toBe('Wrong checksum');
+        },
+    );
+
     it('should log the object to the console', () => {
         // Arrange
         const input = createReturnQueryInput();

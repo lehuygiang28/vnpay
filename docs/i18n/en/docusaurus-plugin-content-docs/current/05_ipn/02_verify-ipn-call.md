@@ -18,8 +18,8 @@ Information after verification and returned by VNPay:
 
 | Property   | Data Type | Description                                                                                                                                                            |
 | ---------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| isSuccess  | boolean   | The result of the payment order                                                                                                                                        |
-| isVerified | boolean   | The result of verifying the integrity of the data received from VNPay                                                                                                  |
+| isSuccess  | boolean   | `true` only when `isVerified` is `true` and `vnp_ResponseCode` is `00` or `0`. Check `isVerified` before accepting a payment.                                          |
+| isVerified | boolean   | Result of verifying `vnp_SecureHash`. Must be `true` before using `isSuccess` or any other returned field.                                                             |
 | message    | string    | Verification message                                                                                                                                                   |
 | vnp_Amount | number    | The payment amount, automatically calculated by the library                                                                                                            |
 | ...        | ...       | Other parameters returned by VNPay, refer to [official documentation](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91-1) |
@@ -27,6 +27,9 @@ Information after verification and returned by VNPay:
 See more properties that VNPay will return in the [official documentation](https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html#danh-s%C3%A1ch-tham-s%E1%BB%91-1).
 :::tip
 All parameters returned by VNPay are also included in the `VerifyIpnCall` object.
+:::
+:::caution
+`isSuccess` is meaningful only when `isVerified` is `true`. An invalid checksum returns `isVerified: false`, `isSuccess: false`, and `message: "Wrong checksum"`. Do not fulfill the order in that case. For IPN, respond with `IpnFailChecksum` (`RspCode` `97`).
 :::
 
 ## Usage
@@ -65,6 +68,7 @@ app.get('/vnpay-ipn', async (req, res) => {
             return res.json(IpnFailChecksum);
         }
 
+        // isSuccess is meaningful only after the signature is valid
         if (!verify.isSuccess) {
             return res.json(IpnUnknownError);
         }

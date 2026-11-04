@@ -68,8 +68,8 @@ const result: RefundResponse = await vnpay.refund({
 
 | Thuộc tính | Kiểu dữ liệu | Mô tả                                                                                                                                                                                      |
 | ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| isSuccess  | boolean      | Kết quả của yêu cầu.                                                                                                                                                                       |
-| isVerified | boolean      | Kết quả xác thực tính toàn vẹn dữ liệu khi nhận từ VNPay.                                                                                                                                  |
+| isSuccess  | boolean      | Kết quả mã phản hồi của yêu cầu. Chỉ dùng giá trị này khi `isVerified` là `true`.                                                                                                          |
+| isVerified | boolean      | Kết quả xác thực chữ ký phản hồi. Phải là `true` trước khi dùng `isSuccess`.                                                                                                               |
 | message    | string       | Thông điệp xác thực.                                                                                                                                                                       |
 | ...        | ...          | Các tham số khác mà VNPay sẽ trả về, tham khảo [tài liệu chính thức](https://sandbox.vnpayment.vn/apis/docs/truy-van-hoan-tien/querydr&refund.html#danh-s%C3%A1ch-tham-s%E1%BB%91-refund). |
 

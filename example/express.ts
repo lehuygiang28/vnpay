@@ -201,7 +201,7 @@ app.get(
             if (!verify.isVerified) {
                 return res.status(200).json({
                     message: verify?.message ?? 'Payment failed!',
-                    status: verify.isSuccess,
+                    status: false,
                 });
             }
         } catch (error) {

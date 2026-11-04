@@ -1,6 +1,6 @@
 # Cài đặt URL IPN
 
-Khi thanh toán hoàn tất, VNPay sẽ gửi một thông báo IPN (Instant Payment Notification) đến URL IPN mà bạn đã cấu hình. Để xác thực thông báo IPN, bạn có thể sử dụng thư viện VNPay.
+Khi thanh toán hoàn tất, VNPay sẽ gửi một thông báo IPN (Instant Payment Notification) đến URL IPN mà bạn đã cấu hình. Để xác thực thông báo IPN, dùng `verifyIpnCall`, kiểm tra `isVerified` trước, và chỉ ghi nhận đơn khi `isSuccess` là `true`. Xem [xác thực IPN](/ipn/verify-ipn-call).
 
 ## Cài đặt URL IPN cho môi trường Sandbox
 

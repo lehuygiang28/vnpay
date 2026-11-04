@@ -1,6 +1,6 @@
 # Setting up IPN URL
 
-When a payment is completed, VNPay will send an IPN (Instant Payment Notification) call to the IPN URL that you have configured. To verify the IPN call, you can use the VNPay library.
+When a payment is completed, VNPay will send an IPN (Instant Payment Notification) call to the IPN URL that you have configured. Verify it with `verifyIpnCall`, check `isVerified` first, and accept the order only when `isSuccess` is `true`. See [verify IPN](/ipn/verify-ipn-call).
 
 ## Setting up IPN URL for Sandbox Environment
 
