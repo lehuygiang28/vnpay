@@ -32,8 +32,9 @@ jobs:
               run: npm run build
 
             # Provenance / OIDC: avoid misleading E404 from older npm; see https://github.com/npm/cli/issues/9088
+            # npm 12 requires Node 22. This workflow runs on Node 20, so install the newest npm 11.
             - name: Use current npm for publish
-              run: npm install -g npm@latest
+              run: npm install -g npm@11
 
             - name: Get npm tag
               id: npm-tag
