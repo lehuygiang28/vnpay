@@ -3,7 +3,7 @@ import { hash } from '../../src/utils';
 
 /**
  * Calculates hash for queryDr response verification
- * Matches the implementation in QueryService.queryDr
+ * A missing value becomes an empty field. A value that contains the text "undefined" is kept.
  */
 export function calculateQueryDrResponseHash(
     responseData: Record<string, unknown>,
@@ -28,9 +28,8 @@ export function calculateQueryDrResponseHash(
         responseData.vnp_PromotionCode,
         responseData.vnp_PromotionAmount,
     ]
-        .map(String)
-        .join('|')
-        .replace(/undefined/g, '');
+        .map((value) => (value === undefined ? '' : String(value)))
+        .join('|');
 
     return hash(secureSecret, Buffer.from(stringToHash, 'utf-8'), hashAlgorithm);
 }
@@ -66,9 +65,8 @@ export function calculateRefundResponseHash(
         responseData.vnp_TransactionStatus,
         responseData.vnp_OrderInfo,
     ]
-        .map(String)
-        .join('|')
-        .replace(/undefined/g, '');
+        .map((value) => (value === undefined ? '' : String(value)))
+        .join('|');
 
     return hash(secureSecret, Buffer.from(stringToHash, 'utf-8'), hashAlgorithm);
 }

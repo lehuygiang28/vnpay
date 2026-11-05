@@ -1,4 +1,4 @@
-import { QUERY_DR_RESPONSE_MAP, REFUND_RESPONSE_MAP } from '../../../src/constants';
+import { QUERY_DR_RESPONSE_MAP, REFUND_RESPONSE_MAP, VNP_VERSION } from '../../../src/constants';
 import { HashAlgorithm, RefundTransactionType, VnpLocale } from '../../../src/enums';
 import { consoleLogger, hash, ignoreLogger } from '../../../src/utils';
 import { getResponseByStatusCode } from '../../../src/utils/common';
@@ -16,6 +16,11 @@ import {
 } from '../../__helpers__';
 
 global.fetch = jest.fn();
+
+/** Joins checksum fields the way a signature should: only a missing value becomes empty. */
+function canonicalChecksumInput(values: readonly unknown[]): string {
+    return values.map((value) => (value === undefined ? '' : String(value))).join('|');
+}
 
 describe('QueryService', () => {
     let vnpay: ReturnType<typeof createTestVNPayInstance>;
@@ -337,6 +342,76 @@ describe('QueryService', () => {
             // Assert
             expect(result.vnp_PromotionCode).toBe('PROMO123');
             expect(result.vnp_PromotionAmount).toBe(50000);
+        });
+
+        it('should accept a queryDr response signed with the text undefined in a field', async () => {
+            // Arrange
+            const mockResponse = createMockQueryDrResponse({
+                vnp_OrderInfo: 'undefined',
+            });
+            const canonical = canonicalChecksumInput([
+                mockResponse.vnp_ResponseId,
+                mockResponse.vnp_Command,
+                mockResponse.vnp_ResponseCode,
+                mockResponse.vnp_Message,
+                DEFAULT_VNPAY_CONFIG.tmnCode,
+                mockResponse.vnp_TxnRef,
+                mockResponse.vnp_Amount,
+                mockResponse.vnp_BankCode,
+                mockResponse.vnp_PayDate,
+                mockResponse.vnp_TransactionNo,
+                mockResponse.vnp_TransactionType,
+                mockResponse.vnp_TransactionStatus,
+                mockResponse.vnp_OrderInfo,
+                mockResponse.vnp_PromotionCode,
+                mockResponse.vnp_PromotionAmount,
+            ]);
+            mockResponse.vnp_SecureHash = hash(
+                DEFAULT_VNPAY_CONFIG.secureSecret,
+                Buffer.from(canonical, 'utf-8'),
+                HashAlgorithm.SHA512,
+            );
+            mockFetchSuccess(mockResponse);
+
+            // Act
+            const result = await vnpay.queryDr(baseQueryDrInput);
+
+            // Assert
+            expect(result.vnp_OrderInfo).toBe('undefined');
+            expect(result.isVerified).toBe(true);
+            expect(result.isSuccess).toBe(true);
+        });
+
+        it('should sign a queryDr request without deleting the text undefined', async () => {
+            // Arrange
+            const input = createQueryDrInput({
+                vnp_OrderInfo: 'undefined',
+            });
+            mockFetchSuccess(createMockQueryDrResponse());
+
+            // Act
+            await vnpay.queryDr(input);
+
+            // Assert
+            const body = getLastFetchRequestBody() as { vnp_SecureHash: string };
+            const canonical = canonicalChecksumInput([
+                input.vnp_RequestId,
+                VNP_VERSION,
+                'querydr',
+                DEFAULT_VNPAY_CONFIG.tmnCode,
+                input.vnp_TxnRef,
+                input.vnp_TransactionDate,
+                input.vnp_CreateDate,
+                input.vnp_IpAddr,
+                input.vnp_OrderInfo,
+            ]);
+            expect(body.vnp_SecureHash).toBe(
+                hash(
+                    DEFAULT_VNPAY_CONFIG.secureSecret,
+                    Buffer.from(canonical, 'utf-8'),
+                    HashAlgorithm.SHA512,
+                ),
+            );
         });
     });
 
@@ -781,6 +856,83 @@ describe('QueryService', () => {
             expect(result.isSuccess).toBe(false);
             expect(result.message).toBe(
                 REFUND_RESPONSE_MAP.get('WRONG_CHECKSUM_KEY')?.[VnpLocale.VN],
+            );
+        });
+
+        it('should accept a refund response signed with the text undefined in a field', async () => {
+            // Arrange
+            const mockResponse = createMockRefundResponse({
+                vnp_OrderInfo: 'undefined',
+            });
+            const canonical = canonicalChecksumInput([
+                mockResponse.vnp_ResponseId,
+                mockResponse.vnp_Command,
+                mockResponse.vnp_ResponseCode,
+                mockResponse.vnp_Message,
+                mockResponse.vnp_TmnCode,
+                mockResponse.vnp_TxnRef,
+                (mockResponse.vnp_Amount as number) / 100,
+                mockResponse.vnp_BankCode,
+                mockResponse.vnp_PayDate,
+                mockResponse.vnp_TransactionNo,
+                mockResponse.vnp_TransactionType,
+                mockResponse.vnp_TransactionStatus,
+                mockResponse.vnp_OrderInfo,
+            ]);
+            mockResponse.vnp_SecureHash = hash(
+                DEFAULT_VNPAY_CONFIG.secureSecret,
+                Buffer.from(canonical, 'utf-8'),
+                HashAlgorithm.SHA512,
+            );
+            mockFetchSuccess(mockResponse);
+
+            // Act
+            const result = await vnpay.refund(baseRefundInput);
+
+            // Assert
+            expect(result.vnp_OrderInfo).toBe('undefined');
+            expect(result.vnp_Amount).toBe(10000);
+            expect(result.isVerified).toBe(true);
+            expect(result.isSuccess).toBe(true);
+        });
+
+        it('should sign a refund request without deleting the text undefined', async () => {
+            // Arrange
+            const input = createRefundInput({
+                vnp_OrderInfo: 'undefined',
+            });
+            mockFetchSuccess(createMockRefundResponse());
+
+            // Act
+            await vnpay.refund(input);
+
+            // Assert
+            const body = getLastFetchRequestBody() as {
+                vnp_SecureHash: string;
+                vnp_Amount: number;
+            };
+            const canonical = canonicalChecksumInput([
+                input.vnp_RequestId,
+                VNP_VERSION,
+                'refund',
+                DEFAULT_VNPAY_CONFIG.tmnCode,
+                input.vnp_TransactionType,
+                input.vnp_TxnRef,
+                input.vnp_Amount * 100,
+                input.vnp_TransactionNo,
+                input.vnp_TransactionDate,
+                input.vnp_CreateBy,
+                input.vnp_CreateDate,
+                input.vnp_IpAddr,
+                input.vnp_OrderInfo,
+            ]);
+            expect(body.vnp_Amount).toBe(input.vnp_Amount * 100);
+            expect(body.vnp_SecureHash).toBe(
+                hash(
+                    DEFAULT_VNPAY_CONFIG.secureSecret,
+                    Buffer.from(canonical, 'utf-8'),
+                    HashAlgorithm.SHA512,
+                ),
             );
         });
     });
