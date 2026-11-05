@@ -46,6 +46,22 @@ describe('VNPay Payment Utility Functions', () => {
             // Assert
             expect(searchParams.toString()).toBe('vnp_Amount=10000&vnp_TnxRef=1234567890');
         });
+
+        it('should skip null and keep the text undefined', () => {
+            // Arrange
+            const data = {
+                vnp_Amount: 10000,
+                vnp_BankCode: null,
+                vnp_OrderInfo: 'undefined',
+            };
+
+            // Act
+            const searchParams = buildPaymentUrlSearchParams(data);
+
+            // Assert
+            expect(searchParams.get('vnp_BankCode')).toBeNull();
+            expect(searchParams.get('vnp_OrderInfo')).toBe('undefined');
+        });
     });
 
     describe('createPaymentUrl', () => {

@@ -1,9 +1,10 @@
 import { HashAlgorithm } from '../../src/enums';
-import { hash } from '../../src/utils';
+import { canonicalHashInput, hash } from '../../src/utils';
 
 /**
- * Calculates hash for queryDr response verification
- * Matches the implementation in QueryService.queryDr
+ * Calculates hash for queryDr response verification.
+ * Matches the implementation in QueryService.queryDr.
+ * A missing value becomes an empty field. A value that contains the text "undefined" is kept.
  */
 export function calculateQueryDrResponseHash(
     responseData: Record<string, unknown>,
@@ -11,7 +12,7 @@ export function calculateQueryDrResponseHash(
     secureSecret: string,
     hashAlgorithm: HashAlgorithm = HashAlgorithm.SHA512,
 ): string {
-    const stringToHash = [
+    const stringToHash = canonicalHashInput([
         responseData.vnp_ResponseId,
         responseData.vnp_Command,
         responseData.vnp_ResponseCode,
@@ -27,10 +28,7 @@ export function calculateQueryDrResponseHash(
         responseData.vnp_OrderInfo,
         responseData.vnp_PromotionCode,
         responseData.vnp_PromotionAmount,
-    ]
-        .map(String)
-        .join('|')
-        .replace(/undefined/g, '');
+    ]);
 
     return hash(secureSecret, Buffer.from(stringToHash, 'utf-8'), hashAlgorithm);
 }
@@ -51,7 +49,7 @@ export function calculateRefundResponseHash(
             ? responseData.vnp_Amount / 100
             : responseData.vnp_Amount;
 
-    const stringToHash = [
+    const stringToHash = canonicalHashInput([
         responseData.vnp_ResponseId,
         responseData.vnp_Command,
         responseData.vnp_ResponseCode,
@@ -65,10 +63,7 @@ export function calculateRefundResponseHash(
         responseData.vnp_TransactionType,
         responseData.vnp_TransactionStatus,
         responseData.vnp_OrderInfo,
-    ]
-        .map(String)
-        .join('|')
-        .replace(/undefined/g, '');
+    ]);
 
     return hash(secureSecret, Buffer.from(stringToHash, 'utf-8'), hashAlgorithm);
 }

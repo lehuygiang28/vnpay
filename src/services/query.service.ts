@@ -20,7 +20,12 @@ import type {
 // Import specific types from their files to fix linter errors
 import type { BodyRequestQueryDr, QueryDrResponseFromVNPay } from '../types/query-dr.type';
 import type { RefundResponseFromVNPay } from '../types/refund.type';
-import { getResponseByStatusCode, hash, resolveUrlString } from '../utils/common';
+import {
+    canonicalHashInput,
+    getResponseByStatusCode,
+    hash,
+    resolveUrlString,
+} from '../utils/common';
 import type { LoggerService } from './logger.service';
 
 /**
@@ -84,7 +89,7 @@ export class QueryService {
             ),
         );
 
-        const stringToCreateHash = [
+        const stringToCreateHash = canonicalHashInput([
             dataQuery.vnp_RequestId,
             dataQuery.vnp_Version,
             command,
@@ -94,10 +99,7 @@ export class QueryService {
             dataQuery.vnp_CreateDate,
             dataQuery.vnp_IpAddr,
             dataQuery.vnp_OrderInfo,
-        ]
-            .map(String)
-            .join('|')
-            .replace(/undefined/g, '');
+        ]);
 
         const requestHashed = hash(
             this.config.secureSecret,
@@ -141,7 +143,7 @@ export class QueryService {
             vnp_Message: message,
         };
 
-        const stringToCreateHashOfResponse = [
+        const stringToCreateHashOfResponse = canonicalHashInput([
             responseData.vnp_ResponseId,
             responseData.vnp_Command,
             responseData.vnp_ResponseCode,
@@ -157,10 +159,7 @@ export class QueryService {
             responseData.vnp_OrderInfo,
             responseData.vnp_PromotionCode,
             responseData.vnp_PromotionAmount,
-        ]
-            .map(String)
-            .join('|')
-            .replace(/undefined/g, '');
+        ]);
 
         const responseHashed = hash(
             this.config.secureSecret,
@@ -248,7 +247,7 @@ export class QueryService {
             ),
         );
 
-        const stringToHashOfRequest = [
+        const stringToHashOfRequest = canonicalHashInput([
             vnp_RequestId,
             vnp_Version,
             vnp_Command,
@@ -262,10 +261,7 @@ export class QueryService {
             vnp_CreateDate,
             vnp_IpAddr,
             vnp_OrderInfo,
-        ]
-            .map(String)
-            .join('|')
-            .replace(/undefined/g, '');
+        ]);
 
         const requestHashed = hash(
             this.config.secureSecret,
@@ -312,7 +308,7 @@ export class QueryService {
         };
 
         // Always check signed hash for response data
-        const stringToCreateHashOfResponse = [
+        const stringToCreateHashOfResponse = canonicalHashInput([
             responseData.vnp_ResponseId,
             responseData.vnp_Command,
             responseData.vnp_ResponseCode,
@@ -326,10 +322,7 @@ export class QueryService {
             responseData.vnp_TransactionType,
             responseData.vnp_TransactionStatus,
             responseData.vnp_OrderInfo,
-        ]
-            .map(String)
-            .join('|')
-            .replace(/undefined/g, '');
+        ]);
 
         const responseHashed = hash(
             this.config.secureSecret,

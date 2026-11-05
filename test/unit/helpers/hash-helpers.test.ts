@@ -43,9 +43,8 @@ describe('hash-helpers', () => {
             response.vnp_PromotionCode,
             response.vnp_PromotionAmount,
         ]
-            .map(String)
-            .join('|')
-            .replace(/undefined/g, '');
+            .map((value) => (value === undefined ? '' : String(value)))
+            .join('|');
         const expected = hash(
             secureSecret,
             Buffer.from(expectedString, 'utf-8'),
@@ -95,9 +94,8 @@ describe('hash-helpers', () => {
             respNumber.vnp_TransactionStatus,
             respNumber.vnp_OrderInfo,
         ]
-            .map(String)
-            .join('|')
-            .replace(/undefined/g, '');
+            .map((value) => (value === undefined ? '' : String(value)))
+            .join('|');
         const expectedNumber = hash(
             secureSecret,
             Buffer.from(expectedStringNumber, 'utf-8'),
@@ -127,9 +125,8 @@ describe('hash-helpers', () => {
             respString.vnp_TransactionStatus,
             respString.vnp_OrderInfo,
         ]
-            .map(String)
-            .join('|')
-            .replace(/undefined/g, '');
+            .map((value) => (value === undefined ? '' : String(value)))
+            .join('|');
         const expectedStringHash = hash(
             secureSecret,
             Buffer.from(expectedStringString, 'utf-8'),
@@ -179,9 +176,8 @@ describe('hash-helpers', () => {
             response.vnp_PromotionCode,
             response.vnp_PromotionAmount,
         ]
-            .map(String)
-            .join('|')
-            .replace(/undefined/g, '');
+            .map((value) => (value === undefined ? '' : String(value)))
+            .join('|');
         const expected = hash(
             secureSecret,
             Buffer.from(expectedString, 'utf-8'),
@@ -194,5 +190,82 @@ describe('hash-helpers', () => {
             HashAlgorithm.SHA512,
         );
         expect(actual).toBe(expected);
+    });
+
+    it('calculateQueryDrResponseHash keeps the text undefined inside a field value', () => {
+        const response = {
+            vnp_ResponseId: 'RID',
+            vnp_Command: 'querydr',
+            vnp_ResponseCode: '00',
+            vnp_Message: 'Success',
+            vnp_TxnRef: 'TXN',
+            vnp_Amount: 1000000,
+            vnp_BankCode: 'NCB',
+            vnp_PayDate: '20240101120000',
+            vnp_TransactionNo: '999',
+            vnp_TransactionType: '01',
+            vnp_TransactionStatus: '00',
+            vnp_OrderInfo: 'beforeundefinedafter',
+        };
+        const expectedString = [
+            'RID',
+            'querydr',
+            '00',
+            'Success',
+            'TMN123',
+            'TXN',
+            '1000000',
+            'NCB',
+            '20240101120000',
+            '999',
+            '01',
+            '00',
+            'beforeundefinedafter',
+            '',
+            '',
+        ].join('|');
+
+        expect(expectedString).toContain('beforeundefinedafter');
+        expect(
+            calculateQueryDrResponseHash(response, 'TMN123', 'secret', HashAlgorithm.SHA512),
+        ).toBe(hash('secret', Buffer.from(expectedString, 'utf-8'), HashAlgorithm.SHA512));
+    });
+
+    it('calculateRefundResponseHash keeps the text undefined inside a field value', () => {
+        const response = {
+            vnp_ResponseId: 'RID',
+            vnp_Command: 'refund',
+            vnp_ResponseCode: '00',
+            vnp_Message: 'Success',
+            vnp_TmnCode: 'TMN',
+            vnp_TxnRef: 'TXN',
+            vnp_Amount: 1000000,
+            vnp_BankCode: 'NCB',
+            vnp_PayDate: '20240101120000',
+            vnp_TransactionNo: '999',
+            vnp_TransactionType: '02',
+            vnp_TransactionStatus: '00',
+            vnp_OrderInfo: 'beforeundefinedafter',
+        };
+        const expectedString = [
+            'RID',
+            'refund',
+            '00',
+            'Success',
+            'TMN',
+            'TXN',
+            '10000',
+            'NCB',
+            '20240101120000',
+            '999',
+            '02',
+            '00',
+            'beforeundefinedafter',
+        ].join('|');
+
+        expect(expectedString).toContain('beforeundefinedafter');
+        expect(calculateRefundResponseHash(response, 'secret', HashAlgorithm.SHA512)).toBe(
+            hash('secret', Buffer.from(expectedString, 'utf-8'), HashAlgorithm.SHA512),
+        );
     });
 });
