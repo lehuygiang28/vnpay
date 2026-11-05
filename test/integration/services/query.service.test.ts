@@ -111,7 +111,7 @@ describe('QueryService', () => {
             // Recalculate hash without response code
             const secureSecret = DEFAULT_VNPAY_CONFIG.secureSecret;
             const tmn = DEFAULT_VNPAY_CONFIG.tmnCode;
-            const stringToCreateHashOfResponse = [
+            const stringToCreateHashOfResponse = canonicalChecksumInput([
                 mockResponse.vnp_ResponseId,
                 mockResponse.vnp_Command,
                 mockResponse.vnp_ResponseCode,
@@ -127,10 +127,7 @@ describe('QueryService', () => {
                 mockResponse.vnp_OrderInfo,
                 mockResponse.vnp_PromotionCode,
                 mockResponse.vnp_PromotionAmount,
-            ]
-                .map(String)
-                .join('|')
-                .replace(/undefined/g, '');
+            ]);
             mockResponse.vnp_SecureHash = hash(
                 secureSecret,
                 Buffer.from(stringToCreateHashOfResponse, 'utf-8'),
@@ -413,6 +410,77 @@ describe('QueryService', () => {
                 ),
             );
         });
+
+        it('should sign a null queryDr field as the text null', async () => {
+            // Arrange
+            const input = createQueryDrInput({
+                vnp_OrderInfo: null as unknown as string,
+            });
+            mockFetchSuccess(createMockQueryDrResponse());
+
+            // Act
+            await vnpay.queryDr(input);
+
+            // Assert
+            const body = getLastFetchRequestBody() as { vnp_SecureHash: string };
+            const canonical = canonicalChecksumInput([
+                input.vnp_RequestId,
+                VNP_VERSION,
+                'querydr',
+                DEFAULT_VNPAY_CONFIG.tmnCode,
+                input.vnp_TxnRef,
+                input.vnp_TransactionDate,
+                input.vnp_CreateDate,
+                input.vnp_IpAddr,
+                input.vnp_OrderInfo,
+            ]);
+            expect(canonical.endsWith('|null')).toBe(true);
+            expect(body.vnp_SecureHash).toBe(
+                hash(
+                    DEFAULT_VNPAY_CONFIG.secureSecret,
+                    Buffer.from(canonical, 'utf-8'),
+                    HashAlgorithm.SHA512,
+                ),
+            );
+        });
+
+        it('should reject a queryDr signature that treats null as an empty field', async () => {
+            // Arrange
+            const mockResponse = createMockQueryDrResponse({
+                vnp_OrderInfo: null,
+            });
+            const canonical = canonicalChecksumInput([
+                mockResponse.vnp_ResponseId,
+                mockResponse.vnp_Command,
+                mockResponse.vnp_ResponseCode,
+                mockResponse.vnp_Message,
+                DEFAULT_VNPAY_CONFIG.tmnCode,
+                mockResponse.vnp_TxnRef,
+                mockResponse.vnp_Amount,
+                mockResponse.vnp_BankCode,
+                mockResponse.vnp_PayDate,
+                mockResponse.vnp_TransactionNo,
+                mockResponse.vnp_TransactionType,
+                mockResponse.vnp_TransactionStatus,
+                '',
+                mockResponse.vnp_PromotionCode,
+                mockResponse.vnp_PromotionAmount,
+            ]);
+            mockResponse.vnp_SecureHash = hash(
+                DEFAULT_VNPAY_CONFIG.secureSecret,
+                Buffer.from(canonical, 'utf-8'),
+                HashAlgorithm.SHA512,
+            );
+            mockFetchSuccess(mockResponse);
+
+            // Act
+            const result = await vnpay.queryDr(baseQueryDrInput);
+
+            // Assert
+            expect(result.vnp_OrderInfo).toBeNull();
+            expect(result.isVerified).toBe(false);
+            expect(result.isSuccess).toBe(false);
+        });
     });
 
     describe('refund', () => {
@@ -468,7 +536,7 @@ describe('QueryService', () => {
         it('should reject a refund signature computed from the undivided wire amount', async () => {
             // Arrange: the service hashes vnp_Amount after dividing by 100
             const mockResponse = createMockRefundResponse();
-            const signedWithWireAmount = [
+            const signedWithWireAmount = canonicalChecksumInput([
                 mockResponse.vnp_ResponseId,
                 mockResponse.vnp_Command,
                 mockResponse.vnp_ResponseCode,
@@ -482,10 +550,7 @@ describe('QueryService', () => {
                 mockResponse.vnp_TransactionType,
                 mockResponse.vnp_TransactionStatus,
                 mockResponse.vnp_OrderInfo,
-            ]
-                .map(String)
-                .join('|')
-                .replace(/undefined/g, '');
+            ]);
             mockResponse.vnp_SecureHash = hash(
                 DEFAULT_VNPAY_CONFIG.secureSecret,
                 Buffer.from(signedWithWireAmount, 'utf-8'),

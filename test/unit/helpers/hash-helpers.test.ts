@@ -43,9 +43,8 @@ describe('hash-helpers', () => {
             response.vnp_PromotionCode,
             response.vnp_PromotionAmount,
         ]
-            .map(String)
-            .join('|')
-            .replace(/undefined/g, '');
+            .map((value) => (value === undefined ? '' : String(value)))
+            .join('|');
         const expected = hash(
             secureSecret,
             Buffer.from(expectedString, 'utf-8'),
@@ -95,9 +94,8 @@ describe('hash-helpers', () => {
             respNumber.vnp_TransactionStatus,
             respNumber.vnp_OrderInfo,
         ]
-            .map(String)
-            .join('|')
-            .replace(/undefined/g, '');
+            .map((value) => (value === undefined ? '' : String(value)))
+            .join('|');
         const expectedNumber = hash(
             secureSecret,
             Buffer.from(expectedStringNumber, 'utf-8'),
@@ -127,9 +125,8 @@ describe('hash-helpers', () => {
             respString.vnp_TransactionStatus,
             respString.vnp_OrderInfo,
         ]
-            .map(String)
-            .join('|')
-            .replace(/undefined/g, '');
+            .map((value) => (value === undefined ? '' : String(value)))
+            .join('|');
         const expectedStringHash = hash(
             secureSecret,
             Buffer.from(expectedStringString, 'utf-8'),
@@ -179,9 +176,8 @@ describe('hash-helpers', () => {
             response.vnp_PromotionCode,
             response.vnp_PromotionAmount,
         ]
-            .map(String)
-            .join('|')
-            .replace(/undefined/g, '');
+            .map((value) => (value === undefined ? '' : String(value)))
+            .join('|');
         const expected = hash(
             secureSecret,
             Buffer.from(expectedString, 'utf-8'),
