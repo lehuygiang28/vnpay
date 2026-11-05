@@ -6,8 +6,8 @@
 
 ### 🩹 Fixes
 
-- `verifyReturnUrl` và `verifyIpnCall`: `isSuccess` chỉ là `true` khi chữ ký hợp lệ và `vnp_ResponseCode` là `00` hoặc `0` ([6f9228f](https://github.com/lehuygiang28/vnpay/commit/6f9228f2e1c9f05195f864c1bf1b7bcd2fe380fb))
-- `queryDr` và `refund`: `isVerified` là `false` khi thiếu hoặc sai `vnp_SecureHash`; `isSuccess` chỉ là `true` khi chữ ký hợp lệ và mã phản hồi thành công ([6f9228f](https://github.com/lehuygiang28/vnpay/commit/6f9228f2e1c9f05195f864c1bf1b7bcd2fe380fb))
+- `verifyReturnUrl` and `verifyIpnCall`: `isSuccess` is `true` only when the signature is valid and `vnp_ResponseCode` is `00` or `0` ([6f9228f](https://github.com/lehuygiang28/vnpay/commit/6f9228f2e1c9f05195f864c1bf1b7bcd2fe380fb))
+- `queryDr` and `refund`: `isVerified` is `false` when `vnp_SecureHash` is missing or invalid; `isSuccess` is `true` only when the signature is valid and the response code is successful ([6f9228f](https://github.com/lehuygiang28/vnpay/commit/6f9228f2e1c9f05195f864c1bf1b7bcd2fe380fb))
 
 ## v2.4.4
 
