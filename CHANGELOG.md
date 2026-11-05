@@ -1,10 +1,12 @@
 # Changelog
 
-## Unreleased
+## v2.5.2
+
+[compare changes](https://github.com/lehuygiang28/vnpay/compare/2.5.1...2.5.2)
 
 ### 🩹 Fixes
 
-- `queryDr` and `refund` keep the text `undefined` inside signed field values. A missing field is still an empty checksum field. `null` is still the text `null`.
+- `queryDr` and `refund` keep the text `undefined` inside signed field values. A missing field is still an empty checksum field. `null` is still the text `null`. ([43075b5](https://github.com/lehuygiang28/vnpay/commit/43075b5d23ecb2fb5bcf49b7401a4abd10612d66))
 
 ## v2.5.1
 
