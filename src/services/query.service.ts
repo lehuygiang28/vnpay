@@ -20,20 +20,13 @@ import type {
 // Import specific types from their files to fix linter errors
 import type { BodyRequestQueryDr, QueryDrResponseFromVNPay } from '../types/query-dr.type';
 import type { RefundResponseFromVNPay } from '../types/refund.type';
-import { getResponseByStatusCode, hash, resolveUrlString } from '../utils/common';
+import {
+    canonicalHashInput,
+    getResponseByStatusCode,
+    hash,
+    resolveUrlString,
+} from '../utils/common';
 import type { LoggerService } from './logger.service';
-
-/**
- * Builds the pipe-separated checksum input.
- * A missing value becomes an empty field. Text that contains "undefined" stays intact.
- * `null` stays the text "null", matching signatures VNPay already produces.
- *
- * @param values - Fields in checksum order
- * @returns Canonical string passed to the hash function
- */
-function canonicalHashInput(values: readonly unknown[]): string {
-    return values.map((value) => (value === undefined ? '' : String(value))).join('|');
-}
 
 /**
  * Dịch vụ truy vấn kết quả và hoàn tiền VNPay

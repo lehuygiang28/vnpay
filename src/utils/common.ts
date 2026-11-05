@@ -155,3 +155,15 @@ export function hash(
 ): string {
     return crypto.createHmac(algorithm, secret).update(data.toString()).digest('hex');
 }
+
+/**
+ * Builds the pipe-separated checksum input for queryDr and refund.
+ * A missing value becomes an empty field. Text that contains "undefined" stays intact.
+ * `null` stays the text "null".
+ *
+ * @param values - Fields in checksum order
+ * @returns Canonical string passed to the hash function
+ */
+export function canonicalHashInput(values: readonly unknown[]): string {
+    return values.map((value) => (value === undefined ? '' : String(value))).join('|');
+}
